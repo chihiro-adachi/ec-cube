@@ -43,7 +43,7 @@ class LC_Page_Api_Db extends LC_Page_Ex
             $arrErr['ECCUBE.Function.Disable'] = 'API機能が無効です。';
             echo 'API機能が無効です。'; // TODO:今後ちゃんと
         } else {
-            $arrParam = $_REQUEST;
+            $json = $_REQUEST;
 
             $objApiDb = new SC_Api_Db_Ex();
  
@@ -51,16 +51,16 @@ class LC_Page_Api_Db extends LC_Page_Ex
 
             switch ($method) {
                 case 'GET':
-                    echo $objApiDb->get($arrParam);
+                    echo $objApiDb->get($json);
                     break;
                 case 'POST':
-                    echo $objApiDb->post($arrParam);
+                    echo $objApiDb->post($json);
                     break;
                 case 'PUT':
-                    echo $objApiDb->put($arrParam);
+                    echo $objApiDb->put($json);
                     break;
                 case 'DELETE':
-                    echo $objApiDb->delete($arrParam);
+                    echo $objApiDb->delete($json);
                     break;
                 default:
             SC_Response_Ex::actionExit();

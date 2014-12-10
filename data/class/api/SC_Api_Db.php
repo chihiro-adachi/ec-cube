@@ -17,16 +17,17 @@ class SC_Api_Db
         **/
     }
 
-    public function get($arrParam)
+    public function get($json)
     {
         $objQuery =& SC_Query_Ex::getSingletonInstance();
-        list($cols, $from, $where, $arrWhereVal) = $this->getParse($arrParam);
-        $value = $objQuery->select($cols, $from, $where, $arrWhereVal);
-        
+        $arrSql = $this->getParse($json);
+        $objQuery->setLimitOffset($arrSql['limit'], $arrSql['offset']);
+        $value = $objQuery->select($arrSql['cols'], $arrSql['from'], $arrSql['where'], $arrSql['arrWhereVal']);
+
         return SC_Utils::jsonEncode($value);
     }
 
-    public function post($arrParam)
+    public function post($json)
     {
         //echo "POST";
         //        $objQuery =& SC_Query_Ex::getSingletonInstance();
@@ -35,19 +36,19 @@ class SC_Api_Db
         //        $value = $objQuery->insert($table, $arrVal, $arrSql, $arrSqlVal, $from, $arrFromVal);
     }
 
-    public function put($arrParam)
+    public function put($json)
     {
         //echo "PUT";
     }
 
-    public function delete($arrParam)
+    public function delete($json)
     {
         //echo "DELETE";
     }
 
-    public function getParse($arrParam)
+    public function getParse($json)
     {
-        $obj = SC_Utils::jsonDecode($arrParam['json']);
+        $obj = SC_Utils::jsonDecode($json['json']);
         
         $limit = $obj->limit;                    // 検索条件 LIMT
         $offset = $obj->offset;                  // 検索条件 OFFSET
@@ -58,11 +59,10 @@ class SC_Api_Db
         $where = '';
         $arrWhereVal = '';
 
-        // TODO: sortとlimitの追加         
         foreach ($filter as $key => $value) {
             if ($where) {
                  $where .= " AND {$key} = ? ";
-                 $arrWhereVal = $value;
+                 $arrWhereVal = ',' . $value;
             } else {
                  $where .= "{$key} = ? ";
                  $arrWhereVal .= $value;
@@ -78,6 +78,13 @@ class SC_Api_Db
         // customerの部分は、任意で指定できるようにする.
         $from = 'dtb_customer';
 
-        return array($cols, $from, $where, $arrWhereVal);
+        $arrSql = array('cols' => $cols,
+                        'from' => $from,
+                        'where' => $where,
+                        'arrWhereVal' => $arrWhereVal,
+                        'limit' => $limit,
+                        'offset' => $offset,
+                  );
+        return $arrSql;
     }
 }
