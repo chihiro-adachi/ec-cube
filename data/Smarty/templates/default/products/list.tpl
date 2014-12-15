@@ -138,19 +138,19 @@
             <!--▲ページナビ(上部)-->
         <!--{/if}-->
 
-        <!--{assign var=id value=$arrProduct.product_id}-->
+        <!--{assign var=id value=$arrProduct.product_index_id}-->
         <!--{assign var=arrErr value=$arrProduct.arrErr}-->
         <!--▼商品-->
         <form name="product_form<!--{$id|h}-->" action="?">
             <input type="hidden" name="<!--{$smarty.const.TRANSACTION_ID_NAME}-->" value="<!--{$transactionid}-->" />
-            <input type="hidden" name="product_id" value="<!--{$id|h}-->" />
-            <input type="hidden" name="product_class_id" id="product_class_id<!--{$id|h}-->" value="<!--{$tpl_product_class_id[$id]}-->" />
+            <input type="hidden" name="product_index_id" value="<!--{$id|h}-->" />
+            <input type="hidden" name="product_id" id="product_id<!--{$id|h}-->" value="<!--{$tpl_product_id[$id]}-->" />
             <div class="list_area clearfix">
                 <a name="product<!--{$id|h}-->"></a>
                 <div class="listphoto">
                     <!--★画像★-->
                     <a href="<!--{$smarty.const.P_DETAIL_URLPATH}--><!--{$arrProduct.product_id|u}-->">
-                        <img src="<!--{$smarty.const.IMAGE_SAVE_URLPATH}--><!--{$arrProduct.main_list_image|sfNoImageMainList|h}-->" alt="<!--{$arrProduct.name|h}-->" class="picture" /></a>
+                        <img src="<!--{$smarty.const.IMAGE_SAVE_URLPATH}--><!--{$arrProduct.at_1|sfNoImageMainList|h}-->" alt="<!--{$arrProduct.name|h}-->" class="picture" /></a>
                 </div>
 
                 <div class="listrightbloc">
@@ -168,36 +168,32 @@
 
                     <!--★商品名★-->
                     <h3>
-                        <a href="<!--{$smarty.const.P_DETAIL_URLPATH}--><!--{$arrProduct.product_id|u}-->"><!--{$arrProduct.name|h}--></a>
+                        <a href="<!--{$smarty.const.P_DETAIL_URLPATH}--><!--{$arrProduct.product_index_id|u}-->"><!--{$arrProduct.name|h}--></a>
                     </h3>
                     <!--★価格★-->
                     <div class="pricebox sale_price">
                         <!--{$smarty.const.SALE_PRICE_TITLE}-->(税込)：
                         <span class="price">
                             <span id="price02_default_<!--{$id}-->"><!--{strip}-->
-                                <!--{if $arrProduct.price02_min_inctax == $arrProduct.price02_max_inctax}-->
-                                    <!--{$arrProduct.price02_min_inctax|n2s}-->
-                                <!--{else}-->
-                                    <!--{$arrProduct.price02_min_inctax|n2s}-->～<!--{$arrProduct.price02_max_inctax|n2s}-->
-                                <!--{/if}-->
+                                    <!--{$arrProductClasses[$id][0].price|n2s}-->
                             </span><span id="price02_dynamic_<!--{$id}-->"></span><!--{/strip}-->
                             円</span>
                     </div>
 
                     <!--★コメント★-->
-                    <div class="listcomment"><!--{$arrProduct.main_list_comment|h|nl2br}--></div>
+                    <div class="listcomment"><!--{$arrProduct.at_2|h|nl2br}--></div>
 
                     <!--★商品詳細を見る★-->
                     <div class="detail_btn">
                         <!--{assign var=name value="detail`$id`"}-->
-                        <a href="<!--{$smarty.const.P_DETAIL_URLPATH}--><!--{$arrProduct.product_id|u}-->">
+                        <a href="<!--{$smarty.const.P_DETAIL_URLPATH}--><!--{$arrProduct.product_index_id|u}-->">
                             <img class="hover_change_image" src="<!--{$TPL_URLPATH}-->img/button/btn_detail.jpg" alt="商品詳細を見る" name="<!--{$name}-->" id="<!--{$name}-->" />
                         </a>
                     </div>
 
                     <!--▼買い物カゴ-->
                     <div class="cart_area clearfix">
-                        <!--{if $tpl_stock_find[$id]}-->
+                        <!--{if $arrProductClasses[$id][0].stock != 0 }-->
                             <!--{if $tpl_classcat_find1[$id]}-->
                                 <div class="classlist">
                                     <dl class="size01 clearfix">

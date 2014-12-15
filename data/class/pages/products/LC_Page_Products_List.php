@@ -22,6 +22,7 @@
  */
 
 require_once CLASS_EX_REALDIR . 'page_extends/LC_Page_Ex.php';
+require_once CLASS_REALDIR . 'models/products.php';
 
 /**
  * 商品一覧 のページクラス.
@@ -134,7 +135,8 @@ class LC_Page_Products_List extends LC_Page_Ex
 
         // 商品一覧データの取得
         $arrSearchCondition = $this->lfGetSearchCondition($this->arrSearchData);
-        $this->tpl_linemax  = $this->lfGetProductAllNum($arrSearchCondition);
+        //$this->tpl_linemax  = $this->lfGetProductAllNum($arrSearchCondition);
+        $this->tpl_linemax = 10;
         $urlParam           = "category_id={$this->arrSearchData['category_id']}&pageno=#page#";
         // モバイルの場合に検索条件をURLの引数に追加
         if (SC_Display_Ex::detectDevice() === DEVICE_TYPE_MOBILE) {
@@ -142,7 +144,17 @@ class LC_Page_Products_List extends LC_Page_Ex
             $urlParam .= "&mode={$this->mode}&name={$searchNameUrl}&orderby={$this->orderby}";
         }
         $this->objNavi      = new SC_PageNavi_Ex($this->tpl_pageno, $this->tpl_linemax, $this->disp_number, 'eccube.movePage', NAVI_PMAX, $urlParam, SC_Display_Ex::detectDevice() !== DEVICE_TYPE_MOBILE);
-        $this->arrProducts  = $this->lfGetProductsList($arrSearchCondition, $this->disp_number, $this->objNavi->start_row, $objProduct);
+        //$this->arrProducts  = $this->lfGetProductsList($arrSearchCondition, $this->disp_number, $this->objNavi->start_row, $objProduct);
+        
+        $productList = new ProductList();
+        $productList->filterByCategoryID($this->arrSearchData["category_id"]);
+        $productList->filterByVenderID($this->arrSearchData["maker_id"]);
+        $productList->filterByKeywords($this->arrSearchData["name"]);
+        $productList->orderBy($this->arrForm['orderby']);
+        $productList->limit($this->disp_number,$this->objNavi->start_row);
+        $productList->get();
+        $this->arrProducts  = $productList->indexes;
+        $this->arrProductClasses = $productList->products;
 
         switch ($this->getMode()) {
             case 'json':
@@ -410,7 +422,7 @@ class LC_Page_Products_List extends LC_Page_Ex
             $searchCondition['where'] .= ' AND EXISTS(SELECT * FROM dtb_products_class WHERE product_id = alldtl.product_id AND del_flg = 0 AND (stock >= 1 OR stock_unlimited = 1))';
         }
 
-        // XXX 一時期内容が異なっていたことがあるので別要素にも格納している。
+        // XXX 一時期内容が異なっていたことがあるので別要素にも格納し���いる。
         $searchCondition['where_for_count'] = $searchCondition['where'];
 
         return $searchCondition;
