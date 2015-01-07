@@ -732,7 +732,7 @@ __EOS__;
         if (
             SC_Utils_Ex::sfIsInt($product_id)
             && !SC_Utils_Ex::sfIsZeroFilling($product_id)
-            && SC_Helper_DB_Ex::sfIsRecord('dtb_products', 'product_id', array($product_id), $where)
+            && SC_Helper_DB_Ex::sfIsRecord('dtb_products_search_index', 'product_index_id', array($product_id), $where)
         ) {
             return true;
         }
