@@ -735,15 +735,9 @@ __EOS__;
             $where .= 'del_flg = 0';
         }
         if (
-<<<<<<< HEAD:src/Eccube/Framework/Product.php
             Utils::sfIsInt($product_id)
             && !Utils::sfIsZeroFilling($product_id)
             && Application::alias('eccube.helper.db')->isRecord('dtb_products', 'product_id', array($product_id), $where)
-=======
-            SC_Utils_Ex::sfIsInt($product_id)
-            && !SC_Utils_Ex::sfIsZeroFilling($product_id)
-            && SC_Helper_DB_Ex::sfIsRecord('dtb_products_search_index', 'product_index_id', array($product_id), $where)
->>>>>>> 2d613c9c74f10fb043fd205548c88aa93aec7513:data/class/SC_Product.php
         ) {
             return true;
         }
