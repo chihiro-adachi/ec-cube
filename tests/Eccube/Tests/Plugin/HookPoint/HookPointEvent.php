@@ -1124,8 +1124,8 @@ class HookPointEvent
     {
         echo EccubeEvents::MAIL_CUSTOMER_WITHDRAW;
 
-        $message = $event->getArgument('message');
-        $message->setBody('onMail3');
+//        $message = $event->getArgument('message');
+//        $message->setBody('onMail3');
     }
 
     function onMail4(EventArgs $event)
