@@ -264,6 +264,8 @@ class EccubeServiceProvider implements ServiceProviderInterface
             $extensions[] = new \Eccube\Form\Extension\HelpTypeExtension();
             $extensions[] = new \Eccube\Form\Extension\FreezeTypeExtension();
             $extensions[] = new \Eccube\Form\Extension\EntryTypeExtension();
+            $extensions[] = new \Eccube\Form\Extension\KanaTypeExtension();
+
 
             return $extensions;
         }));

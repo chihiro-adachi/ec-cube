@@ -37,7 +37,7 @@ class EntryTypeExtension extends AbstractTypeExtension
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        // 項目追加
+        // 項目を追加してみる(Entry/index.twigのコードに追加する必要がある)
         $builder->add(
             'code',
             'text',
@@ -49,8 +49,14 @@ class EntryTypeExtension extends AbstractTypeExtension
                 ),
             )
         );
-        // 会社名削除
+        // 会社名を削除する(Entry/index.twigのコードも削除する必要がある)
         $builder->remove('company_name');
+
+        // EntryTypeで定義されてるrequiredをfalseにする
+        $kana = $builder->get('kana');
+        $kana->setRequired(false);
+
+        // kana01, kana02を変更する場合は, KanaTypeのExtensionを作って、そちらで制御。
     }
 
     public function getExtendedType()
