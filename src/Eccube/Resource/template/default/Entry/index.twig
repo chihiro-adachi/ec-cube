@@ -60,13 +60,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                             {{ form_errors(form.kana.kana02) }}
                         </dd>
                     </dl>
-                    <dl id="top_box__company_name">
-                        <dt>{{ form_label(form.company_name) }}</dt>
-                        <dd class="form-group input_name">
-                            {{ form_widget(form.company_name) }}
-                            {{ form_errors(form.company_name) }}
-                        </dd>
-                    </dl>
+                    {#<dl id="top_box__company_name">#}
+                        {#<dt>{{ form_label(form.company_name) }}</dt>#}
+                        {#<dd class="form-group input_name">#}
+                            {#{{ form_widget(form.company_name) }}#}
+                            {#{{ form_errors(form.company_name) }}#}
+                        {#</dd>#}
+                    {#</dl>#}
                     <dl id="top_box__address_detail">
                         <dt>{{ form_label(form.address) }}</dt>
                         <dd>
@@ -115,6 +115,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                                 {{ form_errors(passwordField) }}
                             </div>
                             {% endfor %}
+                        </dd>
+                    </dl>
+                    {# 紹介コードを追加 #}
+                    <dl>
+                        <dt>{{ form_label(form.code) }}</dt>
+                        <dd class="form-group input_name">
+                            {{ form_widget(form.code) }}
+                            {{ form_errors(form.code) }}
                         </dd>
                     </dl>
                 </div>
