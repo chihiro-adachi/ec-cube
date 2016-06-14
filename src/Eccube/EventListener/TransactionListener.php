@@ -62,6 +62,7 @@ class TransactionListener implements EventSubscriberInterface
 
         $app = $this->app;
         $app['orm.em']->getConnection()->setAutoCommit(false);
+        $app['orm.em']->getConnection()->setNestTransactionsWithSavepoints(true);
         $app['orm.em']->beginTransaction();
     }
 
