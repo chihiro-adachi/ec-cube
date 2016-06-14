@@ -46,6 +46,16 @@ class FrontControllerProvider implements ControllerProviderInterface
         $c->match('/', '\Eccube\Controller\TopController::index')->bind('top'); // deprecated since 3.0.0, to be removed in 3.1
         $c->match('/', '\Eccube\Controller\TopController::index')->bind('index'); // deprecated since 3.0.0, to be removed in 3.1
 
+        // root
+        $c->match('/tran1', '\Eccube\Controller\TopController::tran1')->bind('tran1');
+        $c->match('/tran2', '\Eccube\Controller\TopController::tran2')->bind('tran2');
+        $c->match('/tran3', '\Eccube\Controller\TopController::tran3')->bind('tran3');
+        $c->match('/tran4', '\Eccube\Controller\TopController::tran4')->bind('tran4');
+        $c->match('/tran5', '\Eccube\Controller\TopController::tran5')->bind('tran5');
+        $c->match('/tran6', '\Eccube\Controller\TopController::tran6')->bind('tran6');
+        $c->match('/tran7', '\Eccube\Controller\TopController::tran7')->bind('tran7');
+        $c->match('/tran8', '\Eccube\Controller\TopController::tran8')->bind('tran8');
+
         // cart
         $c->match('/cart', '\Eccube\Controller\CartController::index')->bind('cart');
         $c->post('/cart/add', '\Eccube\Controller\CartController::add')->bind('cart_add');

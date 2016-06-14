@@ -33,4 +33,197 @@ class TopController
     {
         return $app->render('index.twig');
     }
+
+
+    public function tran1(Application $app)
+    {
+        // update 1
+        $BaseInfo = $app['eccube.repository.base_info']->get();
+        $BaseInfo->setCompanyName(__LINE__);
+        $app['orm.em']->flush($BaseInfo);
+
+        return $app->render('index.twig');
+    }
+
+    public function tran2(Application $app)
+    {
+        // update 1
+        $BaseInfo = $app['eccube.repository.base_info']->get();
+        $BaseInfo->setCompanyName(__LINE__);
+        $app['orm.em']->flush($BaseInfo);
+
+        // update 2
+        $BaseInfo->setCompanyName(__LINE__);
+        $app['orm.em']->flush($BaseInfo);
+
+        // 1/2 は rollback.
+        throw new \Exception();
+
+        return $app->render('index.twig');
+    }
+
+    public function tran3(Application $app)
+    {
+        $app['orm.em']->beginTransaction();
+
+        try {
+            $BaseInfo = $app['eccube.repository.base_info']->get();
+            $BaseInfo->setCompanyName(__LINE__);
+            $app['orm.em']->flush($BaseInfo);
+            $app['orm.em']->commit();
+
+        } catch (\Exception $e) {
+            $app['orm.em']->rollback();
+        }
+
+        return $app->render('index.twig');
+    }
+
+    public function tran4(Application $app)
+    {
+        $app['orm.em']->beginTransaction();
+
+        try {
+            // update 1
+            $BaseInfo = $app['eccube.repository.base_info']->get();
+            $BaseInfo->setCompanyName(__LINE__);
+            $app['orm.em']->flush($BaseInfo);
+            $app['orm.em']->commit();
+
+            // update 1 は rollback
+            throw new \Exception();
+
+        } catch (\Exception $e) {
+            $app['orm.em']->rollback();
+        }
+
+        return $app->render('index.twig');
+    }
+
+    public function tran5(Application $app)
+    {
+        $app['orm.em']->beginTransaction();
+
+        try {
+            // update 1
+            $BaseInfo = $app['eccube.repository.base_info']->get();
+            $BaseInfo->setCompanyName(__LINE__);
+            $app['orm.em']->flush($BaseInfo);
+            $app['orm.em']->commit();
+
+        } catch (\Exception $e) {
+            $app['orm.em']->rollback();
+        }
+
+        $app['orm.em']->beginTransaction();
+
+        try {
+            // update 2
+            $BaseInfo = $app['eccube.repository.base_info']->get();
+            $BaseInfo->setCompanyName(__LINE__);
+            $app['orm.em']->flush($BaseInfo);
+            $app['orm.em']->commit();
+
+        } catch (\Exception $e) {
+            $app['orm.em']->rollback();
+        }
+
+        // update1/2はrollback
+        throw new \Exception();
+
+        return $app->render('index.twig');
+    }
+
+    public function tran6(Application $app)
+    {
+        $app['orm.em']->beginTransaction();
+
+        try {
+            // update 1
+            $BaseInfo = $app['eccube.repository.base_info']->get();
+            $BaseInfo->setCompanyName(__LINE__);
+            $app['orm.em']->flush($BaseInfo);
+            $app['orm.em']->commit();
+
+        } catch (\Exception $e) {
+            $app['orm.em']->rollback();
+        }
+
+        // update 2
+        $BaseInfo->setCompanyName(__LINE__);
+        $app['orm.em']->flush($BaseInfo);
+
+        // update 3
+        $BaseInfo->setCompanyName(__LINE__);
+        $app['orm.em']->flush($BaseInfo);
+
+        // update1/2/3 すべてrollback
+        throw new \Exception();
+
+        return $app->render('index.twig');
+    }
+
+    public function tran7(Application $app)
+    {
+        $app['orm.em']->beginTransaction();
+
+        try {
+            // update 1
+            $BaseInfo = $app['eccube.repository.base_info']->get();
+            $BaseInfo->setCompanyName(__LINE__);
+            $app['orm.em']->flush($BaseInfo);
+            $app['orm.em']->commit();
+
+            // update 1がrollback
+            throw new \Exception();
+
+        } catch (\Exception $e) {
+            // update 1がrollback
+            $app['orm.em']->rollback();
+        }
+
+        // update 2
+        $BaseInfo->setCompanyName(__LINE__);
+        $app['orm.em']->flush($BaseInfo);
+
+        // update 3
+        $BaseInfo->setCompanyName(__LINE__);
+        $app['orm.em']->flush($BaseInfo);
+
+        // update2/3 は 暗黙のtransaction block 内のため、まとめて更新される.
+        return $app->render('index.twig');
+    }
+
+    public function tran8(Application $app)
+    {
+        $app['orm.em']->beginTransaction();
+
+        try {
+            // update 1
+            $BaseInfo = $app['eccube.repository.base_info']->get();
+            $BaseInfo->setCompanyName(__LINE__);
+            $app['orm.em']->flush($BaseInfo);
+            $app['orm.em']->commit();
+
+            // update 1がrollback
+            throw new \Exception();
+
+        } catch (\Exception $e) {
+            // update 1がrollback
+            $app['orm.em']->rollback();
+        }
+
+        // update 2
+        $BaseInfo->setCompanyName(__LINE__);
+        $app['orm.em']->flush($BaseInfo);
+
+        // update 3
+        $BaseInfo->setCompanyName(__LINE__);
+        $app['orm.em']->flush($BaseInfo);
+
+        // update2/3 は 暗黙のtransaction block内のため、2/3はrollbackされる
+        throw new \Exception();
+
+        return $app->render('index.twig');
+    }
 }
