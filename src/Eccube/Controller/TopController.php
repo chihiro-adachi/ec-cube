@@ -226,4 +226,37 @@ class TopController
 
         return $app->render('index.twig');
     }
+
+    public function tran9(Application $app)
+    {
+        // update 1 ：本体側の更新処理とする
+        $BaseInfo = $app['eccube.repository.base_info']->get();
+        $BaseInfo->setTel01(__LINE__);
+        $app['orm.em']->flush($BaseInfo);
+
+        // プラグインAが、beginTransactionして更新を行う
+        $app['orm.em']->beginTransaction();
+
+        try {
+            // update 2
+            $BaseInfo->setTel02(__LINE__);
+            $app['orm.em']->flush($BaseInfo);
+            $app['orm.em']->commit();
+
+            // プラグイン内部でエラー
+            throw new \Exception();
+
+        } catch (\Exception $e) {
+            // update 1 / update 2 がrollbackされる.
+            $app['orm.em']->rollback();
+        }
+
+        // update 3：プラグインBが、更新処理を行う.
+        $BaseInfo = $app['eccube.repository.base_info']->get();
+        $BaseInfo->setTel03(__LINE__);
+        $app['orm.em']->flush($BaseInfo);
+
+        // update 1/2 はrollback され, update 3の更新処理のみ適応される
+        return $app->render('index.twig');
+    }
 }

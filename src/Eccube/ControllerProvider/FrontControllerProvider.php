@@ -55,6 +55,7 @@ class FrontControllerProvider implements ControllerProviderInterface
         $c->match('/tran6', '\Eccube\Controller\TopController::tran6')->bind('tran6');
         $c->match('/tran7', '\Eccube\Controller\TopController::tran7')->bind('tran7');
         $c->match('/tran8', '\Eccube\Controller\TopController::tran8')->bind('tran8');
+        $c->match('/tran9', '\Eccube\Controller\TopController::tran9')->bind('tran9');
 
         // cart
         $c->match('/cart', '\Eccube\Controller\CartController::index')->bind('cart');
