@@ -838,6 +838,10 @@ class Application extends ApplicationTrait
                     'path' =>  $path,
                     'original-message' => $e->getMessage()
                 ));
+                $functions = '\\Plugin\\'.$code.'\\'.'Functions';
+                if (class_exists($functions)) {
+                    $this['eccube.event.dispatcher']->addSubscriber(new $functions($this));
+                }
                 continue;
             }
             $config = $this['eccube.service.plugin']->readYml($dir->getRealPath().'/config.yml');
