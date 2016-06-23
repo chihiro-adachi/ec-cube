@@ -907,6 +907,11 @@ class Application extends ApplicationTrait
                 }
             }
         }
+
+        $extention = '\\Ext\\Extention';
+        if (class_exists($functions)) {
+            $this['eccube.event.dispatcher']->addSubscriber(new $extention($this));
+        }
     }
 
     /**

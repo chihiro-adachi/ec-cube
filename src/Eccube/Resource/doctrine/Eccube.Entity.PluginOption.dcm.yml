@@ -1,0 +1,38 @@
+Eccube\Entity\PluginOption:
+    type: entity
+    table: dtb_plugin_option
+    repositoryClass: Eccube\Repository\PluginOptionRepository
+    uniqueConstraints:
+        plugin_code_option_key:
+            columns:
+                - plugin_code
+                - option_key
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            column: id
+            generator:
+                strategy: AUTO
+    fields:
+        plugin_code:
+            type: string
+            length: 256
+            nullable: false
+        option_key:
+            type: string
+            length: 256
+            nullable: false
+        option_value:
+            type: text
+            nullable: true
+        create_date:
+            type: datetime
+            nullable: false
+        update_date:
+            type: datetime
+            nullable: false
+
+    lifecycleCallbacks: {  }
