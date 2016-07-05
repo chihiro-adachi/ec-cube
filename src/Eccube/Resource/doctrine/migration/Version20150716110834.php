@@ -12,7 +12,8 @@ class Version20150716110834 extends AbstractMigration
 {
 
     const NAME = 'dtb_csv';
-
+    private $identity_insert_table;
+    
     /**
      * @param Schema $schema
      */
@@ -22,6 +23,7 @@ class Version20150716110834 extends AbstractMigration
         if (!$schema->hasTable(self::NAME)) {
             return true;
         }
+        $this->identity_insert_table = 'dtb_csv';
         $this->addSql("INSERT INTO dtb_csv (csv_id, csv_type, entity_name, field_name, reference_field_name, disp_name, rank, enable_flg, creator_id, create_date, update_date) VALUES (1, 1, 'Eccube\\\\Entity\\\\Product', 'id', NULL, '商品ID', 1, 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
         $this->addSql("INSERT INTO dtb_csv (csv_id, csv_type, entity_name, field_name, reference_field_name, disp_name, rank, enable_flg, creator_id, create_date, update_date) VALUES (2, 1, 'Eccube\\\\Entity\\\\Product', 'Status', 'id', '公開ステータス(ID)', 2, 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
         $this->addSql("INSERT INTO dtb_csv (csv_id, csv_type, entity_name, field_name, reference_field_name, disp_name, rank, enable_flg, creator_id, create_date, update_date) VALUES (3, 1, 'Eccube\\\\Entity\\\\Product', 'Status', 'name', '公開ステータス(名称)', 3, 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
@@ -228,6 +230,15 @@ class Version20150716110834 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
 //        $this->addSql('DELETE FROM ' . self::NAME);
+
+    }
+    
+  public function addSql($sql) {
+        if ($this->identity_insert_table) {
+           parent::addSql('SET IDENTITY_INSERT '.$this->identity_insert_table.' ON '.$sql.' SET IDENTITY_INSERT '.$this->identity_insert_table.' OFF');
+        } else {
+           parent::addSql($sql);
+        }
 
     }
 }

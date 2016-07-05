@@ -31,6 +31,8 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20150613000000 extends AbstractMigration
 {
+    private $identity_insert_table;
+    
     /**
      * @param Schema $schema
      */
@@ -189,10 +191,14 @@ class Version20150613000000 extends AbstractMigration
         $this->addSql("INSERT INTO mtb_work (id, name, rank) VALUES (0, '非稼働', 0);");
         $this->addSql("INSERT INTO mtb_work (id, name, rank) VALUES (1, '稼働', 1);");
 
+        $this->identity_insert_table = 'dtb_member';
         $this->addSql("INSERT INTO dtb_member (member_id, name, department, login_id, password, salt, authority, rank, work, del_flg, creator_id, update_date, create_date, login_date) VALUES (1, 'dummy', NULL, 'dummy', 'dummy', 'dummy', 0, 0, 1, 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);");
-
+        $this->identity_insert_table = '';
+        
+        $this->identity_insert_table = 'dtb_tax_rule';
         $this->addSql("INSERT INTO dtb_tax_rule (tax_rule_id, apply_date, calc_rule, tax_rate, tax_adjust, creator_id, del_flg, create_date, update_date) VALUES (1, CURRENT_TIMESTAMP, 1, 8, 0, 1, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);");
-
+        $this->identity_insert_table = '';
+        
         $this->addSql("INSERT INTO mtb_country (id, name, rank) VALUES (352,'アイスランド',1);");
         $this->addSql("INSERT INTO mtb_country (id, name, rank) VALUES (372,'アイルランド',2);");
         $this->addSql("INSERT INTO mtb_country (id, name, rank) VALUES (31,'アゼルバイジャン',3);");
@@ -443,6 +449,7 @@ class Version20150613000000 extends AbstractMigration
         $this->addSql("INSERT INTO mtb_country (id, name, rank) VALUES (638,'レユニオン',248);");
         $this->addSql("INSERT INTO mtb_country (id, name, rank) VALUES (643,'ロシア|ロシア連邦',249);");
 
+        $this->identity_insert_table = 'dtb_block';
         $this->addSql("INSERT INTO dtb_block (device_type_id, block_id, block_name, file_name, create_date, update_date, logic_flg, deletable_flg) VALUES (10, 1, 'カテゴリ', 'category', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 0);");
         $this->addSql("INSERT INTO dtb_block (device_type_id, block_id, block_name, file_name, create_date, update_date, logic_flg, deletable_flg) VALUES (10, 2, 'カゴの中', 'cart', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 0);");
         $this->addSql("INSERT INTO dtb_block (device_type_id, block_id, block_name, file_name, create_date, update_date, logic_flg, deletable_flg) VALUES (10, 3, '商品検索', 'search_product', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 0);");
@@ -453,7 +460,9 @@ class Version20150613000000 extends AbstractMigration
         $this->addSql("INSERT INTO dtb_block (device_type_id, block_id, block_name, file_name, create_date, update_date, logic_flg, deletable_flg) VALUES (10, 8, '新着商品', 'new_product', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0, 0);");
         $this->addSql("INSERT INTO dtb_block (device_type_id, block_id, block_name, file_name, create_date, update_date, logic_flg, deletable_flg) VALUES (10, 9, 'フリーエリア', 'free', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0, 0);");
         $this->addSql("INSERT INTO dtb_block (device_type_id, block_id, block_name, file_name, create_date, update_date, logic_flg, deletable_flg) VALUES (10, 10, 'ギャラリー', 'garally', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0, 0);");
+        $this->identity_insert_table = '';
 
+        $this->identity_insert_table = 'dtb_page_layout';
         $this->addSql("INSERT INTO dtb_page_layout (device_type_id, page_id, page_name, url, file_name, edit_flg, author, description, keyword, update_url, create_date, update_date, meta_robots) VALUES (10, 0, 'プレビューデータ', 'preview', NULL, 1, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);");
         $this->addSql("INSERT INTO dtb_page_layout (device_type_id, page_id, page_name, url, file_name, edit_flg, author, description, keyword, update_url, create_date, update_date, meta_robots) VALUES (10, 1, 'TOPページ', 'homepage', 'index', 2, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);");
         $this->addSql("INSERT INTO dtb_page_layout (device_type_id, page_id, page_name, url, file_name, edit_flg, author, description, keyword, update_url, create_date, update_date, meta_robots) VALUES (10, 2, '商品一覧ページ', 'product_list', 'Product/list', 2, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);");
@@ -486,6 +495,7 @@ class Version20150613000000 extends AbstractMigration
         $this->addSql("INSERT INTO dtb_page_layout (device_type_id, page_id, page_name, url, file_name, edit_flg, author, description, keyword, update_url, create_date, update_date, meta_robots) VALUES (10, 29, 'プライバシーポリシー', 'help_privacy', 'Help/privacy', 2, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);");
         $this->addSql("INSERT INTO dtb_page_layout (device_type_id, page_id, page_name, url, file_name, edit_flg, author, description, keyword, update_url, create_date, update_date, meta_robots) VALUES (10, 30, '商品購入ログイン', 'shopping_login', 'Shopping/login', 2, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);");
         $this->addSql("INSERT INTO dtb_page_layout (device_type_id, page_id, page_name, url, file_name, edit_flg, author, description, keyword, update_url, create_date, update_date, meta_robots) VALUES (10, 31, '非会員購入情報入力', 'shopping_nonmember', 'Shopping/nonmember', 2, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL);");
+        $this->identity_insert_table = '';
 
         $this->addSql("INSERT INTO dtb_block_position (page_id, target_id, block_id, block_row, anywhere) VALUES (1, 2, 6, 1, 1);");
         $this->addSql("INSERT INTO dtb_block_position (page_id, target_id, block_id, block_row, anywhere) VALUES (1, 2, 2, 2, 1);");
@@ -498,12 +508,14 @@ class Version20150613000000 extends AbstractMigration
         $this->addSql("INSERT INTO dtb_block_position (page_id, target_id, block_id, block_row, anywhere) VALUES (1, 8, 10, 4, 0);");
         $this->addSql("INSERT INTO dtb_block_position (page_id, target_id, block_id, block_row, anywhere) VALUES (1, 9, 7, 1, 1);");
 
+        $this->identity_insert_table = 'dtb_category';
         $this->addSql("INSERT INTO dtb_category (category_id, category_name, parent_category_id, level, rank, creator_id, create_date, update_date, del_flg) VALUES (1, 'キッチンツール', NULL, 1, 5, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);");
         $this->addSql("INSERT INTO dtb_category (category_id, category_name, parent_category_id, level, rank, creator_id, create_date, update_date, del_flg) VALUES (2, 'インテリア', NULL, 1, 6, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);");
         $this->addSql("INSERT INTO dtb_category (category_id, category_name, parent_category_id, level, rank, creator_id, create_date, update_date, del_flg) VALUES (3, '食器', 1, 2, 3, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);");
         $this->addSql("INSERT INTO dtb_category (category_id, category_name, parent_category_id, level, rank, creator_id, create_date, update_date, del_flg) VALUES (4, '調理器具', 1, 2, 4, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);");
         $this->addSql("INSERT INTO dtb_category (category_id, category_name, parent_category_id, level, rank, creator_id, create_date, update_date, del_flg) VALUES (5, 'フォーク', 3, 3, 2, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);");
         $this->addSql("INSERT INTO dtb_category (category_id, category_name, parent_category_id, level, rank, creator_id, create_date, update_date, del_flg) VALUES (6, '新入荷', NULL, 1, 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);");
+        $this->identity_insert_table = '';
 
         $this->addSql("INSERT INTO dtb_category_count (category_id, product_count, create_date) VALUES (1, 1, CURRENT_TIMESTAMP);");
         $this->addSql("INSERT INTO dtb_category_count (category_id, product_count, create_date) VALUES (4, 1, CURRENT_TIMESTAMP);");
@@ -516,30 +528,39 @@ class Version20150613000000 extends AbstractMigration
         $this->addSql("INSERT INTO dtb_category_total_count (category_id, product_count, create_date) VALUES (5, 1, CURRENT_TIMESTAMP);");
         $this->addSql("INSERT INTO dtb_category_total_count (category_id, product_count, create_date) VALUES (6, 2, CURRENT_TIMESTAMP);");
 
+        $this->identity_insert_table = 'dtb_class_name';
         $this->addSql("INSERT INTO dtb_class_name (class_name_id, name, rank, creator_id, create_date, update_date, del_flg) VALUES (1, '材質', 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);");
         $this->addSql("INSERT INTO dtb_class_name (class_name_id, name, rank, creator_id, create_date, update_date, del_flg) VALUES (2, 'サイズ', 2, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);");
-
+        $this->identity_insert_table = '';
+        
+        $this->identity_insert_table = 'dtb_class_category';
         $this->addSql("INSERT INTO dtb_class_category (class_category_id, name, class_name_id, rank, creator_id, create_date, update_date, del_flg) VALUES (1, '金', 1, 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);");
         $this->addSql("INSERT INTO dtb_class_category (class_category_id, name, class_name_id, rank, creator_id, create_date, update_date, del_flg) VALUES (2, '銀', 1, 2, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);");
         $this->addSql("INSERT INTO dtb_class_category (class_category_id, name, class_name_id, rank, creator_id, create_date, update_date, del_flg) VALUES (3, 'プラチナ', 1, 3, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);");
         $this->addSql("INSERT INTO dtb_class_category (class_category_id, name, class_name_id, rank, creator_id, create_date, update_date, del_flg) VALUES (4, '120mm', 2, 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);");
         $this->addSql("INSERT INTO dtb_class_category (class_category_id, name, class_name_id, rank, creator_id, create_date, update_date, del_flg) VALUES (5, '170mm', 2, 2, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);");
         $this->addSql("INSERT INTO dtb_class_category (class_category_id, name, class_name_id, rank, creator_id, create_date, update_date, del_flg) VALUES (6, '150cm', 2, 3, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);");
-
+        $this->identity_insert_table = '';
+        
+        $this->identity_insert_table = 'dtb_delivery';
         $this->addSql("INSERT INTO dtb_delivery (delivery_id, product_type_id, name, service_name, confirm_url, rank, del_flg, creator_id, create_date, update_date) VALUES (1, 1, 'サンプル業者', 'サンプル業者', NULL, 1, 0, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);");
         $this->addSql("INSERT INTO dtb_delivery (delivery_id, product_type_id, name, service_name, confirm_url, rank, del_flg, creator_id, create_date, update_date) VALUES (2, 2, 'サンプル宅配', 'サンプル宅配', NULL, 2, 0, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);");
-
+        $this->identity_insert_table = '';
+        
+        $this->identity_insert_table = 'dtb_payment';
         $this->addSql("INSERT INTO dtb_payment (payment_id, payment_method, charge, rule_max, rank, fix_flg, del_flg, creator_id, create_date, update_date, payment_image, charge_flg, rule_min) VALUES (1, '郵便振替', 0, NULL, 4, 1, 0, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, 1, 0);");
         $this->addSql("INSERT INTO dtb_payment (payment_id, payment_method, charge, rule_max, rank, fix_flg, del_flg, creator_id, create_date, update_date, payment_image, charge_flg, rule_min) VALUES (2, '現金書留', 0, NULL, 3, 1, 0, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, 1, 0);");
         $this->addSql("INSERT INTO dtb_payment (payment_id, payment_method, charge, rule_max, rank, fix_flg, del_flg, creator_id, create_date, update_date, payment_image, charge_flg, rule_min) VALUES (3, '銀行振込', 0, NULL, 2, 1, 0, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, 1, 0);");
         $this->addSql("INSERT INTO dtb_payment (payment_id, payment_method, charge, rule_max, rank, fix_flg, del_flg, creator_id, create_date, update_date, payment_image, charge_flg, rule_min) VALUES (4, '代金引換', 0, NULL, 1, 1, 0, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, 1, 0);");
-
+        $this->identity_insert_table = '';
+        
         $this->addSql("INSERT INTO dtb_payment_option (delivery_id, payment_id) VALUES (1, 1);");
         $this->addSql("INSERT INTO dtb_payment_option (delivery_id, payment_id) VALUES (1, 2);");
         $this->addSql("INSERT INTO dtb_payment_option (delivery_id, payment_id) VALUES (1, 3);");
         $this->addSql("INSERT INTO dtb_payment_option (delivery_id, payment_id) VALUES (1, 4);");
         $this->addSql("INSERT INTO dtb_payment_option (delivery_id, payment_id) VALUES (2, 3);");
 
+        $this->identity_insert_table = 'dtb_delivery_fee';
         $this->addSql("INSERT INTO dtb_delivery_fee (fee_id, delivery_id, fee, pref) VALUES (1, 1, 1000, 1);");
         $this->addSql("INSERT INTO dtb_delivery_fee (fee_id, delivery_id, fee, pref) VALUES (2, 1, 1000, 2);");
         $this->addSql("INSERT INTO dtb_delivery_fee (fee_id, delivery_id, fee, pref) VALUES (3, 1, 1000, 3);");
@@ -634,10 +655,14 @@ class Version20150613000000 extends AbstractMigration
         $this->addSql("INSERT INTO dtb_delivery_fee (fee_id, delivery_id, fee, pref) VALUES (92, 2, 0, 45);");
         $this->addSql("INSERT INTO dtb_delivery_fee (fee_id, delivery_id, fee, pref) VALUES (93, 2, 0, 46);");
         $this->addSql("INSERT INTO dtb_delivery_fee (fee_id, delivery_id, fee, pref) VALUES (94, 2, 0, 47);");
-
+        $this->identity_insert_table = '';
+        
+        $this->identity_insert_table = 'dtb_delivery_time';
         $this->addSql("INSERT INTO dtb_delivery_time (time_id, delivery_id, delivery_time) VALUES (1, 1, '午前');");
         $this->addSql("INSERT INTO dtb_delivery_time (time_id, delivery_id, delivery_time) VALUES (2, 1, '午後');");
-
+        $this->identity_insert_table = '';
+        
+        $this->identity_insert_table = 'dtb_delivery_date';
         $this->addSql("INSERT INTO dtb_delivery_date (date_id, name, value, rank) VALUES (1, '即日', 0, 0);");
         $this->addSql("INSERT INTO dtb_delivery_date (date_id, name, value, rank) VALUES (2, '1～2日後', 1, 1);");
         $this->addSql("INSERT INTO dtb_delivery_date (date_id, name, value, rank) VALUES (3, '3～4日後', 3, 2);");
@@ -647,7 +672,9 @@ class Version20150613000000 extends AbstractMigration
         $this->addSql("INSERT INTO dtb_delivery_date (date_id, name, value, rank) VALUES (7, '1ヶ月以降', 30, 6);");
         $this->addSql("INSERT INTO dtb_delivery_date (date_id, name, value, rank) VALUES (8, '2ヶ月以降', 60, 7);");
         $this->addSql("INSERT INTO dtb_delivery_date (date_id, name, value, rank) VALUES (9, 'お取り寄せ(商品入荷後)', 0, 8);");
-
+        $this->identity_insert_table = '';
+        
+        $this->identity_insert_table = 'dtb_help';
         $this->addSql("INSERT INTO dtb_help(id, customer_agreement, create_date, update_date) VALUES (1, '第1条 (会員)
 
 1. 「会員」とは、当社が定める手続に従い本規約に同意の上、入会の申し込みを行う個人をいいます。
@@ -735,6 +762,9 @@ class Version20150613000000 extends AbstractMigration
 
 本規約に関して紛争が生じた場合、当社本店所在地を管轄する地方裁判所を第一審の専属的合意管轄裁判所とします。 ', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);");
 
+        $this->identity_insert_table = '';
+        
+        $this->identity_insert_table = 'dtb_mail_template';
         $this->addSql("INSERT INTO dtb_mail_template (template_id, name, file_name, subject, header, footer, creator_id, del_flg, create_date, update_date) VALUES (1, '注文受付メール', 'Mail/order.twig', 'ご注文ありがとうございます', 'この度はご注文いただき誠にありがとうございます。
 下記ご注文内容にお間違えがないかご確認下さい。
 
@@ -749,10 +779,16 @@ class Version20150613000000 extends AbstractMigration
 ご質問やご不明な点がございましたら、こちらからお願いいたします。
 
 ', 1, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);");
+
+
         $this->addSql("INSERT INTO dtb_mail_template (template_id, name, file_name, subject, header, footer, creator_id, del_flg, create_date, update_date) VALUES (5, '問合受付メール', 'Mail/contact.twig', 'お問い合わせを受け付けました', NULL, NULL, 1, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);");
-
+        $this->identity_insert_table = '';
+        
+        $this->identity_insert_table = 'dtb_news';
         $this->addSql("INSERT INTO dtb_news (news_id, news_date, rank, news_title, news_comment, news_url, news_select, link_method, creator_id, create_date, update_date, del_flg) VALUES (1, CURRENT_TIMESTAMP, 1, 'サイトオープンいたしました!', '一人暮らしからオフィスなどさまざまなシーンで あなたの生活をサポートするグッズをご家庭へお届けします！', NULL, 0, 1, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0);");
-
+        $this->identity_insert_table = '';
+        
+        $this->identity_insert_table = 'dtb_product';
         $this->addSql("INSERT INTO dtb_product (product_id, name, status, note, del_flg, creator_id, create_date, update_date, description_detail) VALUES (1, 'ディナーフォーク', 1, NULL, 0, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'セットで揃えたいディナー用のカトラリー。
 定番の銀製は、シルバー特有の美しい輝きと柔らかな曲線が特徴です。適度な重みと日本人の手に合いやすいサイズ感で長く愛用いただけます。
 最高級プラチナフォークは、贈り物としても人気です。');");
@@ -760,6 +796,7 @@ class Version20150613000000 extends AbstractMigration
 パーコレーターはコーヒーの粉をセットして直火にかけて抽出する器具です。
 アウトドアでも淹れたてのコーヒーをお楽しみいただけます。
 いまだけ、おいしい淹れ方の冊子つきです。');");
+        $this->identity_insert_table = '';
 
         $this->addSql("INSERT INTO dtb_product_category (product_id, category_id, rank) VALUES (1, 5, 1);");
         $this->addSql("INSERT INTO dtb_product_category (product_id, category_id, rank) VALUES (1, 6, 1);");
@@ -767,6 +804,7 @@ class Version20150613000000 extends AbstractMigration
         $this->addSql("INSERT INTO dtb_product_category (product_id, category_id, rank) VALUES (2, 4, 1);");
         $this->addSql("INSERT INTO dtb_product_category (product_id, category_id, rank) VALUES (2, 6, 2);");
 
+        $this->identity_insert_table = 'dtb_product_class';
         $this->addSql("INSERT INTO dtb_product_class (product_class_id, product_id, class_category_id1, class_category_id2, product_code, stock, stock_unlimited, sale_limit, price01, price02, delivery_fee, creator_id, create_date, update_date, del_flg, product_type_id) VALUES(0, 1, NULL, NULL, 'fork-01', NULL, 1, NULL, 115000, 110000, NULL, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, 1);");
         $this->addSql("INSERT INTO dtb_product_class (product_class_id, product_id, class_category_id1, class_category_id2, product_code, stock, stock_unlimited, sale_limit, price01, price02, delivery_fee, creator_id, create_date, update_date, del_flg, product_type_id) VALUES(1, 1, 3, 6, 'fork-01', NULL, 1, NULL, 115000, 110000, NULL, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0, 1);");
         $this->addSql("INSERT INTO dtb_product_class (product_class_id, product_id, class_category_id1, class_category_id2, product_code, stock, stock_unlimited, sale_limit, price01, price02, delivery_fee, creator_id, create_date, update_date, del_flg, product_type_id) VALUES(2, 1, 3, 5, 'fork-02', NULL, 1, NULL, 95000, 93000, NULL, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0, 1);");
@@ -778,7 +816,9 @@ class Version20150613000000 extends AbstractMigration
         $this->addSql("INSERT INTO dtb_product_class (product_class_id, product_id, class_category_id1, class_category_id2, product_code, stock, stock_unlimited, sale_limit, price01, price02, delivery_fee, creator_id, create_date, update_date, del_flg, product_type_id) VALUES(8, 1, 1, 5, 'fork-08', NULL, 1, NULL, null, 13000, NULL, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0, 1);");
         $this->addSql("INSERT INTO dtb_product_class (product_class_id, product_id, class_category_id1, class_category_id2, product_code, stock, stock_unlimited, sale_limit, price01, price02, delivery_fee, creator_id, create_date, update_date, del_flg, product_type_id) VALUES(9, 1, 1, 4, 'fork-09', NULL, 1, NULL, null, 5000, NULL, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0, 1);");
         $this->addSql("INSERT INTO dtb_product_class (product_class_id, product_id, class_category_id1, class_category_id2, product_code, stock, stock_unlimited, sale_limit, price01, price02, delivery_fee, creator_id, create_date, update_date, del_flg, product_type_id) VALUES(10, 2, NULL, NULL, 'cafe-01', 100, 0, 5, 3000, 2800, NULL, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 0, 1);");
-
+        $this->identity_insert_table = '';
+        
+        $this->identity_insert_table = 'dtb_product_stock';
         $this->addSql("INSERT INTO dtb_product_stock (product_stock_id, product_class_id, stock, creator_id, create_date, update_date) VALUES(1, 0, NULL, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);");
         $this->addSql("INSERT INTO dtb_product_stock (product_stock_id, product_class_id, stock, creator_id, create_date, update_date) VALUES(2, 1, NULL, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);");
         $this->addSql("INSERT INTO dtb_product_stock (product_stock_id, product_class_id, stock, creator_id, create_date, update_date) VALUES(3, 2, NULL, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);");
@@ -790,18 +830,23 @@ class Version20150613000000 extends AbstractMigration
         $this->addSql("INSERT INTO dtb_product_stock (product_stock_id, product_class_id, stock, creator_id, create_date, update_date) VALUES(9, 8, NULL, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);");
         $this->addSql("INSERT INTO dtb_product_stock (product_stock_id, product_class_id, stock, creator_id, create_date, update_date) VALUES(10, 9, NULL, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);");
         $this->addSql("INSERT INTO dtb_product_stock (product_stock_id, product_class_id, stock, creator_id, create_date, update_date) VALUES(11, 10, 100, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);");
-
+        $this->identity_insert_table = '';
+        
+        $this->identity_insert_table = 'dtb_product_image';
         $this->addSql("INSERT INTO dtb_product_image (product_image_id, product_id, creator_id, file_name, rank, create_date) VALUES(1, 1, 1, 'fork-1.jpg', 1, CURRENT_TIMESTAMP);");
         $this->addSql("INSERT INTO dtb_product_image (product_image_id, product_id, creator_id, file_name, rank, create_date) VALUES(2, 1, 1, 'fork-2.jpg', 2, CURRENT_TIMESTAMP);");
         $this->addSql("INSERT INTO dtb_product_image (product_image_id, product_id, creator_id, file_name, rank, create_date) VALUES(3, 1, 1, 'fork-3.jpg', 3, CURRENT_TIMESTAMP);");
         $this->addSql("INSERT INTO dtb_product_image (product_image_id, product_id, creator_id, file_name, rank, create_date) VALUES(4, 2, 1, 'cafe-1.jpg', 3, CURRENT_TIMESTAMP);");
         $this->addSql("INSERT INTO dtb_product_image (product_image_id, product_id, creator_id, file_name, rank, create_date) VALUES(5, 2, 1, 'cafe-2.jpg', 3, CURRENT_TIMESTAMP);");
         $this->addSql("INSERT INTO dtb_product_image (product_image_id, product_id, creator_id, file_name, rank, create_date) VALUES(6, 2, 1, 'cafe-3.jpg', 3, CURRENT_TIMESTAMP);");
-
+        $this->identity_insert_table = '';
+        
+        $this->identity_insert_table = 'dtb_template';
         $this->addSql("INSERT INTO dtb_template (template_id, template_code, device_type_id, template_name, create_date, update_date) VALUES (1, 'default', 10, 'デフォルト', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);");
         $this->addSql("INSERT INTO dtb_template (template_id, template_code, device_type_id, template_name, create_date, update_date) VALUES (2, 'mobile', 1, 'モバイル', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);");
         $this->addSql("INSERT INTO dtb_template (template_id, template_code, device_type_id, template_name, create_date, update_date) VALUES (4, 'sphone', 2, 'スマートフォン', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);");
-
+        $this->identity_insert_table = '';
+        
         if ($this->connection->getDatabasePlatform()->getName() == "postgresql") {
             $this->addSql("SELECT setval('dtb_base_info_id_seq', 2);");
             $this->addSql("SELECT setval('dtb_member_member_id_seq', 2);");
@@ -831,5 +876,14 @@ class Version20150613000000 extends AbstractMigration
      */
     public function down(Schema $schema)
     {
+    }
+    
+    public function addSql($sql) {
+        if ($this->identity_insert_table) {
+           parent::addSql('SET IDENTITY_INSERT '.$this->identity_insert_table.' ON '.$sql.' SET IDENTITY_INSERT '.$this->identity_insert_table.' OFF');
+        } else {
+           parent::addSql($sql);
+        }
+
     }
 }

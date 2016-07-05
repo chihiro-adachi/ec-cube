@@ -57,6 +57,9 @@ class Step4Type extends AbstractType
         if (extension_loaded('pdo_sqlite')) {
             $database['pdo_sqlite'] = 'SQLite(開発者用)';
         }
+        if (extension_loaded('pdo_sqlsrv')) {
+            $database['pdo_sqlsrv'] = 'Microsoft SQL Server';
+        }
 
         $builder
             ->add('database', 'choice', array(

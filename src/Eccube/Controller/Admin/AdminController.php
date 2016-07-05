@@ -245,7 +245,7 @@ class AdminController extends AbstractController
         $rsm->addScalarResult('count', 'count');
         $query = $em->createNativeQuery($sql, $rsm);
         $query->setParameters(array(':excludes' => $excludes));
-        $result = $query->getResult();
+        //$result = $query->getResult();
         $orderArray = array();
         foreach ($result as $row) {
             $orderArray[$row['status']] = $row['count'];
@@ -278,7 +278,7 @@ class AdminController extends AbstractController
 
         $result = array();
         try {
-            $result = $q->getSingleResult();
+            //$result = $q->getSingleResult();
         } catch (NoResultException $e) {
             // 結果がない場合は空の配列を返す.
         }
@@ -309,7 +309,7 @@ class AdminController extends AbstractController
 
         $result = array();
         try {
-            $result = $q->getSingleResult();
+            //$result = $q->getSingleResult();
         } catch (NoResultException $e) {
             // 結果がない場合は空の配列を返す.
         }

@@ -473,7 +473,7 @@ class InstallController
             $salt = \Eccube\Util\Str::random(32);
 
             $encodedPassword = $passwordEncoder->encodePassword($this->session_data['login_pass'], $salt);
-            $sth = $this->PDO->prepare('INSERT INTO dtb_base_info (
+            $sth = $this->PDO->prepare('SET IDENTITY_INSERT dtb_base_info ON INSERT INTO dtb_base_info (
                 id,
                 shop_name,
                 email01,
@@ -485,18 +485,21 @@ class InstallController
             ) VALUES (
                 1,
                 :shop_name,
-                :admin_mail,
-                :admin_mail,
-                :admin_mail,
-                :admin_mail,
+                :admin_mail1,
+                :admin_mail2,
+                :admin_mail3,
+                :admin_mail4,
                 current_timestamp,
-                0);');
+                0); SET IDENTITY_INSERT dtb_base_info OFF;');
             $sth->execute(array(
                 ':shop_name' => $this->session_data['shop_name'],
-                ':admin_mail' => $this->session_data['email']
+                ':admin_mail1' => $this->session_data['email'],
+                ':admin_mail2' => $this->session_data['email'],
+                ':admin_mail3' => $this->session_data['email'],
+                ':admin_mail4' => $this->session_data['email']
             ));
-
-            $sth = $this->PDO->prepare("INSERT INTO dtb_member (member_id, login_id, password, salt, work, del_flg, authority, creator_id, rank, update_date, create_date,name,department) VALUES (2, :login_id, :admin_pass , :salt , '1', '0', '0', '1', '1', current_timestamp, current_timestamp,'管理者','EC-CUBE SHOP');");
+            
+            $sth = $this->PDO->prepare("SET IDENTITY_INSERT dtb_member ON INSERT INTO dtb_member (member_id, login_id, password, salt, work, del_flg, authority, creator_id, rank, update_date, create_date,name,department) VALUES (2, :login_id, :admin_pass , :salt , '1', '0', '0', '1', '1', current_timestamp, current_timestamp,'管理者','EC-CUBE SHOP') SET IDENTITY_INSERT dtb_member OFF;");
             $sth->execute(array(':login_id' => $this->session_data['login_id'], ':admin_pass' => $encodedPassword, ':salt' => $salt));
 
             $this->PDO->commit();
@@ -711,6 +714,12 @@ class InstallController
                         $data['db_port'] = '3306';
                     }
                     $data['db_driver'] = 'pdo_mysql';
+                    break;
+                case 'pdo_sqlsrv':
+                    if (empty($data['db_port'])) {
+                        $data['db_port'] = '1433';
+                    }
+                    $data['db_driver'] = 'pdo_sqlsrv'; 
                     break;
             }
             $target = array('${DBDRIVER}', '${DBSERVER}', '${DBNAME}', '${DBPORT}', '${DBUSER}', '${DBPASS}');
