@@ -110,6 +110,12 @@ case "${DBTYPE}" in
     DATABASE_YML_DIST="${DIST_DIR}/database.yml.sqlite3-in-memory.dist"
     export DBDRIVER=pdo_sqlite
 ;;
+"sqlsrv" )
+    #-- DB Seting SQL Server
+    SQLCMD=sqlcmd
+    #export DBPORT=
+    export DBDRIVER=sqlsrv
+;;
 * )
     echo "argument is invaid."
     echo ""
@@ -253,6 +259,24 @@ case "${DBTYPE}" in
 
     echo "execute optional SQL..."
     get_optional_sql | ${SQLITE3} ${DBPATH}
+;;
+"sqlsrv" )
+    # SQL Server
+    echo "drop table..."
+    ./vendor/bin/doctrine orm:schema-tool:drop --force
+
+    echo "create table..."
+    ./vendor/bin/doctrine orm:schema-tool:create
+
+    echo "remove migration table..."
+    sqlcmd -S ${DBSERVER} -U ${DBUSER} -P ${DBPASS} -d ${DBNAME} -Q "delete FROM doctrine_migration_versions"
+
+    echo "migration..."
+    php app/console migrations:migrate  --no-interaction
+
+    echo "execute optional SQL..."
+    sqlcmd -S ${DBSERVER} -U ${DBUSER} -P ${DBPASS} -d ${DBNAME} -Q "set identity_insert dtb_member on; INSERT INTO dtb_member (member_id, login_id, password, salt, work, del_flg, authority, creator_id, rank, update_date, create_date,name,department) VALUES (2, 'admin', '${ADMINPASS}', '${AUTH_MAGIC}', 1, 0, 0, 1, 1, current_timestamp, current_timestamp,'管理者','EC-CUBE SHOP');set identity_insert dtb_member off;"
+    sqlcmd -S ${DBSERVER} -U ${DBUSER} -P ${DBPASS} -d ${DBNAME} -Q "set identity_insert dtb_base_info on;INSERT INTO dtb_base_info (id, shop_name, email01, email02, email03, email04, update_date, option_product_tax_rule) VALUES (1, '${SHOP_NAME}', '${ADMIN_MAIL}', '${ADMIN_MAIL}', '${ADMIN_MAIL}', '${ADMIN_MAIL}', current_timestamp, 0);;set identity_insert dtb_base_info off;"
 ;;
 esac
 
