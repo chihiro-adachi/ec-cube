@@ -27,6 +27,7 @@ namespace Eccube\Controller\Install;
 use Doctrine\DBAL\Migrations\Configuration\Configuration;
 use Doctrine\DBAL\Migrations\Migration;
 use Doctrine\DBAL\Migrations\MigrationException;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use Eccube\Common\Constant;
@@ -398,7 +399,10 @@ class InstallController
 
         $schemaTool->dropSchema($metadatas);
 
-        $em->getConnection()->executeQuery('DROP TABLE IF EXISTS doctrine_migration_versions');
+        $schemaManager = $em->getConnection()->getSchemaManager();
+        if ($schemaManager->tablesExist(array('doctrine_migration_versions'))) {
+            $schemaManager->dropTable('doctrine_migration_versions');
+        }
 
         return $this;
     }
@@ -443,6 +447,7 @@ class InstallController
         $metadatas = $em->getMetadataFactory()->getAllMetadata();
         $schemaTool = new SchemaTool($em);
 
+        Type::overrideType('string', 'Eccube\Doctrine\DBAL\Types\NvarcharStringType');
         $schemaTool->createSchema($metadatas);
 
         return $this;
