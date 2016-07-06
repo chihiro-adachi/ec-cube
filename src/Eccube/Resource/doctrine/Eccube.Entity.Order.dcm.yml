@@ -13,77 +13,77 @@ Eccube\Entity\Order:
                 strategy: AUTO
     fields:
         pre_order_id:
-            type: text
+            type: string
             nullable: true
         message:
-            type: text
+            type: string
             nullable: true
         name01:
-            type: text
+            type: string
             nullable: true
             column: order_name01
         name02:
-            type: text
+            type: string
             nullable: true
             column: order_name02
         kana01:
-            type: text
+            type: string
             nullable: true
             column: order_kana01
         kana02:
-            type: text
+            type: string
             nullable: true
             column: order_kana02
         company_name:
-            type: text
+            type: string
             nullable: true
             column: order_company_name
         email:
-            type: text
+            type: string
             nullable: true
             column: order_email
         tel01:
-            type: text
+            type: string
             nullable: true
             column: order_tel01
         tel02:
-            type: text
+            type: string
             nullable: true
             column: order_tel02
         tel03:
-            type: text
+            type: string
             nullable: true
             column: order_tel03
         fax01:
-            type: text
+            type: string
             nullable: true
             column: order_fax01
         fax02:
-            type: text
+            type: string
             nullable: true
             column: order_fax02
         fax03:
-            type: text
+            type: string
             nullable: true
             column: order_fax03
         zip01:
-            type: text
+            type: string
             nullable: true
             column: order_zip01
         zip02:
-            type: text
+            type: string
             nullable: true
             column: order_zip02
         zipcode:
-            type: text
+            type: string
             nullable: true
             column: order_zipcode
         addr01:
-            type: text
+            type: string
             nullable: true
             column: order_addr01
         addr02:
-            type: text
+            type: string
             nullable: true
             column: order_addr02
         birth:
@@ -128,10 +128,10 @@ Eccube\Entity\Order:
             precision: 10
             scale: 0
         payment_method:
-            type: text
+            type: string
             nullable: true
         note:
-            type: text
+            type: string
             nullable: true
         create_date:
             type: datetime

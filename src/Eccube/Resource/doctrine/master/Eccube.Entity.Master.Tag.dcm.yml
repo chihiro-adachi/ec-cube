@@ -10,7 +10,7 @@ Eccube\Entity\Master\Tag:
             id: true
     fields:
         name:
-            type: text
+            type: string
             nullable: false
         rank:
             type: smallint

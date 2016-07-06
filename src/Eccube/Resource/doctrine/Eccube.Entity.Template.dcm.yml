@@ -13,11 +13,11 @@ Eccube\Entity\Template:
                 strategy: AUTO
     fields:
         code:
-            type: text
+            type: string
             nullable: false
             column: template_code
         name:
-            type: text
+            type: string
             nullable: false
             column: template_name
         create_date:

@@ -13,19 +13,19 @@ Eccube\Entity\Member:
                 strategy: AUTO
     fields:
         name:
-            type: text
+            type: string
             nullable: true
         department:
-            type: text
+            type: string
             nullable: true
         login_id:
-            type: text
+            type: string
             nullable: false
         password:
-            type: text
+            type: string
             nullable: false
         salt:
-            type: text
+            type: string
             nullable: false
         rank:
             type: integer

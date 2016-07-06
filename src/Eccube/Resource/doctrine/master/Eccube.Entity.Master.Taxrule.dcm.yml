@@ -10,7 +10,7 @@ Eccube\Entity\Master\Taxrule:
             id: true
     fields:
         name:
-            type: text
+            type: string
             nullable: true
         rank:
             type: smallint

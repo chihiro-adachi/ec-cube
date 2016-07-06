@@ -13,27 +13,27 @@ Eccube\Entity\Product:
                 strategy: AUTO
     fields:
         name:
-            type: text
+            type: string
             nullable: false
             length: 65535
         note:
-            type: text
+            type: string
             nullable: true
             length: 65535
         description_list:
-            type: text
+            type: string
             nullable: true
             length: 65535
         description_detail:
-            type: text
+            type: string
             nullable: true
             length: 65535
         search_word:
-            type: text
+            type: string
             nullable: true
             length: 65535
         free_area:
-            type: text
+            type: string
             nullable: true
             length: 65535
         del_flg:

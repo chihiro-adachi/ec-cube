@@ -13,7 +13,7 @@ Eccube\Entity\DeliveryTime:
                 strategy: AUTO
     fields:
         delivery_time:
-            type: text
+            type: string
             nullable: false
     manyToOne:
         Delivery:

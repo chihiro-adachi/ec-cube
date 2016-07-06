@@ -12,14 +12,14 @@ Eccube\Entity\PageLayout:
                 strategy: AUTO
     fields:
         name:
-            type: text
+            type: string
             nullable: true
             column: page_name
         url:
-            type: text
+            type: string
             nullable: false
         file_name:
-            type: text
+            type: string
             nullable: true
         edit_flg:
             type: smallint
@@ -28,16 +28,16 @@ Eccube\Entity\PageLayout:
             options:
                 default: '1'
         author:
-            type: text
+            type: string
             nullable: true
         description:
-            type: text
+            type: string
             nullable: true
         keyword:
-            type: text
+            type: string
             nullable: true
         update_url:
-            type: text
+            type: string
             nullable: true
         create_date:
             type: datetime
@@ -46,7 +46,7 @@ Eccube\Entity\PageLayout:
             type: datetime
             nullable: false
         meta_robots:
-            type: text
+            type: string
             nullable: true
     oneToMany:
         BlockPositions:

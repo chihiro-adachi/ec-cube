@@ -13,16 +13,16 @@ Eccube\Entity\Csv:
                 strategy: AUTO
     fields:
         entity_name:
-            type: text
+            type: string
             nullable: false
         field_name:
-            type: text
+            type: string
             nullable: false
         reference_field_name:
-            type: text
+            type: string
             nullable: true
         disp_name:
-            type: text
+            type: string
             nullable: false
         rank:
             type: smallint

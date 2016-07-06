@@ -13,7 +13,7 @@ Eccube\Entity\DeliveryDate:
                 strategy: AUTO
     fields:
         name:
-            type: text
+            type: string
             nullable: true
         value:
             type: smallint

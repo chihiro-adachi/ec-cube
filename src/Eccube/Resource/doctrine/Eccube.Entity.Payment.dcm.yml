@@ -13,7 +13,7 @@ Eccube\Entity\Payment:
                 strategy: AUTO
     fields:
         method:
-            type: text
+            type: string
             nullable: true
             column: payment_method
         charge:
@@ -49,7 +49,7 @@ Eccube\Entity\Payment:
             type: datetime
             nullable: false
         payment_image:
-            type: text
+            type: string
             nullable: true
         charge_flg:
             type: smallint

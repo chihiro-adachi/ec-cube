@@ -18,7 +18,7 @@ Eccube\Entity\Block:
                 strategy: AUTO
     fields:
         name:
-            type: text
+            type: string
             column: block_name
             nullable: true
         file_name:

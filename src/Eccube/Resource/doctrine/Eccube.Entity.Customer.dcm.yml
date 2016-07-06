@@ -17,64 +17,64 @@ Eccube\Entity\Customer:
                 strategy: AUTO
     fields:
         name01:
-            type: text
+            type: string
             nullable: false
         name02:
-            type: text
+            type: string
             nullable: false
         kana01:
-            type: text
+            type: string
             nullable: true
         kana02:
-            type: text
+            type: string
             nullable: true
         company_name:
-            type: text
+            type: string
             nullable: true
         zip01:
-            type: text
+            type: string
             nullable: true
         zip02:
-            type: text
+            type: string
             nullable: true
         zipcode:
-            type: text
+            type: string
             nullable: true
         addr01:
-            type: text
+            type: string
             nullable: true
         addr02:
-            type: text
+            type: string
             nullable: true
         email:
-            type: text
+            type: string
             nullable: false
         tel01:
-            type: text
+            type: string
             nullable: true
         tel02:
-            type: text
+            type: string
             nullable: true
         tel03:
-            type: text
+            type: string
             nullable: true
         fax01:
-            type: text
+            type: string
             nullable: true
         fax02:
-            type: text
+            type: string
             nullable: true
         fax03:
-            type: text
+            type: string
             nullable: true
         birth:
             type: datetime
             nullable: true
         password:
-            type: text
+            type: string
             nullable: true
         salt:
-            type: text
+            type: string
             nullable: true
         secret_key:
             type: string
@@ -101,10 +101,10 @@ Eccube\Entity\Customer:
             options:
                 default: '0'
         note:
-            type: text
+            type: string
             nullable: true
         reset_key:
-            type: text
+            type: string
             nullable: true
         reset_expire:
             type: datetime

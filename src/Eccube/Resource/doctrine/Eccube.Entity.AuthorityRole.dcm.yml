@@ -13,7 +13,7 @@ Eccube\Entity\AuthorityRole:
                 strategy: AUTO
     fields:
         deny_url:
-            type: text
+            type: string
             nullable: false
         create_date:
             type: datetime

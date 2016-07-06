@@ -14,13 +14,13 @@ Eccube\Entity\Plugin:
                 strategy: AUTO
     fields:
         name:
-            type: text
+            type: string
             nullable: false
         code:
-            type: text
+            type: string
             nullable: false
         class_name:
-            type: text
+            type: string
         enable:
             type: smallint
             nullable: false
@@ -37,7 +37,7 @@ Eccube\Entity\Plugin:
             type: string
             nullable: false
         source:
-            type: text
+            type: string
             nullable: false
         create_date:
             type: datetime

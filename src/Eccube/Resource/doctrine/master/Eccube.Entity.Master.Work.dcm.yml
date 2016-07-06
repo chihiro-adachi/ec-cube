@@ -10,7 +10,7 @@ Eccube\Entity\Master\Work:
             id: true
     fields:
         name:
-            type: text
+            type: string
             nullable: true
         rank:
             type: smallint

@@ -13,7 +13,7 @@ Eccube\Entity\ProductClass:
                 strategy: AUTO
     fields:
         code:
-            type: text
+            type: string
             column: product_code
             nullable: true
             fixed: false

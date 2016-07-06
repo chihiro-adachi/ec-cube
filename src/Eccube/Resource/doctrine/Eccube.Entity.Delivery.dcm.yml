@@ -13,16 +13,16 @@ Eccube\Entity\Delivery:
                 strategy: AUTO
     fields:
         name:
-            type: text
+            type: string
             nullable: true
         service_name:
-            type: text
+            type: string
             nullable: true
         description:
-            type: text
+            type: string
             nullable: true
         confirm_url:
-            type: text
+            type: string
             nullable: true
         rank:
             type: integer

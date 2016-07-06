@@ -11,15 +11,15 @@ Eccube\Entity\Master\Zip:
             column: zip_id
     fields:
         zipcode:
-            type: text
+            type: string
             nullable: true
         state:
-            type: text
+            type: string
             nullable: true
         city:
-            type: text
+            type: string
             nullable: true
         town:
-            type: text
+            type: string
             nullable: true
     lifecycleCallbacks: {  }

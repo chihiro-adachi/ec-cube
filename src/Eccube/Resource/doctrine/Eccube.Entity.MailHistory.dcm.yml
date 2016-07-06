@@ -16,10 +16,10 @@ Eccube\Entity\MailHistory:
             type: datetime
             nullable: true
         subject:
-            type: text
+            type: string
             nullable: true
         mail_body:
-            type: text
+            type: string
             nullable: true
     manyToOne:
         Order:

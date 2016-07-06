@@ -13,7 +13,7 @@ Eccube\Entity\ProductImage:
                 strategy: AUTO
     fields:
         file_name:
-            type: text
+            type: string
             nullable: false
         rank:
             type: integer

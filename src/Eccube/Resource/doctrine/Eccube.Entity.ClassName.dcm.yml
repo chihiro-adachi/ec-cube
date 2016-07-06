@@ -13,7 +13,7 @@ Eccube\Entity\ClassName:
                 strategy: AUTO
     fields:
         name:
-            type: text
+            type: string
             nullable: false
         rank:
             type: integer

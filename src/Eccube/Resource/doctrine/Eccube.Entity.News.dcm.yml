@@ -21,15 +21,15 @@ Eccube\Entity\News:
             nullable: true
             unsigned: false
         title:
-            type: text
+            type: string
             nullable: false
             column: news_title
         comment:
-            type: text
+            type: string
             nullable: true
             column: news_comment
         url:
-            type: text
+            type: string
             nullable: true
             column: news_url
         select:

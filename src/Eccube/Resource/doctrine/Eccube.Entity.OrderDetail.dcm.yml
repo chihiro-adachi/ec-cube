@@ -17,22 +17,22 @@ Eccube\Entity\OrderDetail:
                 strategy: AUTO
     fields:
         product_name:
-            type: text
+            type: string
             nullable: false
         product_code:
-            type: text
+            type: string
             nullable: true
         class_name1:
-            type: text
+            type: string
             nullable: true
         class_name2:
-            type: text
+            type: string
             nullable: true
         class_category_name1:
-            type: text
+            type: string
             nullable: true
         class_category_name2:
-            type: text
+            type: string
             nullable: true
         price:
             type: decimal

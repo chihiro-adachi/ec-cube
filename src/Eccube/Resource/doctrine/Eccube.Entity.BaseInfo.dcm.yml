@@ -12,82 +12,82 @@ Eccube\Entity\BaseInfo:
                 strategy: AUTO
     fields:
         company_name:
-            type: text
+            type: string
             nullable: true
         company_kana:
-            type: text
+            type: string
             nullable: true
         zip01:
-            type: text
+            type: string
             nullable: true
         zip02:
-            type: text
+            type: string
             nullable: true
         zipcode:
-            type: text
+            type: string
             nullable: true
         addr01:
-            type: text
+            type: string
             nullable: true
         addr02:
-            type: text
+            type: string
             nullable: true
         tel01:
-            type: text
+            type: string
             nullable: true
         tel02:
-            type: text
+            type: string
             nullable: true
         tel03:
-            type: text
+            type: string
             nullable: true
         fax01:
-            type: text
+            type: string
             nullable: true
         fax02:
-            type: text
+            type: string
             nullable: true
         fax03:
-            type: text
+            type: string
             nullable: true
         business_hour:
-            type: text
+            type: string
             nullable: true
         email01:
-            type: text
+            type: string
             nullable: true
         email02:
-            type: text
+            type: string
             nullable: true
         email03:
-            type: text
+            type: string
             nullable: true
         email04:
-            type: text
+            type: string
             nullable: true
         shop_name:
-            type: text
+            type: string
             nullable: true
         shop_kana:
-            type: text
+            type: string
             nullable: true
         shop_name_eng:
-            type: text
+            type: string
             nullable: true
         update_date:
             type: datetime
             nullable: false
         good_traded:
-            type: text
+            type: string
             nullable: true
         message:
-            type: text
+            type: string
             nullable: true
         latitude:
-            type: text
+            type: string
             nullable: true
         longitude:
-            type: text
+            type: string
             nullable: true
         delivery_free_amount:
             type: decimal
@@ -142,7 +142,7 @@ Eccube\Entity\BaseInfo:
             options:
                 default: 0
         authentication_key:
-            type: text
+            type: string
             nullable: true
     manyToOne:
         Country:
