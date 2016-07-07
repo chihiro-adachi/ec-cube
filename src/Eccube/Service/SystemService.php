@@ -41,6 +41,11 @@ class SystemService
         $rsm->addScalarResult('v', 'v');
 
         switch ($this->app['config']['database']['driver']) {
+            case 'pdo_sqlsrv':
+            case 'sqlsrv':
+                $prefix = '';
+                $func = '@@version';
+                break;
             case 'pdo_sqlite':
                 $prefix = 'SQLite version ';
                 $func = 'sqlite_version()';
