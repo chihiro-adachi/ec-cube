@@ -6,4 +6,4 @@ database:
     user: ${DBUSER}
     password : ${DBPASS}
     charset: UTF-8
-    defaultTableOptions: { collate: SQL_Latin1_General_CP1_CI_AS }
+    defaultTableOptions: { collate: utf8_general_ci }
