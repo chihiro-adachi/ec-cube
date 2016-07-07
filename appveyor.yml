@@ -60,8 +60,8 @@ install:
   - echo mbstring.http_output = pass >> C:\tools\php\php.ini
   - echo mbstring.internal_encoding = UTF-8 >> C:\tools\php\php.ini
   - echo memory_limit = 512M >> C:\tools\php\php.ini
-  - copy appveyor/php_pdo_sqlsrv_56_nts.dll ext/
-  - copy appveyor/php_sqlsrv_56_nts.dll ext/
+  - copy appveyor\php_pdo_sqlsrv_56_nts.dll C:\tools\php\ext\php_pdo_sqlsrv_56_nts.dll
+  - copy appveyor\php_sqlsrv_56_nts.dll C:\tools\php\ext\php_sqlsrv_56_nts.dll
   - echo extension=php_pdo_sqlsrv_56_nts.dll >> C:\tools\php\php.ini
   - echo extension=php_sqlsrv_56_nts.dll >> C:\tools\php\php.ini
   - php -r "readfile('http://getcomposer.org/installer');" | php
