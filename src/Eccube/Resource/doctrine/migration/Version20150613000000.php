@@ -50,7 +50,10 @@ class Version20150613000000 extends AbstractMigration
             $this->addSql("SET SESSION sql_mode='NO_AUTO_VALUE_ON_ZERO';");
         }
 
-        $N = 'N';
+        $N = '';
+        if ($this->connection->getDatabasePlatform()->getName() == "mssql") {
+            $N = 'N';
+        }
 
         $this->addSql("INSERT INTO mtb_authority (id, name, rank) VALUES (0, $N'システム管理者', 0);");
         $this->addSql("INSERT INTO mtb_authority (id, name, rank) VALUES (1, $N'店舗オーナー', 1);");
@@ -881,7 +884,8 @@ class Version20150613000000 extends AbstractMigration
     }
 
     protected function addSql($sql, array $params = array(), array $types = array()) {
-        if ($this->identity_insert_table) {
+        $platform = $this->connection->getDatabasePlatform()->getName();
+        if (($platform == 'mssql') && $this->identity_insert_table) {
             parent::addSql(
                 'SET IDENTITY_INSERT '.$this->identity_insert_table.' ON '.$sql.' SET IDENTITY_INSERT '.$this->identity_insert_table.' OFF',
                 $params,

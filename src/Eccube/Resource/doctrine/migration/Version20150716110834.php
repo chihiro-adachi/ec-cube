@@ -234,7 +234,8 @@ class Version20150716110834 extends AbstractMigration
     }
 
     protected function addSql($sql, array $params = array(), array $types = array()) {
-        if ($this->identity_insert_table) {
+        $platform = $this->connection->getDatabasePlatform()->getName();
+        if (($platform == 'mssql') && $this->identity_insert_table) {
             parent::addSql(
                 'SET IDENTITY_INSERT '.$this->identity_insert_table.' ON '.$sql.' SET IDENTITY_INSERT '.$this->identity_insert_table.' OFF',
                 $params,
