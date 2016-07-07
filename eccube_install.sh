@@ -269,7 +269,7 @@ case "${DBTYPE}" in
     ./vendor/bin/doctrine orm:schema-tool:create
 
     echo "remove migration table..."
-    sqlcmd -S ${DBSERVER} -U ${DBUSER} -P ${DBPASS} -d ${DBNAME} -Q "delete FROM doctrine_migration_versions"
+    #sqlcmd -S ${DBSERVER} -U ${DBUSER} -P ${DBPASS} -d ${DBNAME} -Q "delete FROM doctrine_migration_versions"
 
     echo "migration..."
     php app/console migrations:migrate  --no-interaction

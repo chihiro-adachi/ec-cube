@@ -15,19 +15,20 @@ init:
 
 environment:
   global:
-    USER: "root" 
-    DBNAME: "myapp_test"
+    USER: "root"
+    DBSERVER: "SQL2014"
+    DBNAME: "master"
     DBPASS: "Password12!"
-    DBUSER: "root"
+    DBUSER: "sa"
     BASE_DIR: "C:/projects/ec-cube"
 
   matrix:
-  - db: mysql
-    provider: mysql
+  - db: mssql
+    provider: mssql
 
 services:
   - iis  
-  - mysql
+  - mssql2014
 
 # Install scripts. (runs after repo cloning)
 install:
@@ -49,6 +50,8 @@ install:
   - echo extension=php_pgsql.dll >> C:\tools\php\php.ini
   - echo extension=php_pdo_mysql.dll >> C:\tools\php\php.ini
   - echo extension=php_pdo_pgsql.dll >> C:\tools\php\php.ini
+  - echo extension=php_pdo_sqlsrv.dll >> C:\tools\php\php.ini
+  - echo extension=php_sqlsrv.dll >> C:\tools\php\php.ini
   - echo extension=php_curl.dll >> C:\tools\php\php.ini
   - echo extension=php_fileinfo.dll >> C:\tools\php\php.ini
   - echo output_buffering = Off >> C:\tools\php\php.ini
@@ -70,7 +73,7 @@ install:
 build: off
 
 before_test:
-  - bash eccube_install.sh mysql none
+  - bash eccube_install.sh sqlsrv none
 
 test_script:
   - vendor\bin\phpunit.bat
