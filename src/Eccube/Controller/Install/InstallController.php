@@ -478,7 +478,11 @@ class InstallController
             $salt = \Eccube\Util\Str::random(32);
 
             $encodedPassword = $passwordEncoder->encodePassword($this->session_data['login_pass'], $salt);
-            $sth = $this->PDO->prepare('SET IDENTITY_INSERT dtb_base_info ON INSERT INTO dtb_base_info (
+
+            $platform = $this->PDO->getDatabasePlatform()->getName();
+            $identityInsertOn = ($platform == 'mssql') ? 'SET IDENTITY_INSERT dtb_base_info ON;' : '';
+            $identityInsertOff = ($platform == 'mssql') ? 'SET IDENTITY_INSERT dtb_base_info OFF;' : '';
+            $sth = $this->PDO->prepare("$identityInsertOn INSERT INTO dtb_base_info (
                 id,
                 shop_name,
                 email01,
@@ -495,7 +499,7 @@ class InstallController
                 :admin_mail3,
                 :admin_mail4,
                 current_timestamp,
-                0); SET IDENTITY_INSERT dtb_base_info OFF;');
+                0); $identityInsertOff");
             $sth->execute(array(
                 ':shop_name' => $this->session_data['shop_name'],
                 ':admin_mail1' => $this->session_data['email'],
@@ -503,8 +507,9 @@ class InstallController
                 ':admin_mail3' => $this->session_data['email'],
                 ':admin_mail4' => $this->session_data['email']
             ));
-            
-            $sth = $this->PDO->prepare("SET IDENTITY_INSERT dtb_member ON INSERT INTO dtb_member (member_id, login_id, password, salt, work, del_flg, authority, creator_id, rank, update_date, create_date,name,department) VALUES (2, :login_id, :admin_pass , :salt , '1', '0', '0', '1', '1', current_timestamp, current_timestamp,'管理者','EC-CUBE SHOP') SET IDENTITY_INSERT dtb_member OFF;");
+            $identityInsertOn = ($platform == 'mssql') ? 'SET IDENTITY_INSERT dtb_member ON;' : '';
+            $identityInsertOff = ($platform == 'mssql') ? 'SET IDENTITY_INSERT dtb_member OFF;' : '';
+            $sth = $this->PDO->prepare("$identityInsertOn INSERT INTO dtb_member (member_id, login_id, password, salt, work, del_flg, authority, creator_id, rank, update_date, create_date,name,department) VALUES (2, :login_id, :admin_pass , :salt , '1', '0', '0', '1', '1', current_timestamp, current_timestamp,'管理者','EC-CUBE SHOP'); $identityInsertOff");
             $sth->execute(array(':login_id' => $this->session_data['login_id'], ':admin_pass' => $encodedPassword, ':salt' => $salt));
 
             $this->PDO->commit();
