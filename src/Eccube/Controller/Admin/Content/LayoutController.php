@@ -150,8 +150,8 @@ class LayoutController
                     $app['orm.em']->persist($BlockPosition);
                 }
 
-                $app['orm.em']->persist($TargetPageLayout);
-                $app['orm.em']->flush();
+                // DB登録
+                $app['eccube.repository.page_layout']->save($TargetPageLayout);
 
                 $event = new EventArgs(
                     array(

@@ -23,9 +23,11 @@
 
 namespace Eccube;
 
+use Doctrine\Common\Cache\FilesystemCache;
+use Doctrine\Common\Cache\PhpFileCache;
 use Eccube\Application\ApplicationTrait;
 use Eccube\Common\Constant;
-use Monolog\Logger;
+use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\Request;
@@ -76,83 +78,115 @@ class Application extends ApplicationTrait
     public function initConfig()
     {
         // load config
-        $this['config'] = $this->share(function() {
-            $ymlPath = __DIR__.'/../../app/config/eccube';
-            $distPath = __DIR__.'/../../src/Eccube/Resource/config';
+        $app = $this;
+        $this['config'] = $this->share(function ($app) {
+            $cachePath = __DIR__.'/../../app/cache/'.Constant::CONFIG_CACHE_FILE_NAME;
 
-            $config = array();
-            $config_yml = $ymlPath.'/config.yml';
-            if (file_exists($config_yml)) {
-                $config = Yaml::parse(file_get_contents($config_yml));
+            $cache = new ConfigCache($cachePath, $app['debug']);
+
+            if (!$cache->isFresh()) {
+
+                $ymlPath = __DIR__.'/../../app/config/eccube';
+                $distPath = __DIR__.'/../../src/Eccube/Resource/config';
+
+                $config = array();
+                $config_yml = $ymlPath.'/config.yml';
+                if (file_exists($config_yml)) {
+                    $config = Yaml::parse(file_get_contents($config_yml));
+                }
+
+                $config_dist = array();
+                $config_yml_dist = $distPath.'/config.yml.dist';
+                if (file_exists($config_yml_dist)) {
+                    $config_dist = Yaml::parse(file_get_contents($config_yml_dist));
+                }
+
+                $config_path = array();
+                $path_yml = $ymlPath.'/path.yml';
+                if (file_exists($path_yml)) {
+                    $config_path = Yaml::parse(file_get_contents($path_yml));
+                    // RootDirまでのpath補完
+                    $config_path['root_dir'] = $app->getRootDir();
+                    $config_path['public_path_realdir'] = $app->getRootDir().$config_path['public_path'];
+                    $config_path['image_save_realdir'] = $app->getRootDir().$config_path['public_path'].$config_path['image_save_realdir'];
+                    $config_path['image_temp_realdir'] = $app->getRootDir().$config_path['public_path'].$config_path['image_temp_realdir'];
+                    $config_path['user_data_realdir'] = $app->getRootDir().$config_path['public_path'].$config_path['user_data_realdir'];
+                    $config_path['block_default_realdir'] = $app->getSrcDir().$config_path['block_default_realdir'];
+                    $config_path['block_realdir'] = $app->getAppDir().$config_path['block_realdir'];
+                    $config_path['template_default_realdir'] = $app->getSrcDir().$config_path['template_default_realdir'];
+                    $config_path['template_default_html_realdir'] = $app->getRootDir().$config_path['public_path'].$config_path['template_default_html_realdir'];
+                    $config_path['template_admin_realdir'] = $app->getSrcDir().$config_path['template_admin_realdir'];
+                    $config_path['template_admin_html_realdir'] = $app->getRootDir().$config_path['public_path'].$config_path['template_admin_html_realdir'];
+                    $config_path['template_realdir'] = $app->getAppDir().$config_path['template_realdir'];
+                    $config_path['template_html_realdir'] = $app->getRootDir().$config_path['public_path'].$config_path['template_html_realdir'];
+                    $config_path['template_temp_realdir'] = $app->getAppDir().$config_path['template_temp_realdir'];
+                    $config_path['csv_temp_realdir'] = $app->getAppDir().$config_path['csv_temp_realdir'];
+                    $config_path['plugin_realdir'] = $app->getAppDir().$config_path['plugin_realdir'];
+                    $config_path['plugin_temp_realdir'] = $app->getAppDir().$config_path['plugin_temp_realdir'];
+                    $config_path['plugin_html_realdir'] = $app->getRootDir().$config_path['public_path'].$config_path['plugin_html_realdir'];
+                }
+
+                $config_constant = array();
+                $constant_yml = $ymlPath.'/constant.yml';
+                if (file_exists($constant_yml)) {
+                    $config_constant = Yaml::parse(file_get_contents($constant_yml));
+                    $config_constant = empty($config_constant) ? array() : $config_constant;
+                }
+
+                $config_constant_dist = array();
+                $constant_yml_dist = $distPath.'/constant.yml.dist';
+                if (file_exists($constant_yml_dist)) {
+                    $config_constant_dist = Yaml::parse(file_get_contents($constant_yml_dist));
+                }
+
+                $configAll = array_replace_recursive($config_constant_dist, $config_dist, $config_constant, $config_path, $config);
+
+                $database = array();
+                $yml = $ymlPath.'/database.yml';
+                if (file_exists($yml)) {
+                    $database = Yaml::parse(file_get_contents($yml));
+                }
+
+                $mail = array();
+                $yml = $ymlPath.'/mail.yml';
+                if (file_exists($yml)) {
+                    $mail = Yaml::parse(file_get_contents($yml));
+                }
+                $configAll = array_replace_recursive($configAll, $database, $mail);
+
+                $config_log = array();
+                $yml = $ymlPath.'/log.yml';
+                if (file_exists($yml)) {
+                    $config_log = Yaml::parse(file_get_contents($yml));
+                }
+                $config_log_dist = array();
+                $log_yml_dist = $distPath.'/log.yml.dist';
+                if (file_exists($log_yml_dist)) {
+                    $config_log_dist = Yaml::parse(file_get_contents($log_yml_dist));
+                }
+
+                $configAll = array_replace_recursive($configAll, $config_log_dist, $config_log);
+
+                $config_nav = array();
+                $yml = $ymlPath.'/nav.yml';
+                if (file_exists($yml)) {
+                    $config_nav = array('nav' => Yaml::parse(file_get_contents($yml)));
+                }
+                $config_nav_dist = array();
+                $nav_yml_dist = $distPath.'/nav.yml.dist';
+                if (file_exists($nav_yml_dist)) {
+                    $config_nav_dist = array('nav' => Yaml::parse(file_get_contents($nav_yml_dist)));
+                }
+
+                $configAll = array_replace_recursive($configAll, $config_nav_dist, $config_nav);
+
+                $resource = array();
+
+                $cache->write(sprintf('<?php return %s', var_export($configAll, true)).';', $resource);
+
             }
 
-            $config_dist = array();
-            $config_yml_dist = $distPath.'/config.yml.dist';
-            if (file_exists($config_yml_dist)) {
-                $config_dist = Yaml::parse(file_get_contents($config_yml_dist));
-            }
-
-            $config_path = array();
-            $path_yml = $ymlPath.'/path.yml';
-            if (file_exists($path_yml)) {
-                $config_path = Yaml::parse(file_get_contents($path_yml));
-            }
-
-            $config_constant = array();
-            $constant_yml = $ymlPath.'/constant.yml';
-            if (file_exists($constant_yml)) {
-                $config_constant = Yaml::parse(file_get_contents($constant_yml));
-                $config_constant = empty($config_constant) ? array() : $config_constant;
-            }
-
-            $config_constant_dist = array();
-            $constant_yml_dist = $distPath.'/constant.yml.dist';
-            if (file_exists($constant_yml_dist)) {
-                $config_constant_dist = Yaml::parse(file_get_contents($constant_yml_dist));
-            }
-
-            $configAll = array_replace_recursive($config_constant_dist, $config_dist, $config_constant, $config_path, $config);
-
-            $database = array();
-            $yml = $ymlPath.'/database.yml';
-            if (file_exists($yml)) {
-                $database = Yaml::parse(file_get_contents($yml));
-            }
-
-            $mail = array();
-            $yml = $ymlPath.'/mail.yml';
-            if (file_exists($yml)) {
-                $mail = Yaml::parse(file_get_contents($yml));
-            }
-            $configAll = array_replace_recursive($configAll, $database, $mail);
-
-            $config_log = array();
-            $yml = $ymlPath.'/log.yml';
-            if (file_exists($yml)) {
-                $config_log = Yaml::parse(file_get_contents($yml));
-            }
-            $config_log_dist = array();
-            $log_yml_dist = $distPath.'/log.yml.dist';
-            if (file_exists($log_yml_dist)) {
-                $config_log_dist = Yaml::parse(file_get_contents($log_yml_dist));
-            }
-
-            $configAll = array_replace_recursive($configAll, $config_log_dist, $config_log);
-
-            $config_nav = array();
-            $yml = $ymlPath.'/nav.yml';
-            if (file_exists($yml)) {
-                $config_nav = array('nav' => Yaml::parse(file_get_contents($yml)));
-            }
-            $config_nav_dist = array();
-            $nav_yml_dist = $distPath.'/nav.yml.dist';
-            if (file_exists($nav_yml_dist)) {
-                $config_nav_dist = array('nav' => Yaml::parse(file_get_contents($nav_yml_dist)));
-            }
-
-            $configAll = array_replace_recursive($configAll, $config_nav_dist, $config_nav);
-
-            return $configAll;
+            return require $cachePath;
         });
     }
 
@@ -180,6 +214,10 @@ class Application extends ApplicationTrait
         $this->initRendering();
 
         // init provider
+        $this->register(new \Silex\Provider\HttpCacheServiceProvider(), array(
+            'http_cache.cache_dir' => __DIR__.'/../../app/cache/http',
+        ));
+
         $this->register(new \Silex\Provider\HttpFragmentServiceProvider());
         $this->register(new \Silex\Provider\UrlGeneratorServiceProvider());
         $this->register(new \Silex\Provider\FormServiceProvider());
@@ -187,7 +225,7 @@ class Application extends ApplicationTrait
         $this->register(new \Eccube\ServiceProvider\ValidatorServiceProvider());
 
         $app = $this;
-        $this->error(function(\Exception $e, $code) use ($app) {
+        $this->error(function (\Exception $e, $code) use ($app) {
             if ($app['debug']) {
                 return;
             }
@@ -248,7 +286,7 @@ class Application extends ApplicationTrait
         $this->register(new \Silex\Provider\TranslationServiceProvider(), array(
             'locale' => $this['config']['locale'],
         ));
-        $this['translator'] = $this->share($this->extend('translator', function($translator, \Silex\Application $app) {
+        $this['translator'] = $this->share($this->extend('translator', function ($translator, \Silex\Application $app) {
             $translator->addLoader('yaml', new \Symfony\Component\Translation\Loader\YamlFileLoader());
 
             $r = new \ReflectionClass('Symfony\Component\Validator\Validator');
@@ -292,16 +330,16 @@ class Application extends ApplicationTrait
         $this->register(new \Silex\Provider\TwigServiceProvider(), array(
             'twig.form.templates' => array('Form/form_layout.twig'),
         ));
-        $this['twig'] = $this->share($this->extend('twig', function(\Twig_Environment $twig, \Silex\Application $app) {
+        $this['twig'] = $this->share($this->extend('twig', function (\Twig_Environment $twig, \Silex\Application $app) {
             $twig->addExtension(new \Eccube\Twig\Extension\EccubeExtension($app));
             $twig->addExtension(new \Twig_Extension_StringLoader());
 
             return $twig;
         }));
 
-        $this->before(function(Request $request, \Silex\Application $app) {
+        $this->before(function (Request $request, \Silex\Application $app) {
             // フロント or 管理画面ごとにtwigの探索パスを切り替える.
-            $app['twig'] = $app->share($app->extend('twig', function(\Twig_Environment $twig, \Silex\Application $app) {
+            $app['twig'] = $app->share($app->extend('twig', function (\Twig_Environment $twig, \Silex\Application $app) {
                 $paths = array();
 
                 // 互換性がないのでprofiler とproduction 時のcacheを分離する
@@ -353,7 +391,7 @@ class Application extends ApplicationTrait
 
         // twigのグローバル変数を定義.
         $app = $this;
-        $this->on(\Symfony\Component\HttpKernel\KernelEvents::CONTROLLER, function(\Symfony\Component\HttpKernel\Event\FilterControllerEvent $event) use ($app) {
+        $this->on(\Symfony\Component\HttpKernel\KernelEvents::CONTROLLER, function (\Symfony\Component\HttpKernel\Event\FilterControllerEvent $event) use ($app) {
             // ショップ基本情報
             $BaseInfo = $app['eccube.repository.base_info']->get();
             $app['twig']->addGlobal('BaseInfo', $BaseInfo);
@@ -394,8 +432,7 @@ class Application extends ApplicationTrait
                 }
 
                 try {
-                    $DeviceType = $app['eccube.repository.master.device_type']
-                        ->find(\Eccube\Entity\Master\DeviceType::DEVICE_TYPE_PC);
+                    $DeviceType = $app['eccube.repository.master.device_type']->get(\Eccube\Entity\Master\DeviceType::DEVICE_TYPE_PC);
                     $PageLayout = $app['eccube.repository.page_layout']->getByUrl($DeviceType, $route);
                 } catch (\Doctrine\ORM\NoResultException $e) {
                     $PageLayout = $app['eccube.repository.page_layout']->newPageLayout($DeviceType);
@@ -413,7 +450,7 @@ class Application extends ApplicationTrait
         // メール送信時の文字エンコード指定(デフォルトはUTF-8)
         if (isset($this['config']['mail']['charset_iso_2022_jp']) && is_bool($this['config']['mail']['charset_iso_2022_jp'])) {
             if ($this['config']['mail']['charset_iso_2022_jp'] === true) {
-                \Swift::init(function() {
+                \Swift::init(function () {
                     \Swift_DependencyContainer::getInstance()
                         ->register('mime.qpheaderencoder')
                         ->asAliasOf('mime.base64headerencoder');
@@ -442,7 +479,7 @@ class Application extends ApplicationTrait
         $this->register(new \Silex\Provider\DoctrineServiceProvider(), array(
             'dbs.options' => array(
                 'default' => $this['config']['database']
-        )));
+            )));
         $this->register(new \Saxulum\DoctrineOrmManagerRegistry\Silex\Provider\DoctrineOrmManagerRegistryProvider());
 
         // プラグインのmetadata定義を合わせて行う.
@@ -488,12 +525,26 @@ class Application extends ApplicationTrait
             }
         }
 
+        $doctrineCacheDir = __DIR__.'/../../app/cache/doctrine';
+
         $this->register(new \Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider(), array(
-            'orm.proxies_dir' => __DIR__.'/../../app/cache/doctrine',
+            'orm.proxies_dir' => $doctrineCacheDir.'/proxy',
             'orm.em.options' => array(
                 'mappings' => $ormMappings,
             ),
         ));
+
+        $configuration = $this['orm.em.config'];
+
+        $cache = new FilesystemCache($doctrineCacheDir.'/metadata');
+        $configuration->setMetadataCacheImpl($cache);
+
+        $cache = new FilesystemCache($doctrineCacheDir.'/query');
+        $configuration->setQueryCacheImpl($cache);
+
+        $cache = new PhpFileCache($doctrineCacheDir.'/result');
+        $configuration->setResultCacheImpl($cache);
+
     }
 
     public function initSecurity()
@@ -558,19 +609,19 @@ class Application extends ApplicationTrait
             array('^/mypage', 'ROLE_USER'),
         );
 
-        $this['eccube.password_encoder'] = $this->share(function($app) {
+        $this['eccube.password_encoder'] = $this->share(function ($app) {
             return new \Eccube\Security\Core\Encoder\PasswordEncoder($app['config']);
         });
-        $this['security.encoder_factory'] = $this->share(function($app) {
+        $this['security.encoder_factory'] = $this->share(function ($app) {
             return new \Symfony\Component\Security\Core\Encoder\EncoderFactory(array(
                 'Eccube\Entity\Customer' => $app['eccube.password_encoder'],
                 'Eccube\Entity\Member' => $app['eccube.password_encoder'],
             ));
         });
-        $this['eccube.event_listner.security'] = $this->share(function($app) {
+        $this['eccube.event_listner.security'] = $this->share(function ($app) {
             return new \Eccube\EventListener\SecurityEventListener($app['orm.em']);
         });
-        $this['user'] = function($app) {
+        $this['user'] = function ($app) {
             $token = $app['security']->getToken();
 
             return ($token !== null) ? $token->getUser() : null;
@@ -581,17 +632,17 @@ class Application extends ApplicationTrait
 
         // Voterの設定
         $app = $this;
-        $this['authority_voter'] = $this->share(function($app) {
+        $this['authority_voter'] = $this->share(function ($app) {
             return new \Eccube\Security\Voter\AuthorityVoter($app);
         });
 
-        $app['security.voters'] = $app->extend('security.voters', function($voters) use ($app) {
+        $app['security.voters'] = $app->extend('security.voters', function ($voters) use ($app) {
             $voters[] = $app['authority_voter'];
 
             return $voters;
         });
 
-        $this['security.access_manager'] = $this->share(function($app) {
+        $this['security.access_manager'] = $this->share(function ($app) {
             return new \Symfony\Component\Security\Core\Authorization\AccessDecisionManager($app['security.voters'], 'unanimous');
         });
 
@@ -615,42 +666,42 @@ class Application extends ApplicationTrait
     public function initPluginEventDispatcher()
     {
         // EventDispatcher
-        $this['eccube.event.dispatcher'] = $this->share(function() {
+        $this['eccube.event.dispatcher'] = $this->share(function () {
             return new EventDispatcher();
         });
 
         // hook point
-        $this->before(function(Request $request, \Silex\Application $app) {
+        $this->before(function (Request $request, \Silex\Application $app) {
             $app['eccube.event.dispatcher']->dispatch('eccube.event.app.before');
         }, self::EARLY_EVENT);
 
-        $this->before(function(Request $request, \Silex\Application $app) {
+        $this->before(function (Request $request, \Silex\Application $app) {
             $event = 'eccube.event.controller.'.$request->attributes->get('_route').'.before';
             $app['eccube.event.dispatcher']->dispatch($event);
         });
 
-        $this->after(function(Request $request, Response $response, \Silex\Application $app) {
+        $this->after(function (Request $request, Response $response, \Silex\Application $app) {
             $event = 'eccube.event.controller.'.$request->attributes->get('_route').'.after';
             $app['eccube.event.dispatcher']->dispatch($event);
         });
 
-        $this->after(function(Request $request, Response $response, \Silex\Application $app) {
+        $this->after(function (Request $request, Response $response, \Silex\Application $app) {
             $app['eccube.event.dispatcher']->dispatch('eccube.event.app.after');
         }, self::LATE_EVENT);
 
-        $this->finish(function(Request $request, Response $response, \Silex\Application $app) {
+        $this->finish(function (Request $request, Response $response, \Silex\Application $app) {
             $event = 'eccube.event.controller.'.$request->attributes->get('_route').'.finish';
             $app['eccube.event.dispatcher']->dispatch($event);
         });
 
         $app = $this;
-        $this->on(\Symfony\Component\HttpKernel\KernelEvents::RESPONSE, function(\Symfony\Component\HttpKernel\Event\FilterResponseEvent $event) use ($app) {
+        $this->on(\Symfony\Component\HttpKernel\KernelEvents::RESPONSE, function (\Symfony\Component\HttpKernel\Event\FilterResponseEvent $event) use ($app) {
             $route = $event->getRequest()->attributes->get('_route');
             $app['eccube.event.dispatcher']->dispatch('eccube.event.render.'.$route.'.before', $event);
         });
 
         // Request Event
-        $this->on(\Symfony\Component\HttpKernel\KernelEvents::REQUEST, function(\Symfony\Component\HttpKernel\Event\GetResponseEvent $event) use ($app) {
+        $this->on(\Symfony\Component\HttpKernel\KernelEvents::REQUEST, function (\Symfony\Component\HttpKernel\Event\GetResponseEvent $event) use ($app) {
 
             if (\Symfony\Component\HttpKernel\HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
                 return;
@@ -681,7 +732,7 @@ class Application extends ApplicationTrait
         }, 30); // Routing(32)が解決しし, 認証判定(8)が実行される前のタイミング.
 
         // Controller Event
-        $this->on(\Symfony\Component\HttpKernel\KernelEvents::CONTROLLER, function(\Symfony\Component\HttpKernel\Event\FilterControllerEvent $event) use ($app) {
+        $this->on(\Symfony\Component\HttpKernel\KernelEvents::CONTROLLER, function (\Symfony\Component\HttpKernel\Event\FilterControllerEvent $event) use ($app) {
 
             if (\Symfony\Component\HttpKernel\HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
                 return;
@@ -712,11 +763,27 @@ class Application extends ApplicationTrait
         });
 
         // Response Event
-        $this->on(\Symfony\Component\HttpKernel\KernelEvents::RESPONSE, function(\Symfony\Component\HttpKernel\Event\FilterResponseEvent $event) use ($app) {
+        $this->on(\Symfony\Component\HttpKernel\KernelEvents::RESPONSE, function (\Symfony\Component\HttpKernel\Event\FilterResponseEvent $event) use ($app) {
 
             if (\Symfony\Component\HttpKernel\HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
                 return;
             }
+//
+//            $response = $event->getResponse();
+//            $request = $event->getRequest();
+//
+//            $response->setSharedMaxAge(100);
+//            $response->setPublic();
+//
+////            $response->setETag(md5($response->getContent()));
+////            $response->isNotModified($request);
+////
+////            $response->setCache(array(
+////                'public' => false,
+////                'private' => true,
+////                //'max_age'       => 1,
+////                //'s_maxage'      => 10,
+////            ));
 
             $route = $event->getRequest()->attributes->get('_route');
 
@@ -742,7 +809,7 @@ class Application extends ApplicationTrait
         });
 
         // Exception Event
-        $this->on(\Symfony\Component\HttpKernel\KernelEvents::EXCEPTION, function(\Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent $event) use ($app) {
+        $this->on(\Symfony\Component\HttpKernel\KernelEvents::EXCEPTION, function (\Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent $event) use ($app) {
 
             if (\Symfony\Component\HttpKernel\HttpKernelInterface::MASTER_REQUEST !== $event->getRequestType()) {
                 return;
@@ -772,7 +839,7 @@ class Application extends ApplicationTrait
         });
 
         // Terminate Event
-        $this->on(\Symfony\Component\HttpKernel\KernelEvents::TERMINATE, function(\Symfony\Component\HttpKernel\Event\PostResponseEvent $event) use ($app) {
+        $this->on(\Symfony\Component\HttpKernel\KernelEvents::TERMINATE, function (\Symfony\Component\HttpKernel\Event\PostResponseEvent $event) use ($app) {
 
             $route = $event->getRequest()->attributes->get('_route');
 
@@ -835,7 +902,7 @@ class Application extends ApplicationTrait
                 $this['eccube.service.plugin']->checkPluginArchiveContent($path);
             } catch (\Eccube\Exception\PluginException $e) {
                 $this['monolog']->warning("skip {$code} config loading. config.yml not foud or invalid.", array(
-                    'path' =>  $path,
+                    'path' => $path,
                     'original-message' => $e->getMessage()
                 ));
                 continue;
@@ -848,7 +915,7 @@ class Application extends ApplicationTrait
 
             // const
             if (isset($config['const'])) {
-                $this['config'] = $this->share($this->extend('config', function($eccubeConfig) use ($config) {
+                $this['config'] = $this->share($this->extend('config', function ($eccubeConfig) use ($config) {
                     $eccubeConfig[$config['code']] = array(
                         'const' => $config['const'],
                     );
@@ -869,7 +936,7 @@ class Application extends ApplicationTrait
 
                 if (!class_exists($class)) {
                     $this['monolog']->warning("skip {$code} loading. event class not foud.", array(
-                        'class' =>  $class,
+                        'class' => $class,
                     ));
                     $eventExists = false;
                 }
@@ -899,7 +966,7 @@ class Application extends ApplicationTrait
                     $class = '\\Plugin\\'.$config['code'].'\\ServiceProvider\\'.$service;
                     if (!class_exists($class)) {
                         $this['monolog']->warning("skip {$code} loading. service provider class not foud.", array(
-                            'class' =>  $class,
+                            'class' => $class,
                         ));
                         continue;
                     }
@@ -910,11 +977,73 @@ class Application extends ApplicationTrait
     }
 
     /**
+     * EC-CUBE Root Directory
+     *
+     * @return string
+     */
+    public function getRootDir()
+    {
+        static $dir;
+        if (null === $dir) {
+            $r = new \ReflectionObject($this);
+            $dir = dirname(dirname(dirname($r->getFileName())));
+        }
+
+        return $dir;
+    }
+
+    /**
+     * EC-CUBE app Directory
+     *
+     * @return string
+     */
+    public function getAppDir()
+    {
+        static $dir;
+        if (null === $dir) {
+            $dir = $this->getRootDir().'/app';
+        }
+
+        return $dir;
+    }
+
+    /**
+     * EC-CUBE src Directory
+     *
+     * @return string
+     */
+    public function getSrcDir()
+    {
+        static $dir;
+        if (null === $dir) {
+            $dir = $this->getRootDir().'/src';
+        }
+
+        return $dir;
+    }
+
+    /**
+     * EC-CUBE html Directory
+     *
+     * @return string
+     */
+    public function getHtmlDir()
+    {
+        static $dir;
+        if (null === $dir) {
+            $dir = $this->getRootDir().$this['config']['public_path'];
+        }
+
+        return $dir;
+    }
+
+    /**
      *
      * データベースの接続を確認
      * 成功 : trueを返却
      *　失敗 : \Doctrine\DBAL\DBALExceptionエラーが発生( 接続に失敗した場合 )、エラー画面を表示しdie()
      * 備考 : app['debug']がtrueの際は処理を行わない
+     *
      * @return boolean true
      *
      */
@@ -939,6 +1068,7 @@ class Application extends ApplicationTrait
             $response->send();
             die();
         }
+
         return true;
     }
 }

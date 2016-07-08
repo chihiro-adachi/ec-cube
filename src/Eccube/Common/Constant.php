@@ -23,7 +23,8 @@
 
 namespace Eccube\Common;
 
-class Constant {
+class Constant
+{
 
     /**
      * EC-CUBE VERSION.
@@ -44,5 +45,10 @@ class Constant {
      * Csrf Token Name.
      */
     const TOKEN_NAME = '_token';
+
+    /**
+     * Cache File Name.
+     */
+    const CONFIG_CACHE_FILE_NAME = 'config.php.cache';
 
 }

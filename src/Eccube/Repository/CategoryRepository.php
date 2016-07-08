@@ -25,6 +25,7 @@
 namespace Eccube\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 use Eccube\Entity\Category;
 
 /**
@@ -35,6 +36,10 @@ use Eccube\Entity\Category;
  */
 class CategoryRepository extends EntityRepository
 {
+
+    public $cacheKey = 'category';
+
+
     /**
      * 全カテゴリの合計を取得する.
      *
@@ -70,10 +75,27 @@ class CategoryRepository extends EntityRepository
             $qb->where('c.Parent IS NULL');
         }
         $Categories = $qb->getQuery()
+            ->useResultCache(true, null, $this->cacheKey)
             ->getResult();
 
         return $Categories;
     }
+
+
+    /**
+     * カテゴリ一覧を取得する.
+     *
+     * @return array
+     */
+    public function getCategories()
+    {
+        $query = $this->createQueryBuilder('c')
+            ->getQuery()
+            ->useResultCache(true, null, $this->cacheKey);
+
+        return $query->getResult();
+    }
+
 
     /**
      * カテゴリの順位を1上げる.

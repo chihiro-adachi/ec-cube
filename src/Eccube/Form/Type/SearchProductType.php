@@ -25,33 +25,55 @@
 namespace Eccube\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\ChoiceList\ObjectChoiceList;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Doctrine\ORM\EntityRepository;
 
 class SearchProductType extends AbstractType
 {
+
+    public $app;
+
+    public function __construct(\Eccube\Application $app)
+    {
+        $this->app = $app;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('mode', 'hidden', array(
-            'data' => 'search',
-        ));
+
+        $Categories = $this->app['eccube.repository.category']->getCategories();
+        $choiceList = new ObjectChoiceList($Categories, 'NameWithLevel', array(), null, 'id');
+
         $builder->add('category_id', 'entity', array(
             'class' => 'Eccube\Entity\Category',
             'property' => 'NameWithLevel',
-            'query_builder' => function (EntityRepository $er) {
-                return $er
-                    ->createQueryBuilder('c')
-                    ->orderBy('c.rank', 'DESC');
-            },
+            'choice_list' => $choiceList,
             'empty_value' => '全ての商品',
             'empty_data' => null,
             'required' => false,
             'label' => '商品カテゴリから選ぶ',
         ));
+
+        $builder->add('mode', 'hidden', array(
+            'data' => 'search',
+        ));
+//        $builder->add('category_id', 'entity', array(
+//            'class' => 'Eccube\Entity\Category',
+//            'property' => 'NameWithLevel',
+//            'query_builder' => function (EntityRepository $er) {
+//                return $er
+//                    ->createQueryBuilder('c')
+//                    ->orderBy('c.rank', 'DESC');
+//            },
+//            'empty_value' => '全ての商品',
+//            'empty_data' => null,
+//            'required' => false,
+//            'label' => '商品カテゴリから選ぶ',
+//        ));
         $builder->add('name', 'search', array(
             'required' => false,
             'label' => '商品名を入力',

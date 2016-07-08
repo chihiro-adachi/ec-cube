@@ -25,6 +25,7 @@
 namespace Eccube\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Eccube\Entity\BaseInfo;
 
 /**
  * BaseInfoRepository
@@ -34,6 +35,9 @@ use Doctrine\ORM\EntityRepository;
  */
 class BaseInfoRepository extends EntityRepository
 {
+
+    public $cacheKey = 'base_info';
+
     /**
      * get
      *
@@ -43,6 +47,30 @@ class BaseInfoRepository extends EntityRepository
      */
     public function get($id = 1)
     {
-        return $this->find($id);
+
+        $query = $this->createQueryBuilder('bi')
+            ->where('bi.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->useResultCache(true, null, $this->cacheKey);
+
+        return $query->getSingleResult();
+    }
+
+    /**
+     * BaseInfoを保存
+     *
+     * @param BaseInfo $BaseInfo
+     */
+    public function save(BaseInfo $BaseInfo)
+    {
+
+        $em = $this->getEntityManager();
+
+        $em->persist($BaseInfo);
+        $em->flush($BaseInfo);
+
+        $em->getConfiguration()->getResultCacheImpl()->delete($this->cacheKey);
+
     }
 }

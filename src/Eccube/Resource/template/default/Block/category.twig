@@ -19,25 +19,51 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #}
-{% macro tree(Category) %}
-    <li>
-        <a href="{{ url('product_list') }}?category_id={{ Category.id }}">
-            {{ Category.name }}
-        </a>
-        {% if Category.children|length > 0 %}
-            <ul>
-            {% for ChildCategory in Category.children %}
-                    {{ _self.tree(ChildCategory) }}
-            {% endfor %}
-            </ul>
-        {% endif %}
-    </li>
-{% endmacro %}
+{#{% macro tree(Category) %}#}
+    {#<li>#}
+        {#<a href="{{ url('product_list') }}?category_id={{ Category.id }}">#}
+            {#{{ Category.name }}#}
+        {#</a>#}
+        {#{% if Category.children|length > 0 %}#}
+            {#<ul>#}
+            {#{% for ChildCategory in Category.children %}#}
+                    {#{{ _self.tree(ChildCategory) }}#}
+            {#{% endfor %}#}
+            {#</ul>#}
+        {#{% endif %}#}
+    {#</li>#}
+{#{% endmacro %}#}
+
+{#<nav id="category" class="drawer_block pc">#}
+    {#<ul class="category-nav">#}
+    {#{% for Category in Categories %}#}
+        {#{{ _self.tree(Category) }}#}
+    {#{% endfor %}#}
+    {#</ul> <!-- category-nav -->#}
+{#</nav>#}
+
 
 <nav id="category" class="drawer_block pc">
     <ul class="category-nav">
-    {% for Category in Categories %}
-        {{ _self.tree(Category) }}
-    {% endfor %}
+        {% for Category in Categories %}
+            {% if Category.parent is null %}
+                <li>
+                    <a href="{{ url('product_list') }}?category_id={{ Category.id }}">
+                        {{ Category.name }}
+                    </a>
+                    <ul>
+                        {% for ChildCategory in Categories %}
+                            {% if ChildCategory.parent is not null and ChildCategory.parent.id == Category.id %}
+                                <li>
+                                    <a href="{{ url('product_list') }}?category_id={{ ChildCategory.id }}">
+                                        {{ ChildCategory.name }}
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endif %}
+        {% endfor %}
     </ul> <!-- category-nav -->
 </nav>

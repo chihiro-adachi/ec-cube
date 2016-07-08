@@ -25,10 +25,11 @@
 namespace Eccube\Controller\Block;
 
 use Eccube\Application;
+use Symfony\Component\HttpFoundation\Request;
 
 class NewsController
 {
-    public function index(Application $app)
+    public function index(Application $app, Request $request)
     {
         $NewsList = $app['orm.em']->getRepository('\Eccube\Entity\News')
             ->findBy(
@@ -36,8 +37,14 @@ class NewsController
                 array('rank' => 'DESC')
             );
 
-        return $app->render('Block/news.twig', array(
+        $response = $app->render('Block/news.twig', array(
             'NewsList' => $NewsList,
         ));
+
+        $response->setPublic();
+        $response->setETag(md5($response->getContent()));
+        $response->isNotModified($request);
+
+        return $response;
     }
 }

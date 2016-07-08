@@ -38,10 +38,16 @@ class LoginController
             ->createNamedBuilder('', 'customer_login')
             ->getForm();
 
-        return $app->render('Block/login.twig', array(
+        $response = $app->render('Block/login.twig', array(
             'error' => $app['security.last_error']($request),
             'email' => $email,
             'form' => $form->createView(),
         ));
+
+        $response->setPublic();
+        $response->setETag(md5($response->getContent()));
+        $response->isNotModified($request);
+
+        return $response;
     }
 }

@@ -32,8 +32,14 @@ class CartController
     {
         /** @var $Cart \Eccube\Entity\Cart */
         $Cart = $app['eccube.service.cart']->getCart();
-        return $app->render('Block/cart.twig', array(
+
+        $response = $app->render('Block/cart.twig', array(
             'Cart' => $Cart,
         ));
+
+        $response->headers->addCacheControlDirective('no-cache',true);
+        $response->headers->addCacheControlDirective('no-store',true);
+
+        return $response;
     }
 }

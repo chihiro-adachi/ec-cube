@@ -24,9 +24,10 @@
 
 namespace Eccube\Repository;
 
-use Eccube\Util\Str;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\Query;
+use Eccube\Util\Str;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -75,6 +76,8 @@ class ProductRepository extends EntityRepository
     public function getQueryBuilderBySearchData($searchData)
     {
         $qb = $this->createQueryBuilder('p')
+//            ->innerJoin('p.ProductImage', 'pi')
+//            ->addSelect('pi')
             ->andWhere('p.Status = 1');
 
         // category
@@ -109,6 +112,7 @@ class ProductRepository extends EntityRepository
             //@see http://doctrine-orm.readthedocs.org/en/latest/reference/dql-doctrine-query-language.html
             $qb->addSelect('MIN(pc.price02) as HIDDEN price02_min');
             $qb->innerJoin('p.ProductClasses', 'pc');
+//            $qb->addSelect('pc');
             $qb->groupBy('p');
             $qb->orderBy('price02_min', 'ASC');
             // 新着順

@@ -1,12 +1,5 @@
-# duplicated
-root: ${ROOT_URLPATH}/ # root_urlpath
-admin_dir: ${ADMIN_ROUTE}/ # admin_route
-tpl: ${ROOT_URLPATH}/user_data/packages/default/ # front_urlpath
-admin_tpl: ${ROOT_URLPATH}/user_data/packages/admin/ # admin_urlpath
-image_path: ${ROOT_URLPATH}/upload/save_image/ # image_save_urlpath
-
 # base valiables
-root_dir: ${ROOT_DIR}
+root_dir:
 root_urlpath: ${ROOT_URLPATH}
 template_code: ${TEMPLATE_CODE}
 
@@ -16,35 +9,35 @@ user_data_route: ${USER_DATA_ROUTE}
 
 # public directory
 public_path: /html
-public_path_realdir: ${ROOT_DIR}/html
+public_path_realdir:
 
 # realdir::image
-image_save_realdir: ${ROOT_DIR}/html/upload/save_image
-image_temp_realdir: ${ROOT_DIR}/html/upload/temp_image
+image_save_realdir: /upload/save_image
+image_temp_realdir: /upload/temp_image
 
 # realdir::user_data
-user_data_realdir: ${ROOT_DIR}/html/user_data
+user_data_realdir: /user_data
 
 # realdir::block
-block_default_realdir: ${ROOT_DIR}/src/Eccube/Resource/template/default/Block
-block_realdir: ${ROOT_DIR}/app/template/${TEMPLATE_CODE}/Block
+block_default_realdir: /Eccube/Resource/template/default/Block
+block_realdir: /template/${TEMPLATE_CODE}/Block
 
 # realdir::template
-template_default_realdir: ${ROOT_DIR}/src/Eccube/Resource/template/default
-template_default_html_realdir: ${ROOT_DIR}/html/template/default
-template_admin_realdir: ${ROOT_DIR}/src/Eccube/Resource/template/admin
-template_admin_html_realdir: ${ROOT_DIR}/html/template/admin
-template_realdir: ${ROOT_DIR}/app/template/${TEMPLATE_CODE}
-template_html_realdir: ${ROOT_DIR}/html/template/${TEMPLATE_CODE}
-template_temp_realdir: ${ROOT_DIR}/app/cache/eccube/template
+template_default_realdir: /Eccube/Resource/template/default
+template_default_html_realdir: /template/default
+template_admin_realdir: /Eccube/Resource/template/admin
+template_admin_html_realdir: /template/admin
+template_realdir: /template/${TEMPLATE_CODE}
+template_html_realdir: /template/${TEMPLATE_CODE}
+template_temp_realdir: /cache/eccube/template
 
 # realdir::csv
-csv_temp_realdir: ${ROOT_DIR}/app/cache/eccube/csv
+csv_temp_realdir: /cache/eccube/csv
 
 # realdir:plugin
-plugin_realdir: ${ROOT_DIR}/app/Plugin
-plugin_temp_realdir: ${ROOT_DIR}/app/cache/plugin
-plugin_html_realdir: ${ROOT_DIR}/html/plugin
+plugin_realdir: /Plugin
+plugin_temp_realdir: /cache/plugin
+plugin_html_realdir: /plugin
 
 # urlpath
 admin_urlpath: ${ROOT_URLPATH}/template/admin

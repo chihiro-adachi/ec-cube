@@ -63,6 +63,10 @@ class InstallController
         $this->config_path = __DIR__ . '/../../../../app/config/eccube';
         $this->dist_path = __DIR__ . '/../../Resource/config';
         $this->cache_path = __DIR__ . '/../../../../app/cache';
+        $cachePath = __DIR__.'/../../../../app/cache/'. Constant::CONFIG_CACHE_FILE_NAME;
+
+        $file = new Filesystem();
+        $file->remove($cachePath);
     }
 
     private function isValid(Request $request, Form $form)
@@ -314,7 +318,7 @@ class InstallController
         $host = $request->getSchemeAndHttpHost();
         $basePath = $request->getBasePath();
 
-        $adminUrl = $host . $basePath . '/' . $config['admin_dir'];
+        $adminUrl = $host . $basePath . '/' . $config['admin_route'] . '/';
 
         return $app['twig']->render('complete.twig', array(
             'admin_url' => $adminUrl,
@@ -786,8 +790,8 @@ class InstallController
         $ROOT_DIR = realpath(__DIR__ . '/../../../../');
         $ROOT_URLPATH = $request->getBasePath();
 
-        $target = array('${ADMIN_ROUTE}', '${TEMPLATE_CODE}', '${USER_DATA_ROUTE}', '${ROOT_DIR}', '${ROOT_URLPATH}');
-        $replace = array($ADMIN_ROUTE, $TEMPLATE_CODE, $USER_DATA_ROUTE, $ROOT_DIR, $ROOT_URLPATH);
+        $target = array('${ADMIN_ROUTE}', '${TEMPLATE_CODE}', '${USER_DATA_ROUTE}', '${ROOT_URLPATH}');
+        $replace = array($ADMIN_ROUTE, $TEMPLATE_CODE, $USER_DATA_ROUTE, $ROOT_URLPATH);
 
         $fs = new Filesystem();
         $content = str_replace(

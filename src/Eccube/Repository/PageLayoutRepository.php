@@ -29,7 +29,6 @@ use Doctrine\ORM\Query\Expr;
 use Eccube\Entity\Master\DeviceType;
 use Eccube\Entity\PageLayout;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
 
 /**
  * PageLayoutRepository
@@ -40,6 +39,10 @@ use Symfony\Component\Finder\Finder;
 class PageLayoutRepository extends EntityRepository
 {
     protected $app;
+
+    public $cacheKeyOwn = 'page_layout_own';
+
+    public $cacheKeyAny = 'page_layout_any';
 
     public function setApplication($app)
     {
@@ -82,8 +85,8 @@ class PageLayoutRepository extends EntityRepository
         $ownResult = $qb
             ->getQuery()
             ->setParameters(array(
-                'DeviceType'  => $DeviceType,
-                'pageId'        => $pageId,
+                'DeviceType' => $DeviceType,
+                'pageId' => $pageId,
             ))
             ->getSingleResult();
 
@@ -130,8 +133,9 @@ class PageLayoutRepository extends EntityRepository
             ->getQuery()
             ->setParameters(array(
                 'DeviceType' => $DeviceType,
-                'url'  => $url,
+                'url' => $url,
             ))
+            ->useResultCache(true, null, $this->cacheKeyOwn)
             ->getSingleResult();
 
         $qb = $this->createQueryBuilder('p')
@@ -147,6 +151,7 @@ class PageLayoutRepository extends EntityRepository
             ->setParameters(array(
                 'DeviceType' => $DeviceType,
             ))
+            ->useResultCache(true, null, $this->cacheKeyAny)
             ->getResult();
 
         $OwnBlockPosition = $ownResult->getBlockPositions();
@@ -177,6 +182,7 @@ class PageLayoutRepository extends EntityRepository
         if (is_null($page_id)) {
             $PageLayout = $this
                 ->newPageLayout($DeviceType);
+
             return $PageLayout;
         } else {
             return $this->get($DeviceType, $page_id);
@@ -190,9 +196,9 @@ class PageLayoutRepository extends EntityRepository
      * $deviceTypeId は必須. デフォルト値は DEVICE_TYPE_PC.
      *
      * @access public
-     * @param  \Eccube\Entity\Master\DeviceType  $DeviceType 端末種別ID
-     * @param  string                            $where 追加の検索条件
-     * @param  string[]                          $parameters 追加の検索パラメーター
+     * @param  \Eccube\Entity\Master\DeviceType $DeviceType 端末種別ID
+     * @param  string $where 追加の検索条件
+     * @param  string[] $parameters 追加の検索パラメーター
      * @return array                             ページ属性の配列
      */
     public function getPageList(DeviceType $DeviceType, $where = null, $parameters = array())
@@ -257,7 +263,7 @@ class PageLayoutRepository extends EntityRepository
         }
 
         foreach ($readPaths as $readPath) {
-            $filePath = $readPath . '/' . $fileName . '.twig';
+            $filePath = $readPath.'/'.$fileName.'.twig';
             $fs = new Filesystem();
             if ($fs->exists($filePath)) {
                 return array(
@@ -266,5 +272,23 @@ class PageLayoutRepository extends EntityRepository
                 );
             }
         }
+    }
+
+    /**
+     * PageLayoutを保存
+     *
+     * @param PageLayout $PageLayout
+     */
+    public function save(PageLayout $PageLayout)
+    {
+
+        $em = $this->getEntityManager();
+
+        $em->persist($PageLayout);
+        $em->flush($PageLayout);
+
+        $em->getConfiguration()->getResultCacheImpl()->delete($this->cacheKeyOwn);
+        $em->getConfiguration()->getResultCacheImpl()->delete($this->cacheKeyAny);
+
     }
 }

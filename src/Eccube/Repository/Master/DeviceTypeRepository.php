@@ -34,4 +34,26 @@ use Doctrine\ORM\EntityRepository;
  */
 class DeviceTypeRepository extends EntityRepository
 {
+
+    public $cacheKey = 'device_type';
+
+    /**
+     * DeviceTypeの取得
+     *
+     * @param int $id
+     * @return mixed
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function get($id = 10)
+    {
+
+        $query = $this->createQueryBuilder('dt')
+            ->where('dt.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->useResultCache(true, null, $this->cacheKey);
+
+        return $query->getSingleResult();
+    }
 }

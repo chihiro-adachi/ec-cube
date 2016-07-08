@@ -112,8 +112,7 @@ class PageController extends AbstractController
                         ->setName($PrevPageLayout->getName());
                 }
                 // DB登録
-                $app['orm.em']->persist($PageLayout);
-                $app['orm.em']->flush();
+                $app['eccube.repository.page_layout']->save($PageLayout);
 
                 // ファイル生成・更新
                 $templatePath = $app['eccube.repository.page_layout']->getWriteTemplatePath($editable);

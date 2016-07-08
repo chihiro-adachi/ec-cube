@@ -188,7 +188,7 @@ class ProductController
 
         $Category = $searchForm->get('category_id')->getData();
 
-        return $app->render('Product/list.twig', array(
+        $response = $app->render('Product/list.twig', array(
             'subtitle' => $this->getPageTitle($searchData),
             'pagination' => $pagination,
             'search_form' => $searchForm->createView(),
@@ -197,6 +197,11 @@ class ProductController
             'forms' => $forms,
             'Category' => $Category,
         ));
+        $response->setPublic();
+        $response->setETag(md5($response->getContent()));
+        $response->isNotModified($request);
+
+        return $response;
     }
 
     public function detail(Application $app, Request $request, $id)

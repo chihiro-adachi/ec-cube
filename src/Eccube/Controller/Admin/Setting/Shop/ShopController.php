@@ -53,8 +53,9 @@ class ShopController extends AbstractController
         if ($app['request']->getMethod() === 'POST') {
             $form->handleRequest($app['request']);
             if ($form->isValid()) {
-                $app['orm.em']->persist($BaseInfo);
-                $app['orm.em']->flush();
+
+                // DB登録
+                $app['eccube.repository.base_info']->save($BaseInfo);
 
                 $event = new EventArgs(
                     array(

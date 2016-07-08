@@ -30,14 +30,16 @@ class CategoryController
 {
     public function index(Application $app)
     {
-        $Categories = $app['eccube.repository.category']
-            ->findBy(
-                array('Parent' => null),
-                array('rank' => 'DESC')
-            );
+        $Categories = $app['eccube.repository.category']->getCategories();
 
-        return $app->render('Block/category.twig', array(
+        $response = $app->render('Block/category.twig', array(
             'Categories' => $Categories
         ));
+
+        $response->setPublic();
+        $response->setETag(md5($response->getContent()));
+        $response->isNotModified($app['request']);
+
+        return $response;
     }
 }
