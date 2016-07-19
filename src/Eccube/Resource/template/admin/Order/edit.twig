@@ -263,7 +263,7 @@ var setModeAndSubmit = function(mode, keyname, keyid) {
                         {% if Order.id is empty %}
                         <div id="customer_info_list__button_search" class="btn_area">
                             <ul>
-                                <li><a class="btn btn-default" data-toggle="modal" data-target="#searchCustomerModal">会員検索</a></li>
+                                <li><a class="btn btn-default" onclick="window.open('{{ path('admin_order_customer_search') }}', null, 'width=600, height=400')">会員検索</a></li>
                             </ul>
                         </div>
                         {% endif %}

@@ -108,6 +108,8 @@ class AdminControllerProvider implements ControllerProviderInterface
         $c->match('/order/mail_complete', '\Eccube\Controller\Admin\Order\MailController::complete')->bind('admin_order_mail_complete');
         $c->match('/order/mail/view', '\Eccube\Controller\Admin\Order\MailController::view')->bind('admin_order_mail_view');
 
+        $c->match('/order/customer', '\Eccube\Controller\Admin\Order\CustomerSearchController::index')->bind('admin_order_customer_search');
+
         // content
         // deprecated /content/ 3.1 delete. use /content/news
         $c->match('/content', '\Eccube\Controller\Admin\Content\ContentsController::index')->bind('admin_content');
