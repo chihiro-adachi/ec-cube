@@ -231,7 +231,7 @@ class TopController
     {
         // update 1 ：本体側の更新処理とする
         $BaseInfo = $app['eccube.repository.base_info']->get();
-        $BaseInfo->setTel01(__LINE__);
+        $BaseInfo->setCompanyName(__LINE__);
         $app['orm.em']->flush($BaseInfo);
 
         // プラグインAが、beginTransactionして更新を行う
@@ -239,7 +239,7 @@ class TopController
 
         try {
             // update 2
-            $BaseInfo->setTel02(__LINE__);
+            $BaseInfo->setCompanyName(__LINE__);
             $app['orm.em']->flush($BaseInfo);
             $app['orm.em']->commit();
 
@@ -253,7 +253,7 @@ class TopController
 
         // update 3：プラグインBが、更新処理を行う.
         $BaseInfo = $app['eccube.repository.base_info']->get();
-        $BaseInfo->setTel03(__LINE__);
+        $BaseInfo->setCompanyName(__LINE__);
         $app['orm.em']->flush($BaseInfo);
 
         // update 1/2 はrollback され, update 3の更新処理のみ適応される
