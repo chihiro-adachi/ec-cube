@@ -38,6 +38,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
     <meta name="robots" content="{{ PageLayout.meta_robots }}">
 {% endif %}
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<style type="text/css">body { visibility: hidden; }</style>
 <link rel="icon" href="{{ app.config.front_urlpath }}/img/common/favicon.ico">
 <link rel="stylesheet" href="{{ app.config.front_urlpath }}/css/style.css?v={{ constant('Eccube\\Common\\Constant::VERSION') }}">
 <link rel="stylesheet" href="{{ app.config.front_urlpath }}/css/slick.css?v={{ constant('Eccube\\Common\\Constant::VERSION') }}">
@@ -173,7 +174,7 @@ $(function () {
             type: 'GET',
             dataType: 'html',
         }).done(function(data){
-           $block.after(data);
+           $block.after(data).fadeIn(1000);
            $block.remove();
         }).fail(function(data){
             console.log('fail');
@@ -183,6 +184,7 @@ $(function () {
 
     $.when.apply($, dfds).done(function() {
         $('#drawer').append($('.drawer_block').clone(true).children());
+        $("body").css({ visibility: "visible" });
     });
     $.ajax({
         url: '{{ app.config.front_urlpath }}/img/common/svg.html',
