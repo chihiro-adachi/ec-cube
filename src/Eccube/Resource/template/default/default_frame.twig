@@ -165,7 +165,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 <script src="{{ app.config.front_urlpath }}/js/eccube.js?v={{ constant('Eccube\\Common\\Constant::VERSION') }}"></script>
 <script>
 $(function () {
-    $('#drawer').append($('.drawer_block').clone(true).children());
+    var dfds = [];
+    $(".render_blocks").each(function(elem) {
+        var $block = $(this);
+        var dfd = $.ajax({
+            url: $block.attr('data-block-path'),
+            type: 'GET',
+            dataType: 'html',
+        }).done(function(data){
+           $block.after(data);
+           $block.remove();
+        }).fail(function(data){
+            console.log('fail');
+        });
+        dfds.push(dfd);
+    });
+
+    $.when.apply($, dfds).done(function() {
+        $('#drawer').append($('.drawer_block').clone(true).children());
+    });
     $.ajax({
         url: '{{ app.config.front_urlpath }}/img/common/svg.html',
         type: 'GET',
@@ -174,6 +192,7 @@ $(function () {
         $('body').prepend(data);
     }).fail(function(data){
     });
+ 
 });
 </script>
 {% block javascript %}{% endblock %}
