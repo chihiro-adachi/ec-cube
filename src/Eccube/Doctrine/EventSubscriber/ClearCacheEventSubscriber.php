@@ -25,7 +25,7 @@
 namespace Eccube\Doctrine\EventSubscriber;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use Eccube\Application;
 
@@ -46,6 +46,14 @@ class ClearCacheEventSubscriber implements EventSubscriber
         $this->app = $app;
         $this->entities = array(
             'Eccube\Entity\BaseInfo',
+            'Eccube\Entity\PageLayout',
+            'Eccube\Entity\BlockPosition',
+            'Eccube\Entity\Block',
+        );
+        $this->groups = array(
+            'Eccube\Entity\PageLayout',
+            'Eccube\Entity\BlockPosition',
+            'Eccube\Entity\Block',
         );
     }
 
@@ -55,21 +63,46 @@ class ClearCacheEventSubscriber implements EventSubscriber
     public function getSubscribedEvents()
     {
         return array(
-            Events::preUpdate,
+            Events::postUpdate,
+            Events::postRemove,
         );
     }
 
-    public function preUpdate(PreUpdateEventArgs $args)
+    protected function clearCache(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
 
         foreach ($this->entities as $class) {
+            error_log($class);
             if ($entity instanceof $class) {
+
                 $em = $args->getEntityManager();
                 $cacheImpl = $em->getConfiguration()->getResultCacheImpl();
-                $cacheKey = $class.$entity->getId();
-                $cacheImpl->delete($cacheKey);
+                if (in_array($class, $this->groups)) {
+                    foreach ($this->groups as $group) {
+                        error_log('clear:'.$group);
+                        $cacheImpl->setNameSpace($group);
+                        $cacheImpl->deleteAll();
+                    }
+                } else {
+                    error_log('clear:'.$class);
+                    $cacheImpl->setNameSpace($class);
+                    $cacheImpl->deleteAll();
+                }
+
             }
         }
+    }
+
+    public function postRemove(LifecycleEventArgs $args)
+    {
+        error_log("==postRemove==");
+        $this->clearCache($args);
+    }
+
+    public function postUpdate(LifecycleEventArgs $args)
+    {
+        error_log("==postUpdate==");
+        $this->clearCache($args);
     }
 }
