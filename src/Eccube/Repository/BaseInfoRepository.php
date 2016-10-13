@@ -25,6 +25,7 @@
 namespace Eccube\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Eccube\Entity\BaseInfo;
 
 /**
  * BaseInfoRepository
@@ -43,6 +44,13 @@ class BaseInfoRepository extends EntityRepository
      */
     public function get($id = 1)
     {
-        return $this->find($id);
+        $cacheKey = $this->getEntityName().$id;
+
+        return $this->createQueryBuilder('b')
+            ->where('b.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->useResultCache(true, null, $cacheKey)
+            ->getSingleResult();
     }
 }
