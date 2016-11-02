@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4e339709cb4e258ec506802dbf8a1b15",
-    "content-hash": "8f623cf24418d568eb9e2bd5a6586d3b",
+    "hash": "8d0b588543ec19b0496f09731901349d",
+    "content-hash": "0c2ecff084db577aa0e7e8871ef2b50f",
     "packages": [
         {
             "name": "dflydev/doctrine-orm-service-provider",
@@ -897,7 +897,7 @@
             ],
             "authors": [
                 {
-                    "name": "Knplabs",
+                    "name": "KnpLabs",
                     "homepage": "http://knplabs.com"
                 }
             ],
@@ -4770,7 +4770,9 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.3.3"
+        "php": ">=5.3.3",
+        "ext-pdo_sqlite": "*",
+        "ext-mbstring": "*"
     },
     "platform-dev": [],
     "platform-overrides": {
