@@ -637,6 +637,9 @@ EOD;
         $this->verify('キャッシュファイル名が一致するか');
 
         $pluginConfigs = $this->app->parsePluginConfigs();
+        dump($tmpname);
+        dump($pluginConfigs);
+
         $this->assertTrue(array_key_exists($tmpname, $pluginConfigs));
         $this->expected = $config;
         $this->actual = $pluginConfigs[$tmpname]['config'];
