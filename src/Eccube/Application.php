@@ -1211,7 +1211,7 @@ class Application extends ApplicationTrait
 
         $pluginConfigs = array();
         foreach ($finder as $dir) {
-            debug($dir);
+            dump($dir);
 
             $code = $dir->getBaseName();
             dump($code);
