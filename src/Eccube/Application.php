@@ -1211,6 +1211,8 @@ class Application extends ApplicationTrait
 
         $pluginConfigs = array();
         foreach ($finder as $dir) {
+            debug($dir);
+
             $code = $dir->getBaseName();
             dump($code);
             $file = $dir->getRealPath().'/config.yml';
