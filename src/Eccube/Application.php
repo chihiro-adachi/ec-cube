@@ -1211,10 +1211,12 @@ class Application extends ApplicationTrait
 
         $pluginConfigs = array();
         foreach ($finder as $dir) {
-            dump($dir);
-
             $code = $dir->getBaseName();
+            dump("#-----------------------------------");
+            dump('# '.__FILE__.':'.__LINE__);
             dump($code);
+            dump("#-----------------------------------");
+
             $file = $dir->getRealPath().'/config.yml';
             $config = null;
             if (file_exists($file)) {
@@ -1239,6 +1241,11 @@ class Application extends ApplicationTrait
                 $this['monolog']->debug("parse {$code} config", array($code => $pluginConfigs[$code]));
             }
         }
+
+        dump("#-----------------------------------");
+        dump('# '.__FILE__.':'.__LINE__);
+        dump($pluginConfigs);
+        dump("#-----------------------------------");
 
         return $pluginConfigs;
     }
