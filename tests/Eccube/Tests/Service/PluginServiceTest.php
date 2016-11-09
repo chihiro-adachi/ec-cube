@@ -638,11 +638,10 @@ EOD;
 
         $pluginConfigs = $this->app->parsePluginConfigs();
 
-        dump("#-----------------------------------");
+        dump("");
         dump('# '.__FILE__.':'.__LINE__);
         dump($tmpname);
         dump($pluginConfigs);
-        dump("#-----------------------------------");
 
         $this->assertTrue(array_key_exists($tmpname, $pluginConfigs));
         $this->expected = $config;

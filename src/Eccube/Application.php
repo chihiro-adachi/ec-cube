@@ -1212,10 +1212,9 @@ class Application extends ApplicationTrait
         $pluginConfigs = array();
         foreach ($finder as $dir) {
             $code = $dir->getBaseName();
-            dump("#-----------------------------------");
+            dump("");
             dump('# '.__FILE__.':'.__LINE__);
             dump($code);
-            dump("#-----------------------------------");
 
             $file = $dir->getRealPath().'/config.yml';
             $config = null;
@@ -1239,13 +1238,18 @@ class Application extends ApplicationTrait
                     'event' => $event
                 );
                 $this['monolog']->debug("parse {$code} config", array($code => $pluginConfigs[$code]));
+
+                dump("");
+                dump('# '.__FILE__.':'.__LINE__);
+                dump($pluginConfigs);
+            } else {
+                dump("");
+                dump('# '.__FILE__.':'.__LINE__);
+                dump($pluginConfigs);
             }
         }
 
-        dump("#-----------------------------------");
-        dump('# '.__FILE__.':'.__LINE__);
-        dump($pluginConfigs);
-        dump("#-----------------------------------");
+
 
         return $pluginConfigs;
     }
