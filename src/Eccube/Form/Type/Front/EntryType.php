@@ -46,14 +46,15 @@ class EntryType extends AbstractType
     {
         $builder
             ->add('name', 'name', array(
-                'required' => true,
+                'required' => false,
             ))
             ->add('kana', 'kana', array(
-                'required' => true,
+                'required' => false,
             ))
             ->add('company_name', 'text', array(
                 'required' => false,
                 'constraints' => array(
+                    new Assert\NotBlank(),
                     new Assert\Length(array(
                         'max' => $this->config['stext_len'],
                     )),
@@ -62,7 +63,7 @@ class EntryType extends AbstractType
             ->add('zip', 'zip')
             ->add('address', 'address')
             ->add('tel', 'tel', array(
-                'required' => true,
+                'required' => false,
             ))
             ->add('fax', 'tel', array(
                 'required' => false,

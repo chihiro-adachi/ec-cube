@@ -95,6 +95,7 @@ class NameType extends AbstractType
         $resolver->setDefaults(array(
             'options' => array(),
             'lastname_options' => array(
+                'error_bubbling' => true,
                 'attr' => array(
                     'placeholder' => 'Name01',
                 ),
@@ -109,6 +110,7 @@ class NameType extends AbstractType
                 ),
             ),
             'firstname_options' => array(
+                'error_bubbling' => true,
                 'attr' => array(
                     'placeholder' => 'Name02',
                 ),

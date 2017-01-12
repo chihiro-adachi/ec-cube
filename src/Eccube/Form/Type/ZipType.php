@@ -93,12 +93,14 @@ class ZipType extends AbstractType
         $resolver->setDefaults(array(
             'options' => array('constraints' => array()),
             'zip01_options' => array(
+                'error_bubbling' => true,
                 'constraints' => array(
                     new Assert\Type(array('type' => 'numeric', 'message' => 'form.type.numeric.invalid')),
                     new Assert\Length(array('min' => $this->config['zip01_len'], 'max' => $this->config['zip01_len'])),
                 ),
             ),
             'zip02_options' => array(
+                'error_bubbling' => true,
                 'constraints' => array(
                     new Assert\Type(array('type' => 'numeric', 'message' => 'form.type.numeric.invalid')),
                     new Assert\Length(array('min' => $this->config['zip02_len'], 'max' => $this->config['zip02_len'])),

@@ -52,6 +52,7 @@ class KanaType extends AbstractType
     {
         $resolver->setDefaults(array(
             'lastname_options' => array(
+                'error_bubbling' => true,
                 'attr' => array(
                     'placeholder' => 'Kana01',
                 ),
@@ -65,6 +66,7 @@ class KanaType extends AbstractType
                 ),
             ),
             'firstname_options' => array(
+                'error_bubbling' => true,
                 'attr' => array(
                     'placeholder' => 'Kana02',
                 ),

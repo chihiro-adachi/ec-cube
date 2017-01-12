@@ -24,152 +24,276 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 {% set body_class = 'registration_page' %}
 
 {% block javascript %}
-<script src="//ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
-<script>
-    $(function() {
-        $('#zip-search').click(function() {
-            AjaxZip3.zip2addr('entry[zip][zip01]', 'entry[zip][zip02]', 'entry[address][pref]', 'entry[address][addr01]');
+    <script src="//ajaxzip3.github.io/ajaxzip3.js" charset="UTF-8"></script>
+    <script>
+        $(function () {
+            $('#zip-search').click(function () {
+                AjaxZip3.zip2addr('entry[zip][zip01]', 'entry[zip][zip02]', 'entry[address][pref]', 'entry[address][addr01]');
+            });
         });
-    });
-</script>
+    </script>
 {% endblock javascript %}
 
 {% block main %}
-<h1 class="page-heading">新規会員登録</h1>
-<div id="top_wrap" class="container-fluid">
-    <div id="top_box" class="row">
-        <div id="top_box__body" class="col-md-10 col-md-offset-1">
-            <form method="post" action="{{ url('entry') }}">
-                {{ form_widget(form._token) }}
-                <div id="top_box__body_inner" class="dl_table">
-                    <dl id="top_box__name">
-                        <dt>{{ form_label(form.name) }}</dt>
-                        <dd class="form-group input_name">
-                            {{ form_widget(form.name.name01) }}
-                            {{ form_widget(form.name.name02) }}
-                            {{ form_errors(form.name.name01) }}
-                            {{ form_errors(form.name.name02) }}
-                        </dd>
-                    </dl>
-                    <dl id="top_box__kana">
-                        <dt>{{ form_label(form.kana) }}</dt>
-                        <dd class="form-group input_name">
-                            {{ form_widget(form.kana.kana01) }}
-                            {{ form_widget(form.kana.kana02) }}
-                            {{ form_errors(form.kana.kana01) }}
-                            {{ form_errors(form.kana.kana02) }}
-                        </dd>
-                    </dl>
-                    <dl id="top_box__company_name">
-                        <dt>{{ form_label(form.company_name) }}</dt>
-                        <dd class="form-group input_name">
-                            {{ form_widget(form.company_name) }}
-                            {{ form_errors(form.company_name) }}
-                        </dd>
-                    </dl>
-                    <dl id="top_box__address_detail">
-                        <dt>{{ form_label(form.address) }}</dt>
-                        <dd>
-                            <div id="top_box__zip" class="form-group form-inline input_zip {% if form.zip.zip01.vars.errors is not empty or form.zip.zip02.vars.errors is not empty %}has-error{% endif %}">{{ form_widget(form.zip) }}</div>
-                            <div id="top_box__address" class="{% if form.address.pref.vars.errors is not empty or form.address.addr01.vars.errors is not empty or form.address.addr02.vars.errors is not empty %}has-error{% endif %}">
-                                {{ form_widget(form.address) }}
-                                {{ form_errors(form.address) }}
-                            </div>
-                        </dd>
-                    </dl>
-                    <dl id="top_box__tel">
-                        <dt>{{ form_label(form.tel) }}</dt>
-                        <dd>
-                            <div class="form-inline form-group input_tel">
-                                {{ form_widget(form.tel, {attr : {class : 'short'}}) }}
-                                {{ form_errors(form.tel) }}
-                            </div>
-                        </dd>
-                    </dl>
-                    <dl id="top_box__fax">
-                        <dt>{{ form_label(form.fax) }}</dt>
-                        <dd>
-                            <div class="form-inline form-group input_tel">
-                                {{ form_widget(form.fax, {attr : {class : 'short'}}) }}
-                                {{ form_errors(form.fax) }}
-                            </div>
-                        </dd>
-                    </dl>
-                    <dl id="top_box__email">
-                        <dt>{{ form_label(form.email) }}</dt>
-                        <dd>
-                            {% for emailField in form.email %}
-                            <div class="form-group {% if emailField.vars.errors is not empty %}has-error{% endif %}">
-                                {{ form_widget(emailField) }}
-                                {{ form_errors(emailField) }}
-                            </div>
-                            {% endfor %}
-                        </dd>
-                    </dl>
-                    <dl id="top_box__password">
-                        <dt>{{ form_label(form.password) }}</dt>
-                        <dd>
-                            {% for passwordField in form.password %}
-                            <div class="form-group {% if passwordField.vars.errors is not empty %}has-error{% endif %}">
-                                {{ form_widget(passwordField, { type : 'password' }) }}
-                                {{ form_errors(passwordField) }}
-                            </div>
-                            {% endfor %}
-                        </dd>
-                    </dl>
-                </div>
-                <div id="top_box__birth" class="dl_table not_required">
-                    <dl>
-                        <dt>{{ form_label(form.birth) }}</dt>
-                        <dd>
-                            <div class="form-group form-inline">
-                                {{ form_widget(form.birth) }}
-                                {{ form_errors(form.birth) }}
-                            </div>
-                        </dd>
-                    </dl>
-                    <dl>
-                        <dt id="top_box__sex">{{ form_label(form.sex) }}</dt>
-                        <dd>
-                            <div class="form-group form-inline">
-                                {{ form_widget(form.sex) }}
-                                {{ form_errors(form.sex) }}
-                            </div>
-                        </dd>
-                    </dl>
-                    <dl id="top_box__job">
-                        <dt>{{ form_label(form.job) }}</dt>
-                        <dd>
-                            <div class="form-group form-inline">
-                                {{ form_widget(form.job) }}
-                                {{ form_errors(form.job) }}
-                            </div>
-                        </dd>
-                    </dl>
-                </div>
-                {% for f in form %}
-                    {% if f.vars.name matches '[^plg*]' %}
-                        <div class="extra-form dl_table">
-                            {{ form_row(f) }}
-                        </div>
-                    {% endif %}
-                {% endfor %}
-                <input id="top_box__hidden_mode" type="hidden" name="mode" value="confirm">
-                <p id="top_box__agreement" class="form_terms_link"><a href="{{ url('help_agreement') }}" target="_blank">利用規約</a>に同意してお進みください
-                </p>
-
-                <div id="top_box__footer" class="row no-padding">
-                    <div id="top_box__button_menu" class="btn_group col-sm-offset-4 col-sm-4">
-                        <p>
-                            <button type="submit" class="btn btn-primary btn-block">同意する</button>
-                        </p>
-                        <p><a href="{{ url('index') }}" class="btn btn-info btn-block">同意しない</a></p>
+    <h1 class="page-heading">新規会員登録</h1>
+    <div id="top_wrap" class="container-fluid">
+        <div id="top_box" class="row">
+            <div id="top_box__body" class="col-md-10 col-md-offset-1">
+                <form method="post" action="{{ url('entry') }}">
+                    {{ form_widget(form._token) }}
+                    <div id="top_box__body_inner" class="dl_table">
+                        <dl id="top_box__name">
+                            <dt><label class="control-label">お名前</label><span class="required">必須</span></dt>
+                            <dd class="form-group input_name{% if form.name.vars.errors|length > 0 %} has-error{% endif %}">
+                                <input type="text" name="{{ form.name.name01.vars.full_name }}"
+                                       value="{{ form.name.name01.vars.value }}"
+                                       placeholder="{{ '姓'|trans }}"
+                                       class="form-control"/>
+                                <input type="text" name="{{ form.name.name02.vars.full_name }}"
+                                       value="{{ form.name.name02.vars.value }}"
+                                       placeholder="{{ '名'|trans }}"
+                                       class="form-control"/>
+                                {% for error in form.name.vars.errors %}
+                                    <p class="errormsg text-danger">{{ error.message }}</p>
+                                {% endfor %}
+                            </dd>
+                        </dl>
+                        <dl id="top_box__kana">
+                            <dt><label class="control-label">お名前（カナ）</label><span class="required">必須</span></dt>
+                            <dd class="form-group input_name{% if form.kana.vars.errors|length > 0 %} has-error{% endif %}">
+                                <input type="text" name="{{ form.kana.kana01.vars.full_name }}"
+                                       value="{{ form.kana.kana01.vars.value }}"
+                                       placeholder="{{ 'セイ'|trans }}"
+                                       class="form-control"/>
+                                <input type="text" name="{{ form.kana.kana02.vars.full_name }}"
+                                       value="{{ form.kana.kana02.vars.value }}"
+                                       placeholder="{{ 'メイ'|trans }}"
+                                       class="form-control"/>
+                                {% for error in form.kana.vars.errors %}
+                                    <p class="errormsg text-danger">{{ error.message }}</p>
+                                {% endfor %}
+                            </dd>
+                        </dl>
+                        <dl id="top_box__company_name">
+                            <dt><label class="control-label">会社名</label></dt>
+                            <dd class="form-group input_name{% if form.company_name.vars.errors|length > 0 %} has-error{% endif %}">
+                                <input type="text" name="{{ form.company_name.vars.full_name }}"
+                                       value="{{ form.company_name.vars.value }}"
+                                       placeholder="会社名"
+                                       class="form-control"/>
+                                {% for error in form.company_name.vars.errors %}
+                                    <p class="errormsg text-danger">{{ error.message }}</p>
+                                {% endfor %}
+                            </dd>
+                        </dl>
+                        <dl id="top_box__address_detail">
+                            <dt><label class="control-label">住所</label><span class="required">必須</span></dt>
+                            <dd>
+                                <div class="form-group form-inline input_zip {% if form.zip.vars.errors|length > 0 %} has-error{% endif %}">
+                                    〒<input
+                                            type="text"
+                                            name="{{ form.zip.zip01.vars.full_name }}"
+                                            value="{{ form.zip.zip01.vars.value }}"
+                                            style="ime-mode: disabled;"
+                                            pattern="\d*"
+                                            class="form-control has-error"/>
+                                    -<input type="text"
+                                            name="{{ form.zip.zip02.vars.full_name }}"
+                                            value="{{ form.zip.zip02.vars.value }}"
+                                            style="ime-mode: disabled;"
+                                            pattern="\d*"
+                                            class="form-control"/>
+                                    <span class="question-circle"><svg class="cb cb-question"><use
+                                                    xlink:href="#cb-question"/></svg></span> <a
+                                            href="http://www.post.japanpost.jp/zipcode/" target="_blank">郵便番号検索</a>
+                                    {% for error in form.zip.vars.errors %}
+                                        <p class="errormsg text-danger">{{ error.message }}</p>
+                                    {% endfor %}
+                                    <div class="zip-search">
+                                        <button type="button" id="zip-search" class="btn btn-default btn-sm">
+                                            郵便番号から自動入力
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="form-inline form-group input_zip{% if form.address.pref.vars.errors|length > 0 %} has-error{% endif %}">
+                                    <select name="{{ form.address.pref.vars.full_name }}" class="form-control">
+                                        <option>都道府県を選択</option>
+                                        {% for choice in form.address.pref.vars.choices %}
+                                            <option value="{{ choice.value }}"{% if choice is selectedchoice(form.address.pref.vars) %} selected="selected"{% endif %}>{{ choice.label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    {% for error in form.address.pref.vars.errors %}
+                                        <p class="errormsg text-danger">{{ error.message }}</p>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-group {% if form.address.addr01.vars.errors|length > 0 %} has-error{% endif %}">
+                                    <input type="text"
+                                           name="{{ form.address.addr01.vars.full_name }}"
+                                           value="{{ form.address.addr01.vars.value }}"
+                                           style="ime-mode: active;"
+                                           placeholder="市区町村名 (例：千代田区神田神保町)"
+                                           class="form-control"/><br/>
+                                    {% for error in form.address.addr01.vars.errors %}
+                                        <p class="errormsg text-danger">{{ error.message }}</p>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-group {% if form.address.addr02.vars.errors|length > 0 %} has-error{% endif %}">
+                                    <input type="text"
+                                           name="{{ form.address.addr02.vars.full_name }}"
+                                           value="{{ form.address.addr02.vars.value }}"
+                                           style="ime-mode: active;"
+                                           placeholder="番地・ビル名 (例：1-3-5)"
+                                           class="form-control"/><br/>
+                                    {% for error in form.address.addr02.vars.errors %}
+                                        <p class="errormsg text-danger">{{ error.message }}</p>
+                                    {% endfor %}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl id="top_box__tel">
+                            <dt><label class="control-label">電話番号</label><span class="required">必須</span></dt>
+                            <dd>
+                                <div class="form-inline form-group input_tel">
+                                    <span class="{% if form.tel.tel01.vars.errors|length > 0 %}has-error{% endif %}">
+                                        <input type="tel"
+                                               name="{{ form.tel.tel01.vars.full_name }}"
+                                               value="{{ form.tel.tel01.vars.value }}"
+                                               style="ime-mode: disabled;"
+                                               class="form-control short"/>&nbsp;-&nbsp;
+                                    </span>
+                                    <span class="{% if form.tel.tel02.vars.errors|length > 0 %}has-error{% endif %}">
+                                        <input
+                                                name="{{ form.tel.tel02.vars.full_name }}"
+                                                value="{{ form.tel.tel02.vars.value }}"
+                                                style="ime-mode: disabled;"
+                                                class="form-control short"/>&nbsp;-&nbsp;
+                                    </span>
+                                    <span class="{% if form.tel.tel03.vars.errors|length > 0 %}has-error{% endif %}">
+                                        <input
+                                                name="{{ form.tel.tel03.vars.full_name }}"
+                                                value="{{ form.tel.tel03.vars.value }}"
+                                                style="ime-mode: disabled;"
+                                                class="form-control short"/>
+                                    </span>
+                                    {% for error in form.tel.vars.errors %}
+                                        <p class="errormsg text-danger">{{ error.message|trans }}</p>
+                                    {% endfor %}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl id="top_box__fax">
+                            <dt><label class="control-label">FAX番号</label></dt>
+                            <dd>
+                                <div class="form-inline form-group input_tel">
+                                    <span class="{% if form.fax.fax01.vars.errors|length > 0 %}has-error{% endif %}">
+                                        <input type="tel"
+                                               name="{{ form.fax.fax01.vars.full_name }}"
+                                               value="{{ form.fax.fax01.vars.value }}"
+                                               style="ime-mode: disabled;"
+                                               class="form-control short"/>&nbsp;-&nbsp;
+                                    </span>
+                                    <span class="{% if form.fax.fax02.vars.errors|length > 0 %}has-error{% endif %}">
+                                        <input
+                                                name="{{ form.fax.fax02.vars.full_name }}"
+                                                value="{{ form.fax.fax02.vars.value }}"
+                                                style="ime-mode: disabled;"
+                                                class="form-control short"/>&nbsp;-&nbsp;
+                                    </span>
+                                    <span class="{% if form.fax.fax03.vars.errors|length > 0 %}has-error{% endif %}">
+                                        <input
+                                                name="{{ form.fax.fax03.vars.full_name }}"
+                                                value="{{ form.fax.fax03.vars.value }}"
+                                                style="ime-mode: disabled;"
+                                                class="form-control short"/>
+                                    </span>
+                                    {% for error in form.fax.vars.errors %}
+                                        <p class="errormsg text-danger">{{ error.message|trans }}</p>
+                                    {% endfor %}
+                                </div>
+                            {#<dt>{{ form_label(form.fax) }}</dt>#}
+                            {#<dd>#}
+                                {#<div class="form-inline form-group input_tel">#}
+                                    {#{{ form_widget(form.fax, {attr : {class : 'short'}}) }}#}
+                                    {#{{ form_errors(form.fax) }}#}
+                                {#</div>#}
+                            </dd>
+                        </dl>
+                        <dl id="top_box__email">
+                            <dt>{{ form_label(form.email) }}</dt>
+                            <dd>
+                                {% for emailField in form.email %}
+                                    <div class="form-group {% if emailField.vars.errors is not empty %}has-error{% endif %}">
+                                        {{ form_widget(emailField) }}
+                                        {{ form_errors(emailField) }}
+                                    </div>
+                                {% endfor %}
+                            </dd>
+                        </dl>
+                        <dl id="top_box__password">
+                            <dt>{{ form_label(form.password) }}</dt>
+                            <dd>
+                                {% for passwordField in form.password %}
+                                    <div class="form-group {% if passwordField.vars.errors is not empty %}has-error{% endif %}">
+                                        {{ form_widget(passwordField, { type : 'password' }) }}
+                                        {{ form_errors(passwordField) }}
+                                    </div>
+                                {% endfor %}
+                            </dd>
+                        </dl>
                     </div>
-                </div>
-            </form>
+                    <div id="top_box__birth" class="dl_table not_required">
+                        <dl>
+                            <dt>{{ form_label(form.birth) }}</dt>
+                            <dd>
+                                <div class="form-group form-inline">
+                                    {{ form_widget(form.birth) }}
+                                    {{ form_errors(form.birth) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl>
+                            <dt id="top_box__sex">{{ form_label(form.sex) }}</dt>
+                            <dd>
+                                <div class="form-group form-inline">
+                                    {{ form_widget(form.sex) }}
+                                    {{ form_errors(form.sex) }}
+                                </div>
+                            </dd>
+                        </dl>
+                        <dl id="top_box__job">
+                            <dt>{{ form_label(form.job) }}</dt>
+                            <dd>
+                                <div class="form-group form-inline">
+                                    {{ form_widget(form.job) }}
+                                    {{ form_errors(form.job) }}
+                                </div>
+                            </dd>
+                        </dl>
+                    </div>
+                    {% for f in form %}
+                        {% if f.vars.name matches '[^plg*]' %}
+                            <div class="extra-form dl_table">
+                                {{ form_row(f) }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    <input id="top_box__hidden_mode" type="hidden" name="mode" value="confirm">
+                    <p id="top_box__agreement" class="form_terms_link"><a href="{{ url('help_agreement') }}"
+                                                                          target="_blank">利用規約</a>に同意してお進みください
+                    </p>
+
+                    <div id="top_box__footer" class="row no-padding">
+                        <div id="top_box__button_menu" class="btn_group col-sm-offset-4 col-sm-4">
+                            <p>
+                                <button type="submit" class="btn btn-primary btn-block">同意する</button>
+                            </p>
+                            <p><a href="{{ url('index') }}" class="btn btn-info btn-block">同意しない</a></p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!-- /.col -->
         </div>
-        <!-- /.col -->
+        <!-- /.row -->
     </div>
-    <!-- /.row -->
-</div>
 {% endblock %}
