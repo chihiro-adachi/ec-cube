@@ -210,62 +210,118 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                                         <p class="errormsg text-danger">{{ error.message|trans }}</p>
                                     {% endfor %}
                                 </div>
-                            {#<dt>{{ form_label(form.fax) }}</dt>#}
-                            {#<dd>#}
-                                {#<div class="form-inline form-group input_tel">#}
-                                    {#{{ form_widget(form.fax, {attr : {class : 'short'}}) }}#}
-                                    {#{{ form_errors(form.fax) }}#}
-                                {#</div>#}
                             </dd>
                         </dl>
                         <dl id="top_box__email">
-                            <dt>{{ form_label(form.email) }}</dt>
+                            <dt><label class="control-label">メールアドレス</label><span class="required">必須</span></dt>
                             <dd>
-                                {% for emailField in form.email %}
-                                    <div class="form-group {% if emailField.vars.errors is not empty %}has-error{% endif %}">
-                                        {{ form_widget(emailField) }}
-                                        {{ form_errors(emailField) }}
-                                    </div>
-                                {% endfor %}
+                                <div class="form-group {% if form.email.first.vars.errors|length > 0 %}has-error{% endif %}">
+                                    <input type="email" name="{{ form.email.first.vars.full_name }}"
+                                           class="form-control" value="{{ form.email.first.vars.value }}">
+                                    {% for error in form.email.first.vars.errors %}
+                                        <p class="errormsg text-danger">{{ error.message|trans }}</p>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-group {% if form.email.second.vars.errors|length > 0 %}has-error{% endif %}">
+                                    <input type="email"
+                                           name="{{ form.email.second.vars.full_name }}"
+                                           placeholder="確認のためもう一度入力してください"
+                                           class="form-control"
+                                           value="{{ form.email.second.vars.value }}">
+                                    {% for error in form.email.second.vars.errors %}
+                                        <p class="errormsg text-danger">{{ error.message|trans }}</p>
+                                    {% endfor %}
+                                </div>
                             </dd>
                         </dl>
                         <dl id="top_box__password">
-                            <dt>{{ form_label(form.password) }}</dt>
+                            <dt><label class="control-label">パスワード</label><span class="required">必須</span></dt>
                             <dd>
-                                {% for passwordField in form.password %}
-                                    <div class="form-group {% if passwordField.vars.errors is not empty %}has-error{% endif %}">
-                                        {{ form_widget(passwordField, { type : 'password' }) }}
-                                        {{ form_errors(passwordField) }}
-                                    </div>
-                                {% endfor %}
+                                <div class="form-group {% if form.password.first.vars.errors|length > 0 %}has-error{% endif %}">
+                                    <input type="password"
+                                           name="{{ form.password.first.vars.full_name }}"
+                                           class="form-control"
+                                           value="{{ form.password.first.vars.value }}">
+                                    {% for error in form.password.first.vars.errors %}
+                                        <p class="errormsg text-danger">{{ error.message|trans }}</p>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-group {% if form.password.second.vars.errors|length > 0 %}has-error{% endif %}">
+                                    <input type="password"
+                                           placeholder="確認のためもう一度入力してください"
+                                           name="{{ form.password.second.vars.full_name }}"
+                                           class="form-control"
+                                           value="{{ form.password.second.vars.value }}">
+                                    {% for error in form.password.second.vars.errors %}
+                                        <p class="errormsg text-danger">{{ error.message|trans }}</p>
+                                    {% endfor %}
+                                </div>
                             </dd>
                         </dl>
                     </div>
                     <div id="top_box__birth" class="dl_table not_required">
                         <dl>
-                            <dt>{{ form_label(form.birth) }}</dt>
+                            <dt><label class="control-label">生年月日</label></dt>
                             <dd>
                                 <div class="form-group form-inline">
-                                    {{ form_widget(form.birth) }}
-                                    {{ form_errors(form.birth) }}
+                                    <div id="entry_birth" class="form-inline">
+                                        <select name="{{ form.birth.year.vars.full_name }}" class="form-control">
+                                            <option value="">----</option>
+                                            {% for choice in form.birth.year.vars.choices %}
+                                                <option value="{{ choice.value }}"{% if choice is selectedchoice(form.birth.year.vars) %} selected="selected"{% endif %}>{{ choice.label }}</option>
+                                            {% endfor %}
+                                        </select>年
+                                        <select name="{{ form.birth.month.vars.full_name }}" class="form-control">
+                                            <option value="">--</option>
+                                            {% for choice in form.birth.month.vars.choices %}
+                                                <option value="{{ choice.value }}"{% if choice is selectedchoice(form.birth.month.vars) %} selected="selected"{% endif %}>{{ choice.label }}</option>
+                                            {% endfor %}
+                                        </select>月
+                                        <select name="{{ form.birth.day.vars.full_name }}" class="form-control">
+                                            <option value="">--</option>
+                                            {% for choice in form.birth.day.vars.choices %}
+                                                <option value="{{ choice.value }}"{% if choice is selectedchoice(form.birth.day.vars) %} selected="selected"{% endif %}>{{ choice.label }}</option>
+                                            {% endfor %}
+                                        </select>日
+                                    </div>
+                                    {% for error in form.birth.vars.errors %}
+                                        <p class="errormsg text-danger">{{ error.message|trans }}</p>
+                                    {% endfor %}
                                 </div>
                             </dd>
                         </dl>
                         <dl>
-                            <dt id="top_box__sex">{{ form_label(form.sex) }}</dt>
+                            <dt id="top_box__sex"><label class="control-label">性別</label></dt>
                             <dd>
                                 <div class="form-group form-inline">
-                                    {{ form_widget(form.sex) }}
-                                    {{ form_errors(form.sex) }}
+                                    <div id="entry_sex">
+                                        {% for choice in form.sex.vars.choices %}
+                                            <div class="radio">
+                                                <label><input type="radio"
+                                                              name="{{ form.sex.vars.full_name }}"
+                                                              value="{{ choice.value }}"{% if choice is selectedchoice(form.sex.vars) %} checked="checked"{% endif %} />{{ choice.label }}</label>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% for error in form.sex.vars.errors %}
+                                        <p class="errormsg text-danger">{{ error.message|trans }}</p>
+                                    {% endfor %}
                                 </div>
                             </dd>
                         </dl>
                         <dl id="top_box__job">
-                            <dt>{{ form_label(form.job) }}</dt>
+                            <dt><label class="control-label">職業</label></dt>
                             <dd>
                                 <div class="form-group form-inline">
-                                    {{ form_widget(form.job) }}
-                                    {{ form_errors(form.job) }}
+                                    <select  name="{{ form.job.vars.full_name }}" class="form-control">
+                                        <option value="">選択してください</option>
+                                        {% for choice in form.job.vars.choices %}
+                                            <option value="{{ choice.value }}"{% if choice is selectedchoice(form.job.vars) %} selected="selected"{% endif %}>{{ choice.label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    {% for error in form.job.vars.errors %}
+                                        <p class="errormsg text-danger">{{ error.message|trans }}</p>
+                                    {% endfor %}
                                 </div>
                             </dd>
                         </dl>
