@@ -23,6 +23,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 {% set body_class = 'registration_page' %}
 
+{% form_theme form with ['Form/form_div_layout.html.twig', _self] %}
+
 {% block main %}
     <h1 class="page-heading">新規会員登録確認</h1>
     <div id="confirm_wrap" class="container-fluid">
@@ -36,29 +38,41 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                         <dl id="confirm_box__name">
                             <dt>{{ form_label(form.name) }}</dt>
                             <dd class="form-group input_name">
-                                {{ form_widget(form.name.name01, { attr : { placeholder: '姓' }}) }}
-                                {{ form_widget(form.name.name02, { attr : { placeholder: '名' }}) }}
+                                {{ form.name.name01.vars.data }} {# form.vars.value = form.vars.data = Customer #}
+                                {{ form.name.name02.vars.data }}
+                                {{ form_widget(form.name.name01, { type : 'hidden' }) }}
+                                {{ form_widget(form.name.name02, { type : 'hidden' }) }}
                             </dd>
                         </dl>
                         <dl id="confirm_box__kana">
                             <dt>{{ form_label(form.kana) }}</dt>
                             <dd class="form-group input_name">
-                                {{ form_widget(form.kana.kana01, { attr : { placeholder: 'セイ' }}) }}
-                                {{ form_widget(form.kana.kana02, { attr : { placeholder: 'メイ' }}) }}
+                                {{ form.kana.kana01.vars.data }}
+                                {{ form.kana.kana02.vars.data }}
+                                {{ form_widget(form.kana.kana01, { type : 'hidden' }) }}
+                                {{ form_widget(form.kana.kana02, { type : 'hidden' }) }}
                             </dd>
                         </dl>
                         <dl id="confirm_box__company_name">
                             <dt>{{ form_label(form.company_name) }}</dt>
                             <dd class="form-group input_name">
-                                {{ form_widget(form.company_name) }}
+                                {{ form.company_name.vars.data }}
+                                {{ form_widget(form.company_name, { type : 'hidden' }) }}
                             </dd>
                         </dl>
                         <dl id="confirm_box__address_detail">
                             <dt>{{ form_label(form.address) }}</dt>
                             <dd>
-                                <div id="confirm_box__zip" class="form-group form-inline input_zip {% if form.zip.zip01.vars.errors is not empty or form.zip.zip02.vars.errors is not empty %}has-error{% endif %}">{{ form_widget(form.zip) }}</div>
-                                <div id="confirm_box__address" class="{% if form.address.pref.vars.errors is not empty or form.address.addr01.vars.errors is not empty or form.address.addr02.vars.errors is not empty %}has-error{% endif %}">
-                                    {{ form_widget(form.address) }}
+                                <div id="confirm_box__zip" class="form-group form-inline input_zip">
+                                    〒 {{ form.zip.zip01.vars.data }} - {{ form.zip.zip02.vars.data }}
+                                    {{ form_widget(form.zip.zip01, { type : 'hidden' }) }}
+                                    {{ form_widget(form.zip.zip02, { type : 'hidden' }) }}
+                                </div>
+                                <div id="confirm_box__address">
+                                    {{ form.address.pref.vars.data }} {{ form.address.addr01.vars.data }} {{ form.address.addr02.vars.data }}
+                                    {{ form_widget(form.address.pref, { type : 'hidden' }) }}
+                                    {{ form_widget(form.address.addr01, { type : 'hidden' }) }}
+                                    {{ form_widget(form.address.addr02, { type : 'hidden' }) }}
                                 </div>
                             </dd>
                         </dl>
@@ -66,7 +80,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                             <dt>{{ form_label(form.tel) }}</dt>
                             <dd>
                                 <div class="form-inline form-group input_tel">
-                                    {{ form_widget(form.tel, {attr : {class : 'short'}}) }}
+                                    {{ form.tel.tel01.vars.data }} - {{ form.tel.tel02.vars.data }} - {{ form.tel.tel03.vars.data }}
+                                    {{ form_widget(form.tel.tel01, { type : 'hidden' }) }}
+                                    {{ form_widget(form.tel.tel02, { type : 'hidden' }) }}
+                                    {{ form_widget(form.tel.tel03, { type : 'hidden' }) }}
                                 </div>
                             </dd>
                         </dl>
@@ -74,7 +91,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                             <dt>{{ form_label(form.fax) }}</dt>
                             <dd>
                                 <div class="form-inline form-group input_tel">
-                                    {{ form_widget(form.fax, {attr : {class : 'short'}}) }}
+                                    {{ form.fax.fax01.vars.data }} - {{ form.fax.fax02.vars.data }} - {{ form.fax.fax03.vars.data }}
+                                    {{ form_widget(form.fax.fax01, { type : 'hidden' }) }}
+                                    {{ form_widget(form.fax.fax02, { type : 'hidden' }) }}
+                                    {{ form_widget(form.fax.fax03, { type : 'hidden' }) }}
                                 </div>
                             </dd>
                         </dl>
@@ -82,8 +102,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                             <dt>{{ form_label(form.email) }}</dt>
                             <dd>
                                 <div class="form-group">
-                                    {{ form_widget(form.email.first) }}
-                                    {{ form_widget(form.email.second, {freeze_display_text: false}) }}
+                                    {{ form.email.vars.data }}
+                                    {{ form_widget(form.email.first, { type : 'hidden' }) }}
+                                    {{ form_widget(form.email.second, { type : 'hidden' }) }}
                                 </div>
                             </dd>
                         </dl>
@@ -92,8 +113,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                             <dd>
                                 <div class="form-group">
                                     ********
-                                    {{ form_widget(form.password.first, {freeze_display_text: false}) }}
-                                    {{ form_widget(form.password.second, {freeze_display_text: false}) }}
+                                    {{ form_widget(form.password.first, { type : 'hidden' }) }}
+                                    {{ form_widget(form.password.second, { type : 'hidden' }) }}
                                 </div>
                             </dd>
                         </dl>
@@ -103,7 +124,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                             <dt>{{ form_label(form.birth) }}</dt>
                             <dd>
                                 <div class="form-group form-inline">
-                                    {{ form_widget(form.birth) }}
+                                    {{ form.birth.vars.data ? form.birth.vars.data|date('Y/m/d') }}
+                                    {{ form_widget(form.birth.year, { type : 'hidden' }) }}
+                                    {{ form_widget(form.birth.month, { type : 'hidden' }) }}
+                                    {{ form_widget(form.birth.day, { type : 'hidden' }) }}
                                 </div>
                             </dd>
                         </dl>
@@ -111,7 +135,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                             <dt>{{ form_label(form.sex) }}</dt>
                             <dd>
                                 <div class="form-group form-inline">
-                                    {{ form_widget(form.sex) }}
+                                    {{ form.sex.vars.data }}
+                                    {{ form_widget(form.sex, { type: 'hidden'}) }}
                                 </div>
                             </dd>
                         </dl>
@@ -119,7 +144,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                             <dt>{{ form_label(form.job) }}</dt>
                             <dd>
                                 <div class="form-group form-inline">
-                                    {{ form_widget(form.job) }}
+                                    {{ form.job.vars.data }}
+                                    {{ form_widget(form.job, { type: 'hidden'}) }}
                                 </div>
                             </dd>
                         </dl>

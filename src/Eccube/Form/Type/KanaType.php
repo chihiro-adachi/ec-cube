@@ -63,6 +63,7 @@ class KanaType extends AbstractType
                         'max' => $this->config['kana_len'],
                     )),
                 ),
+                'error_bubbling' => true,
             ),
             'firstname_options' => array(
                 'attr' => array(
@@ -76,6 +77,7 @@ class KanaType extends AbstractType
                         'max' => $this->config['kana_len'],
                     )),
                 ),
+                'error_bubbling' => true,
             ),
         ));
     }

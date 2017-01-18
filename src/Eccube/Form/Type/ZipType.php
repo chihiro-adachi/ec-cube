@@ -67,8 +67,8 @@ class ZipType extends AbstractType
         }
 
         $builder
-            ->add($options['zip01_name'], 'text', array_merge_recursive($options['options'], $options['zip01_options']))
-            ->add($options['zip02_name'], 'text', array_merge_recursive($options['options'], $options['zip02_options']))
+            ->add($options['zip01_name'], 'text', array_merge($options['options'], $options['zip01_options']))
+            ->add($options['zip02_name'], 'text', array_merge($options['options'], $options['zip02_options']))
         ;
 
         $builder->setAttribute('zip01_name', $options['zip01_name']);
@@ -97,12 +97,14 @@ class ZipType extends AbstractType
                     new Assert\Type(array('type' => 'numeric', 'message' => 'form.type.numeric.invalid')),
                     new Assert\Length(array('min' => $this->config['zip01_len'], 'max' => $this->config['zip01_len'])),
                 ),
+                'error_bubbling' => true,
             ),
             'zip02_options' => array(
                 'constraints' => array(
                     new Assert\Type(array('type' => 'numeric', 'message' => 'form.type.numeric.invalid')),
                     new Assert\Length(array('min' => $this->config['zip02_len'], 'max' => $this->config['zip02_len'])),
                 ),
+                'error_bubbling' => true,
             ),
             'zip01_name' => '',
             'zip02_name' => '',

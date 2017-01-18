@@ -69,8 +69,8 @@ class NameType extends AbstractType
         }
 
         $builder
-            ->add($options['lastname_name'], 'text', array_merge_recursive($options['options'], $options['lastname_options']))
-            ->add($options['firstname_name'], 'text', array_merge_recursive($options['options'], $options['firstname_options']))
+            ->add($options['lastname_name'], 'text', array_merge($options['options'], $options['lastname_options']))
+            ->add($options['firstname_name'], 'text', array_merge($options['options'], $options['firstname_options']))
         ;
 
         $builder->setAttribute('lastname_name', $options['lastname_name']);
@@ -107,6 +107,7 @@ class NameType extends AbstractType
                         'message' => 'form.type.name.firstname.nothasspace'
                     ))
                 ),
+                'error_bubbling' => true,
             ),
             'firstname_options' => array(
                 'attr' => array(
@@ -121,6 +122,7 @@ class NameType extends AbstractType
                         'message' => 'form.type.name.lastname.nothasspace'
                     ))
                 ),
+                'error_bubbling' => true,
             ),
             'lastname_name' => '',
             'firstname_name' => '',

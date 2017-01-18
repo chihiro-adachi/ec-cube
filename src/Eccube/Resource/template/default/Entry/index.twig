@@ -34,45 +34,72 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 </script>
 {% endblock javascript %}
 
+{# with [ theme1.html.twig, theme2.html.twig, ...] でテーマを複数設定できる #}
+{% form_theme form with ['Form/form_div_layout.html.twig', _self] %}
+
+{#- _self を指定しておけば、 このtwig内でテーマを上書きできる #}
+{#{% block form_errors %}#}
+    {#{% if errors|length > 0 %}#}
+        {#{% for error in errors %}#}
+            {#<p class="errormsg text-danger">{{ error.message|trans }}</p>#}
+        {#{% endfor %}#}
+    {#{% endif %}#}
+{#{% endblock %}#}
+
 {% block main %}
 <h1 class="page-heading">新規会員登録</h1>
 <div id="top_wrap" class="container-fluid">
     <div id="top_box" class="row">
         <div id="top_box__body" class="col-md-10 col-md-offset-1">
-            <form method="post" action="{{ url('entry') }}">
+            <form method="post" action="{{ url('entry') }}" novalidate>
                 {{ form_widget(form._token) }}
                 <div id="top_box__body_inner" class="dl_table">
                     <dl id="top_box__name">
                         <dt>{{ form_label(form.name) }}</dt>
-                        <dd class="form-group input_name">
-                            {{ form_widget(form.name.name01) }}
-                            {{ form_widget(form.name.name02) }}
-                            {{ form_errors(form.name.name01) }}
-                            {{ form_errors(form.name.name02) }}
+                        <dd class="form-group input_name{% if form.name.vars.errors|length > 0 %} has-error{% endif %}">
+                            {{ form_widget(form.name.name01, { 'attr' : { 'class' : 'form-control'}}) }}
+                            {{ form_widget(form.name.name02, { 'attr' : { 'class' : 'form-control'}}) }}
+                            {{ form_errors(form.name) }}
                         </dd>
                     </dl>
                     <dl id="top_box__kana">
                         <dt>{{ form_label(form.kana) }}</dt>
-                        <dd class="form-group input_name">
-                            {{ form_widget(form.kana.kana01) }}
-                            {{ form_widget(form.kana.kana02) }}
-                            {{ form_errors(form.kana.kana01) }}
-                            {{ form_errors(form.kana.kana02) }}
+                        <dd class="form-group input_name{% if form.kana.vars.errors|length > 0 %} has-error{% endif %}">
+                            {{ form_widget(form.kana.kana01, { 'attr' : { 'class' : 'form-control'}}) }}
+                            {{ form_widget(form.kana.kana02, { 'attr' : { 'class' : 'form-control'}}) }}
+                            {{ form_errors(form.kana) }}
                         </dd>
                     </dl>
                     <dl id="top_box__company_name">
                         <dt>{{ form_label(form.company_name) }}</dt>
-                        <dd class="form-group input_name">
-                            {{ form_widget(form.company_name) }}
+                        <dd class="form-group input_name{% if form.company_name.vars.errors|length > 0 %} has-error{% endif %}">
+                            {{ form_widget(form.company_name, { 'attr' : { 'class' : 'form-control'}}) }}
                             {{ form_errors(form.company_name) }}
                         </dd>
                     </dl>
                     <dl id="top_box__address_detail">
                         <dt>{{ form_label(form.address) }}</dt>
                         <dd>
-                            <div id="top_box__zip" class="form-group form-inline input_zip {% if form.zip.zip01.vars.errors is not empty or form.zip.zip02.vars.errors is not empty %}has-error{% endif %}">{{ form_widget(form.zip) }}</div>
-                            <div id="top_box__address" class="{% if form.address.pref.vars.errors is not empty or form.address.addr01.vars.errors is not empty or form.address.addr02.vars.errors is not empty %}has-error{% endif %}">
-                                {{ form_widget(form.address) }}
+                            <div id="top_box__zip" class="form-group form-inline input_zip{% if form.zip.vars.errors|length > 0 %} has-error{% endif %}">
+                                〒{{ form_widget(form.zip.zip01, { 'attr' : { 'class' : 'form-control'}}) }} - {{ form_widget(form.zip.zip02, { 'attr' : { 'class' : 'form-control'}}) }}
+                                <span class="question-circle"><svg class="cb cb-question"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#cb-question"></use></svg></span>
+                                <a href="http://www.post.japanpost.jp/zipcode/" target="_blank">郵便番号検索</a>
+                                {{ form_errors(form.zip) }}
+                                <div class="zip-search">
+                                    <button type="button" id="zip-search" class="btn btn-default btn-sm">郵便番号から自動入力</button>
+                                </div>
+                            </div>
+                            <div id="top_box__address" class="{% if form.address.vars.errors is not empty or form.address.addr01.vars.errors is not empty or form.address.addr02.vars.errors is not empty %}has-error{% endif %}">
+                                <div class="form-inline form-group">
+                                    {{ form_widget(form.address.pref, { 'attr' : { 'class' : 'form-control'}}) }}
+                                    {{ form_errors(form.address.pref) }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form_widget(form.address.addr01, { 'attr' : { 'class' : 'form-control'}}) }}
+                                    {{ form_errors(form.address.addr01) }}
+                                    {{ form_widget(form.address.addr02, { 'attr' : { 'class' : 'form-control', 'style' : 'margin-top : 15px' }}) }}
+                                    {{ form_errors(form.address.addr02) }}
+                                </div>
                                 {{ form_errors(form.address) }}
                             </div>
                         </dd>
@@ -80,41 +107,49 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                     <dl id="top_box__tel">
                         <dt>{{ form_label(form.tel) }}</dt>
                         <dd>
-                            <div class="form-inline form-group input_tel">
-                                {{ form_widget(form.tel, {attr : {class : 'short'}}) }}
-                                {{ form_errors(form.tel) }}
+                            <div class="form-inline form-group input_tel{% if form.tel.vars.errors|length > 0 %} has-error{% endif %}">
+                                {{ form_widget(form.tel.tel01, { 'attr' : { 'class' : 'form-control'}}) }} - {{ form_widget(form.tel.tel02, { 'attr' : { 'class' : 'form-control'}}) }} - {{ form_widget(form.tel.tel03, { 'attr' : { 'class' : 'form-control'}}) }}
+                                {{ form_errors(form.tel.tel01) }}
+                                {{ form_errors(form.tel.tel02) }}
+                                {{ form_errors(form.tel.tel03) }}
                             </div>
                         </dd>
                     </dl>
                     <dl id="top_box__fax">
                         <dt>{{ form_label(form.fax) }}</dt>
                         <dd>
-                            <div class="form-inline form-group input_tel">
-                                {{ form_widget(form.fax, {attr : {class : 'short'}}) }}
-                                {{ form_errors(form.fax) }}
+                            <div class="form-inline form-group input_tel{% if form.fax.vars.errors|length > 0 %} has-error{% endif %}">
+                                {{ form_widget(form.fax.fax01, { 'attr' : { 'class' : 'form-control'}}) }} - {{ form_widget(form.fax.fax02, { 'attr' : { 'class' : 'form-control'}}) }} - {{ form_widget(form.fax.fax03, { 'attr' : { 'class' : 'form-control'}}) }}
+                                {{ form_errors(form.fax.fax01) }}
+                                {{ form_errors(form.fax.fax02) }}
+                                {{ form_errors(form.fax.fax03) }}
                             </div>
                         </dd>
                     </dl>
                     <dl id="top_box__email">
                         <dt>{{ form_label(form.email) }}</dt>
                         <dd>
-                            {% for emailField in form.email %}
-                            <div class="form-group {% if emailField.vars.errors is not empty %}has-error{% endif %}">
-                                {{ form_widget(emailField) }}
-                                {{ form_errors(emailField) }}
+                            <div class="form-group{% if form.email.first.vars.errors|length > 0 %} has-error{% endif %}">
+                                {{ form_widget(form.email.first, { 'attr' : { 'class' : 'form-control' }}) }}
+                                {{ form_errors(form.email.first) }}
                             </div>
-                            {% endfor %}
+                            <div class="form-group{% if form.email.second.vars.errors|length > 0 %} has-error{% endif %}">
+                                {{ form_widget(form.email.second, { 'attr' : { 'class' : 'form-control' }}) }}
+                                {{ form_errors(form.email.second) }}
+                            </div>
                         </dd>
                     </dl>
                     <dl id="top_box__password">
                         <dt>{{ form_label(form.password) }}</dt>
                         <dd>
-                            {% for passwordField in form.password %}
-                            <div class="form-group {% if passwordField.vars.errors is not empty %}has-error{% endif %}">
-                                {{ form_widget(passwordField, { type : 'password' }) }}
-                                {{ form_errors(passwordField) }}
+                            <div class="form-group{% if form.password.first.vars.errors|length > 0 %} has-error{% endif %}">
+                                {{ form_widget(form.password.first, { 'type' : 'password', 'attr' : { 'class' : 'form-control' }}) }}
+                                {{ form_errors(form.password.first) }}
                             </div>
-                            {% endfor %}
+                            <div class="form-group{% if form.password.second.vars.errors|length > 0 %} has-error{% endif %}">
+                                {{ form_widget(form.password.second, { 'type' : 'password', 'attr' : { 'class' : 'form-control' }}) }}
+                                {{ form_errors(form.password.second) }}
+                            </div>
                         </dd>
                     </dl>
                 </div>
@@ -123,8 +158,12 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                         <dt>{{ form_label(form.birth) }}</dt>
                         <dd>
                             <div class="form-group form-inline">
-                                {{ form_widget(form.birth) }}
-                                {{ form_errors(form.birth) }}
+                                {{ form_widget(form.birth.year, {'attr' : { 'class' : 'form-control' }}) }}
+                                {{ form_widget(form.birth.month, {'attr' : { 'class' : 'form-control' }}) }}
+                                {{ form_widget(form.birth.day, {'attr' : { 'class' : 'form-control' }}) }}
+                                {{ form_errors(form.birth.year) }}
+                                {{ form_errors(form.birth.month) }}
+                                {{ form_errors(form.birth.day) }}
                             </div>
                         </dd>
                     </dl>
@@ -132,7 +171,13 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                         <dt id="top_box__sex">{{ form_label(form.sex) }}</dt>
                         <dd>
                             <div class="form-group form-inline">
-                                {{ form_widget(form.sex) }}
+                                <div id="entry_sex">
+                                    {% for sex in form.sex %}
+                                    <div class="radio">
+                                        <label>{{ form_widget(sex)}}{{ sex.vars.label }}</label>
+                                    </div>
+                                    {% endfor %}
+                                </div>
                                 {{ form_errors(form.sex) }}
                             </div>
                         </dd>
@@ -141,7 +186,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                         <dt>{{ form_label(form.job) }}</dt>
                         <dd>
                             <div class="form-group form-inline">
-                                {{ form_widget(form.job) }}
+                                {{ form_widget(form.job, { 'attr' : { 'class' : 'form-control'}}) }}
                                 {{ form_errors(form.job) }}
                             </div>
                         </dd>
