@@ -292,6 +292,26 @@ class ProductController
                     }
 
                     return $app->redirect($app->url('cart'));
+                // mode=shoppingの際は, カート画面をスキップして購入確認画面へリダイレクトする
+                } elseif ($addCartData['mode'] === 'skip_cart') {
+                    try {
+                        // カートをクリアする.
+                        $app['eccube.service.cart']->clear();
+                        // カートへ商品を追加する.
+                        $app['eccube.service.cart']->addProduct($addCartData['product_class_id'], $addCartData['quantity']);
+                        // カートをロック状態に設定.
+                        $app['eccube.service.cart']->lock();
+                        // カートを保存.
+                        $app['eccube.service.cart']->save();
+                    } catch (CartException $e) {
+                        // エラーが発生した場合は, カート画面で表示させる
+                        $app->addRequestError($e->getMessage());
+
+                        return $app->redirect($app->url('cart'));
+                    }
+
+                    // 購入確認画面へリダイレクト.
+                    return $app->redirect($app->url('shopping'));
                 }
             }
         } else {

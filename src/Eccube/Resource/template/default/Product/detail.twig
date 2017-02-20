@@ -80,6 +80,10 @@ $(function(){
         $('#mode').val('add_cart');
     });
 
+    $('#skip-cart').click(function() {
+        $('#mode').val('skip_cart');
+    });
+
     // bfcache無効化
     $(window).bind('pageshow', function(event) {
         if (event.originalEvent.persisted) {
@@ -237,6 +241,9 @@ $(function(){
                                         {% endif %}
                                     </ul>
                                     {% endif %}
+                                    <ul class="row">
+                                        <li class="col-xs-12 col-sm-8"><button type="submit" id="skip-cart" class="btn btn-primary btn-block prevention-btn prevention-mask">すぐに購入する</button></li>
+                                    </ul>
                                 </div>
                             {% else %}
                                 {# 在庫がない場合は品切れボタンのみ表示 #}
