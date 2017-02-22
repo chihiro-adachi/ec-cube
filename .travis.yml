@@ -73,5 +73,18 @@ after_script:
 after_success:
   - if [[ $PHP_SAPI = 'phpdbg' ]]; then php vendor/bin/coveralls -v -x coverage.clover ; fi
 
-  # after_failure:
-#   - 'cat app/log/site_`date +"%Y-%m-%d"`.log'
+before_deploy:
+  # php7.0 + mysql のmatrixでリリース用パッケージを作成する.
+  - if [[ $TRAVIS_PHP_VERSION = '7.0' ]] && [[ $DB = 'mysql' ]]; then sh release.sh ; fi
+
+deploy:
+  provider: releases
+  api_key:
+    secure: BsPLgFvqn90gKG4se3Hv8/5fY7IacgyJghEZH9/1eLyB2A8gIe5kv6FfMhkAGu0s+Isg7zKFmhpNc1wpf2PXboQ3qvxg0KyxlhHX2O3XB1S0+Bkbm3hqGvJ/1RD86c8siWlcnEQX1fThiuWLSbWqy7zVGQ9xSg+QNorlFVNlkxv1U3cftfHvblJq4fXgrFFxC5bR48bQUTaAQG5+sEeqwQA9f7WGEopG1tNvyTXnJWcGIk1zcmoUn8GvAb53dJFMFEJ7fsE9z0LyWnXn5d4cRjYuomiauLfU/x4xhsLWn657VKANRA/MrHRXVeKsWuJYqYYThwxMZzFp6Wb49mKcH9rq3745ZmiW3S29sxNnX/u/fMB0IIPTLCJYHNw0H3n1XDTRVqUQPX93f8Vz9WHa0Z3LxqvlhqLn5zuNReg8TfvW/oZsoHUV/gr6Zrqrc/FsBanPWz5M6NDm4YPTKcYEX3yT7JDahswGAFUknWgKzz7iDEFRC920BPNwoZ0B647yblMxnM5ZunSFcXLq/3sMrhR5gSXMoz7D2rNbjlDSRbwMumjDhyOYw+vQSRXyhBNiBCYvVeW9j/yIcor7NFKEA176uwsMV0Uej1p1/zyn9cLwROs94+3FesY9KmyYxK9PX9Wle+0kL/aFXyXwBzKVAUnPtcDwRSVM4Zig61e2bxI=
+  skip_cleanup: true
+  file_glob: true
+  file: 'release/*.{tar.gz,zip}'
+  on:
+    repo: chihiro-adachi/ec-cube
+    all_branches: true
+    tags: true
