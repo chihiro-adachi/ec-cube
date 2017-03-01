@@ -35,6 +35,8 @@ fi
 mkdir -p ${BASE_DIR}
 cd ${BASE_DIR}
 
+mkdir -p ${BASE_DIR}/package
+
 echo ">> git clone ${REPOSITORY}..."
 git clone --depth 1 --branch=${TAG} ${REPOSITORY} ${CLONE_DIR}
 
@@ -78,10 +80,10 @@ chmod -R a+w ${CLONE_DIR}/html
 chmod -R a+w ${CLONE_DIR}/app
 
 echo ">> create archives..."
-tar czfp ${PACKAGE_NAME}.tar.gz ${PACKAGE_NAME} 1> /dev/null
-zip -ry ${PACKAGE_NAME}.zip ${PACKAGE_NAME} 1> /dev/null
+tar czfp package/${PACKAGE_NAME}.tar.gz ${PACKAGE_NAME} 1> /dev/null
+zip -ry package/${PACKAGE_NAME}.zip ${PACKAGE_NAME} 1> /dev/null
 
 echo ">> check md5sum..."
-md5sum ${PACKAGE_NAME}.tar.gz ${PACKAGE_NAME}.zip
+md5sum package/${PACKAGE_NAME}.tar.gz package/${PACKAGE_NAME}.zip
 
 echo ">> done."
