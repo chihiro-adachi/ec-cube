@@ -95,10 +95,11 @@ deploy:
   secret_access_key:
     secure: Be9j8WLPpEBULIMO/Ir3ruzQYwsmn2aeBuGwtjBxJ0qaKBJ6Ay+X4fq4dx0pEEmoyKlH2K0zGTAr3UxMci+U5DsjeT8IEOVqoCkf79QEl47bKa3GBEZ5NnfrIJIGV3Rl2LtNy9vo5xsPLWEsZvgq/2UO+BXAUp3KeZAIb/9zh94=
   bucket: ca-2017-03-01
+  endpoint: s3-ap-northeast-1.amazonaws.com
+  region: ap-northeast-1
   skip_cleanup: true
   local_dir: release/package
   on:
     repo: chihiro-adachi/ec-cube
     all_branches: true
     tags: true
-  region: ap-northeast-1
