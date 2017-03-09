@@ -562,6 +562,9 @@ class Application extends ApplicationTrait
             array('^/mypage/withdraw_complete', 'IS_AUTHENTICATED_ANONYMOUSLY'),
             array('^/mypage/change', 'IS_AUTHENTICATED_FULLY'),
             array('^/mypage', 'ROLE_USER'),
+            array('^/$', 'IS_AUTHENTICATED_ANONYMOUSLY'),
+            array('^/entry', 'IS_AUTHENTICATED_ANONYMOUSLY'),
+            array('^/', 'ROLE_USER'),
         );
 
         $this['eccube.password_encoder'] = $this->share(function ($app) {
