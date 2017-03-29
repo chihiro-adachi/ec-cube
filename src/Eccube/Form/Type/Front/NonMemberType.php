@@ -75,7 +75,9 @@ class NonMemberType extends AbstractType
             ->add('tel', 'tel', array(
                 'required' => true,
             ))
-            ->add('email', 'repeated_email');
+            ->add('email', 'repeated_email')
+
+            ->add('other_addr', 'address');
     }
 
     /**

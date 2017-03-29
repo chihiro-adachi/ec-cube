@@ -963,6 +963,9 @@ class ShoppingController extends AbstractController
 
         $form->handleRequest($request);
 
+        $customerAddr = $form['other_addr']->getData();
+        dump($customerAddr);
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             log_info('非会員お客様情報登録開始');
