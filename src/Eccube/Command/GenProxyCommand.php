@@ -41,25 +41,22 @@ class GenProxyCommand extends Command
             ->setDescription('generate entity proxies');
     }
 
-
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var \Eccube\Application $app */
         $app = $this->getSilexApplication();
 
-//        if ($input->getArgument('mode') == 'clean') {
-//            // プロキシのクリア
-//            $files = Finder::create()
-//                ->in($app['config']['root_dir'].'/app/cache/doctrine/entity-proxies')
-//                ->name('*.php')
-//                ->files();
-//            $fs = new Filesystem();
-//            foreach ($files as $file) {
-//                $output->writeln('remove -> '.$file->getRealPath());
-//                unlink($file->getRealPath());
-//            }
-//            return;
-//        }
+        // プロキシのクリア
+        $files = Finder::create()
+            ->in($app['config']['root_dir'].'/app/cache/doctrine/entity-proxies')
+            ->name('*.php')
+            ->files();
+        $fs = new Filesystem();
+        foreach ($files as $file) {
+            $output->writeln('remove -> '.$file->getRealPath());
+            $fs->remove($file->getRealPath());
+        }
+
         // Acmeからファイルを抽出
         $files = Finder::create()
             ->in(
@@ -104,10 +101,30 @@ class GenProxyCommand extends Command
                 = \Zend\Code\Generator\ClassGenerator::fromReflection($rc);
 
             foreach ($traits as $trait) {
+                $rt = new \Zend\Code\Reflection\ClassReflection($trait);
+                foreach ($rt->getProperties() as $prop) {
+                    // すでにProxyがある場合, $generatorにuse XxxTrait;が存在せず,
+                    // traitに定義されているフィールド,メソッドがクラス側に追加されてしまう
+                    if ($generator->hasProperty($prop->getName())) {
+                        // $generator->removeProperty()はzend-code 2.6.3 では未実装なのでリフレクションで削除.
+                        $generatorRefObj = new \ReflectionObject($generator);
+                        $generatorRefProp = $generatorRefObj->getProperty('properties');
+                        $generatorRefProp->setAccessible(true);
+                        $properies = $generatorRefProp->getValue($generator);
+                        unset($properies[$prop->getName()]);
+                        $generatorRefProp->setValue($generator, $properies);
+                    }
+                }
+                foreach ($rt->getMethods() as $method) {
+                    if ($generator->hasMethod($method->getName())) {
+                        $generator->removeMethod($method->getName());
+                    }
+                }
                 $generator->addTrait('\\'.$trait);
             }
 
-            $generator->setExtendedClass('\\Eccube\\Entity\\AbstractEntity');
+            $extendClass = $generator->getExtendedClass();
+            $generator->setExtendedClass('\\'.$extendClass);
 
             $dir = $app['config']['root_dir'].'/app/cache/doctrine/entity-proxies';
             $file = basename($rc->getFileName());
@@ -115,8 +132,6 @@ class GenProxyCommand extends Command
             $code = $generator->generate();
             file_put_contents($dir.'/'.$file, '<?php '.PHP_EOL.$code);
             $output->writeln('gen -> '.$dir.'/'.$file);
-
-
         }
     }
 }
