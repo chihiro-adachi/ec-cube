@@ -123,8 +123,16 @@ class GenProxyCommand extends Command
                 $generator->addTrait('\\'.$trait);
             }
 
+            // extendしたクラスが相対パスになるので
             $extendClass = $generator->getExtendedClass();
             $generator->setExtendedClass('\\'.$extendClass);
+
+            // interfaceが相対パスになるので
+            $interfaces = $generator->getImplementedInterfaces();
+            foreach ($interfaces as &$interface) {
+                $interface = '\\'.$interface;
+            }
+            $generator->setImplementedInterfaces($interfaces);
 
             $dir = $app['config']['root_dir'].'/app/cache/doctrine/entity-proxies';
             $file = basename($rc->getFileName());
