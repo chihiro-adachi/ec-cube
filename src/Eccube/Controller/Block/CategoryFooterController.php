@@ -8,6 +8,8 @@ class CategoryFooterController
     {
         $Categories = $app['eccube.repository.category']->getList();
 
-        return $app->render('Block/category_footer.twig');
+        return $app->render('Block/category_footer.twig', array(
+            'Categories' => $Categories
+        ));
     }
 }
