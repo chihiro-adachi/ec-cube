@@ -72,6 +72,7 @@ class FrontControllerProvider implements ControllerProviderInterface
 
         // block
         $c->match('/block/category', '\Eccube\Controller\Block\CategoryController::index')->bind('block_category');
+        $c->match('/block/category_footer', '\Eccube\Controller\Block\CategoryFooterController::index')->bind('block_category_footer');
         $c->match('/block/cart', '\Eccube\Controller\Block\CartController::index')->bind('block_cart');
         $c->match('/block/search_product', '\Eccube\Controller\Block\SearchProductController::index')->bind('block_search_product');
         $c->match('/block/news', '\Eccube\Controller\Block\NewsController::index')->bind('block_news');
