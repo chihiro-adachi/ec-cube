@@ -6,6 +6,6 @@ class CategoryFooterController
 {
     public function index(\Eccube\Application $app)
     {
-        return "コントローラを経由してカテゴリを表示する";
+        return $app->render('Block/category_footer.twig');
     }
 }
