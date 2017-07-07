@@ -21,6 +21,10 @@ class PurchaseFlow
 
     public function execute(ItemHolderInterface $itemHolder) {
 
+        $this->calculateDeliveryFeeTotal($itemHolder);
+        $this->calculateCharge($itemHolder);
+        $this->calculateDiscount($itemHolder);
+        $this->calculateTax($itemHolder);
         $this->calculateTotal($itemHolder);
 
         foreach ($itemHolder->getItems() as $item) {
@@ -54,12 +58,75 @@ class PurchaseFlow
     /**
      * @param ItemHolderInterface $itemHolder
      */
-    private function calculateTotal(ItemHolderInterface $itemHolder)
+    protected function calculateTotal(ItemHolderInterface $itemHolder)
     {
         $total = array_reduce($itemHolder->getItems()->toArray(), function ($sum, ItemInterface $item) {
-            $sum += $item->getPrice() * $item->getQuantity();
+            $sum += $item->getPriceIncTax() * $item->getQuantity();
             return $sum;
         }, 0);
         $itemHolder->setTotal($total);
+        // TODO
+        if ($itemHolder instanceof \Eccube\Entity\Order) {
+            // Order には PaymentTotal もセットする
+            $itemHolder->setPaymentTotal($total);
+        }
+    }
+
+    /**
+     * @param ItemHolderInterface $itemHolder
+     */
+    protected function calculateDeliveryFeeTotal(ItemHolderInterface $itemHolder)
+    {
+        $total = array_reduce($itemHolder->getItems()->filter(
+            function (ItemInterface $item) {
+                return $item->isDeliveryFee();
+            })->toArray(), function ($sum, ItemInterface $item) {
+                $sum += $item->getPriceIncTax() * $item->getQuantity();
+                return $sum;
+            }, 0);
+        $itemHolder->setDeliveryFeeTotal($total);
+    }
+
+    /**
+     * @param ItemHolderInterface $itemHolder
+     */
+    protected function calculateDiscount(ItemHolderInterface $itemHolder)
+    {
+        $total = array_reduce($itemHolder->getItems()->filter(
+            function (ItemInterface $item) {
+                return $item->isDiscount();
+            })->toArray(), function ($sum, ItemInterface $item) {
+                $sum += $item->getPriceIncTax() * $item->getQuantity();
+                return $sum;
+            }, 0);
+        // TODO 後方互換のため discount には正の整数を代入する
+        $itemHolder->setDiscount($total * -1);
+    }
+
+    /**
+     * @param ItemHolderInterface $itemHolder
+     */
+    protected function calculateCharge(ItemHolderInterface $itemHolder)
+    {
+        $total = array_reduce($itemHolder->getItems()->filter(
+            function (ItemInterface $item) {
+                return $item->isCharge();
+            })->toArray(), function ($sum, ItemInterface $item) {
+                $sum += $item->getPriceIncTax() * $item->getQuantity();
+                return $sum;
+            }, 0);
+        $itemHolder->setCharge($total);
+    }
+
+    /**
+     * @param ItemHolderInterface $itemHolder
+     */
+    protected function calculateTax(ItemHolderInterface $itemHolder)
+    {
+        $total = array_reduce($itemHolder->getItems()->toArray(), function ($sum, ItemInterface $item) {
+            $sum += ($item->getPriceIncTax() - $item->getPrice()) * $item->getQuantity();
+            return $sum;
+        }, 0);
+        $itemHolder->setTax($total);
     }
 }
