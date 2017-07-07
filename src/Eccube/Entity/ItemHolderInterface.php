@@ -36,6 +36,13 @@ interface ItemHolderInterface
     public function setTotal($total);
 
     /**
+     * 個数の合計を返します。
+     *
+     * @return mixed
+     */
+    public function getQuantity();
+
+    /**
      * 送料合計を設定します。
      * @param $total|int
      */

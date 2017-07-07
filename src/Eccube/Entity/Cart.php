@@ -64,6 +64,11 @@ class Cart extends \Eccube\Entity\AbstractEntity implements PurchaseInterface, I
      */
     private $errors = [];
 
+    public function __wakeup()
+    {
+        $this->errors = [];
+    }
+
     public function __construct()
     {
         $this->CartItems = new \Doctrine\Common\Collections\ArrayCollection();
@@ -149,7 +154,7 @@ class Cart extends \Eccube\Entity\AbstractEntity implements PurchaseInterface, I
     public function getCartItemByIdentifier($class_name, $class_id)
     {
         foreach ($this->CartItems as $CartItem) {
-            if ($CartItem->getClassName() === $class_name && $CartItem->getClassId() === $class_id) {
+            if ($CartItem->getClassName() === $class_name && $CartItem->getClassId() == $class_id) {
                 return $CartItem;
             }
         }
@@ -160,7 +165,7 @@ class Cart extends \Eccube\Entity\AbstractEntity implements PurchaseInterface, I
     public function removeCartItemByIdentifier($class_name, $class_id)
     {
         foreach ($this->CartItems as $CartItem) {
-            if ($CartItem->getClassName() === $class_name && $CartItem->getClassId() === $class_id) {
+            if ($CartItem->getClassName() === $class_name && $CartItem->getClassId() == $class_id) {
                 $this->CartItems->removeElement($CartItem);
             }
         }
@@ -300,6 +305,16 @@ class Cart extends \Eccube\Entity\AbstractEntity implements PurchaseInterface, I
     public function addItem(ItemInterface $item)
     {
         $this->CartItems->add($item);
+    }
+
+    /**
+     * 個数の合計を返します。
+     *
+     * @return mixed
+     */
+    public function getQuantity()
+    {
+        return $this->getTotalQuantity();
     }
 
     /**
