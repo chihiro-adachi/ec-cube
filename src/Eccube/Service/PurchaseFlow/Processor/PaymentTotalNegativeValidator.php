@@ -21,36 +21,22 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace Eccube\Service\PurchaseFlow;
+namespace Eccube\Service\PurchaseFlow\Processor;
 
 
-use Eccube\Entity\CartItem;
-use Eccube\Entity\ItemInterface;
+use Eccube\Entity\ItemHolderInterface;
+use Eccube\Service\PurchaseFlow\ItemValidateException;
+use Eccube\Service\PurchaseFlow\ValidatableItemHolderProcessor;
 
-abstract class ValidatableItemProcessor implements ItemProcessor
+/**
+ * 合計金額のマイナスチェック.
+ */
+class PaymentTotalNegativeValidator extends ValidatableItemHolderProcessor
 {
-    /**
-     * @param ItemInterface $item
-     * @throws ItemValidateException
-     */
-    public function process(ItemInterface $item)
+    protected function validate(ItemHolderInterface $item)
     {
-        try {
-            $this->validate($item);
-
-            return ProcessResult::success();
-        } catch (ItemValidateException $e) {
-            if ($item instanceof CartItem) {
-                $this->handle($item);
-            }
-
-            return ProcessResult::warn($e->getMessage());
+        if ($item->getTotal() < 0) {
+            throw new ItemValidateException('shopping.total.price');
         }
-    }
-
-    protected abstract function validate(ItemInterface $item);
-
-    protected function handle(ItemInterface $item)
-    {
     }
 }
