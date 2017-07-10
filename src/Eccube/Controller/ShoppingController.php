@@ -28,9 +28,9 @@ use Eccube\Application;
 use Eccube\Common\Constant;
 use Eccube\Entity\Customer;
 use Eccube\Entity\CustomerAddress;
+use Eccube\Entity\ItemHolderInterface;
 use Eccube\Entity\Master\OrderItemType;
-use Eccube\Entity\Master\TaxType;
-use Eccube\Entity\Master\TaxDisplayType;
+use Eccube\Entity\Order;
 use Eccube\Entity\ShipmentItem;
 use Eccube\Entity\Shipping;
 use Eccube\Event\EccubeEvents;
@@ -43,9 +43,7 @@ use Eccube\Form\Type\Front\ShoppingShippingType;
 use Eccube\Form\Type\ShippingMultipleType;
 use Eccube\Form\Type\Shopping\OrderType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\HttpFoundation\Request;
@@ -107,16 +105,16 @@ class ShoppingController extends AbstractController
         $app->forwardChain($app->path("shopping/calculateOrder"))
             ->forwardChain($app->path("shopping/createForm"));
 
-        // 受注のマイナスチェック
-        $response = $app->forward($app->path("shopping/checkToMinusPrice"));
-        if ($response->isRedirection() || $response->getContent()) {
-            return $response;
+
+        /** @var Order $Order */
+        $Order = $app['request_scope']->get('Order');
+
+        if (!empty($Order->getErrors())) {
+            return $app->redirect($app->url('shopping_error'));
         }
 
         // 複数配送の場合、エラーメッセージを一度だけ表示
         $app->forward($app->path("shopping/handleMultipleErrors"));
-
-        $Order = $app['request_scope']->get('Order');
         $form = $app['request_scope']->get(OrderType::class);
 
         return [
@@ -282,6 +280,7 @@ class ShoppingController extends AbstractController
                 throw new NotFoundHttpException('選択されたお届け先住所が存在しない');
             }
 
+            /** @var Order $Order */
             $Order = $app['eccube.service.shopping']->getOrder($app['config']['order_processing']);
             if (!$Order) {
                 log_info('購入処理中の受注情報がないため購入エラー');
@@ -298,14 +297,17 @@ class ShoppingController extends AbstractController
             log_info('お届先情報更新開始', array($Shipping->getId()));
 
             // お届け先情報を更新
-            $Shipping
-                ->setFromCustomerAddress($CustomerAddress);
+            $Shipping->setFromCustomerAddress($CustomerAddress);
 
             // 配送料金の設定
             $app['eccube.service.shopping']->setShippingDeliveryFee($Shipping);
 
+
             // 合計金額の再計算
-            $Order = $app['eccube.service.shopping']->getAmount($Order);
+            $this->executePurchaseFlow($app, $Order);
+            if (!empty($Order->getErrors())) {
+                return $app->redirect($app->url('shopping_error'));
+            }
 
             // 配送先を更新
             $app['orm.em']->flush();
@@ -360,6 +362,7 @@ class ShoppingController extends AbstractController
             return $response;
         }
 
+        /** @var Order $Order */
         $Order = $app['request_scope']->get('Order');
 
         $Shipping = $Order->findShipping($id);
@@ -413,7 +416,10 @@ class ShoppingController extends AbstractController
             $app['eccube.service.shopping']->setShippingDeliveryFee($Shipping);
 
             // 合計金額の再計算
-            $app['eccube.service.shopping']->getAmount($Order);
+            $this->executePurchaseFlow($app, $Order);
+            if (!empty($Order->getErrors())) {
+                return $app->redirect($app->url('shopping_error'));
+            }
 
             // 配送先を更新
             $app['orm.em']->flush();
@@ -579,13 +585,6 @@ class ShoppingController extends AbstractController
             return $app->redirect($app->url('shopping'));
         }
 
-        // カートチェック
-        if (count($cartService->getCart()->getCartItems()) <= 0) {
-            // カートが存在しない時はエラー
-            log_info('カートに商品が入っていないためショッピングカート画面にリダイレクト');
-            return $app->redirect($app->url('cart'));
-        }
-
         $builder = $app['form.factory']->createBuilder(NonMemberType::class);
 
         $event = new EventArgs(
@@ -645,6 +644,7 @@ class ShoppingController extends AbstractController
             $Customer->addCustomerAddress($CustomerAddress);
 
             // 受注情報を取得
+            /** @var Order $Order */
             $Order = $app['eccube.service.shopping']->getOrder($app['config']['order_processing']);
 
             // 初回アクセス(受注データがない)の場合は, 受注情報を作成
@@ -661,6 +661,14 @@ class ShoppingController extends AbstractController
                     $app->addRequestError($e->getMessage());
                     return $app->redirect($app->url('cart'));
                 }
+            }
+
+            $this->executePurchaseFlow($app, $Order);
+            if (!empty($Order->getErrors())) {
+                foreach ($Order->getErrors() as $error) {
+                    $app->addRequestError($error);
+                }
+                return $app->redirect($app->url('cart'));
             }
 
             // 非会員用セッションを作成
@@ -927,7 +935,10 @@ class ShoppingController extends AbstractController
             }
 
             // 合計金額の再計算
-            $Order = $app['eccube.service.shopping']->getAmount($Order);
+            $this->executePurchaseFlow($app, $Order);
+            if (!empty($Order->getErrors())) {
+                return $app->redirect($app->url('shopping_error'));
+            }
 
             // 配送先を更新
             $app['orm.em']->flush();
@@ -1174,6 +1185,7 @@ class ShoppingController extends AbstractController
             // カートが存在しない時はエラー
             return $app->redirect($app->url('cart'));
         }
+
         return new Response();
     }
 
@@ -1244,7 +1256,8 @@ class ShoppingController extends AbstractController
         $Order = $app['request_scope']->get('Order');
 
         // 構築したOrderを集計する.
-        $app['eccube.service.calculate']($Order, $Order->getCustomer())->calculate();
+        $this->executePurchaseFlow($app, $Order);
+
         return new Response();
     }
 
@@ -1322,29 +1335,8 @@ class ShoppingController extends AbstractController
     }
 
     /**
-     * 受注合計のマイナスをチェックする
-     *
-     * @Route("/checkToMinusPrice", name="shopping/checkToMinusPrice")
-     * @param Application $app
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
-     */
-    public function checkToMinusPrice(Application $app, Request $request)
-    {
-        $Order = $app['request_scope']->get('Order');
-        if ($Order->getTotalPrice() < 0) {
-            // 合計金額がマイナスの場合、エラー
-            log_info('受注金額マイナスエラー', array($Order->getId()));
-            $message = $app->trans('shopping.total.price', array('totalPrice' => number_format($Order->getTotalPrice())));
-            $app->addError($message);
-
-            return $app->redirect($app->url('shopping_error'));
-        }
-        return new Response();
-    }
-
-    /**
      * 複数配送時のエラーを表示する
+     * TODO ItemHolderProcessor化?
      *
      * @Route("/handleMultipleErrors", name="shopping/handleMultipleErrors")
      * @param Application $app
@@ -1405,13 +1397,14 @@ class ShoppingController extends AbstractController
      */
     public function completeOrder(Application $app, Request $request)
     {
-        $Order = $app['request_scope']->get('Order');
         $form = $app['request_scope']->get(OrderType::class);
 
-        // requestのバインド後、Calculatorに再集計させる
+        // requestのバインド後、再集計
         $app->forward($app->path("shopping/calculateOrder"));
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            /** @var Order $Order */
             $Order = $form->getData();
             log_info('購入処理開始', array($Order->getId()));
 
@@ -1424,13 +1417,14 @@ class ShoppingController extends AbstractController
                 // FormTypeで更新されるため不要
                 //$app['eccube.service.shopping']->setFormData($Order, $data);
 
+                $this->executePurchaseFlow($app, $Order);
+                if (!empty($Order->getErrors())) {
+                    // TODO エラーメッセージ
+                    throw new ShoppingException();
+                }
+
                 // 購入処理
                 $app['eccube.service.shopping']->processPurchase($Order); // XXX フロント画面に依存してるので管理画面では使えない
-
-                // 集計は,この1行でいけるはず
-                // プラグインで Strategy をセットしたりする
-                // 集計はステートレスな実装とし、再計算時に状態を考慮しなくても良いようにする
-                $app['eccube.service.calculate']($Order, $Order->getCustomer())->calculate();
 
                 // Order も引数で渡すのがベスト??
                 $paymentService = $app['eccube.service.payment']($Order->getPayment()->getServiceClass());
@@ -1541,5 +1535,13 @@ class ShoppingController extends AbstractController
 
         // 完了画面表示
         return $app->redirect($app->url('shopping_complete'));
+    }
+
+    private function executePurchaseFlow(Application $app, ItemHolderInterface $itemHolder)
+    {
+        $app['eccube.purchase.flow.shopping']->execute($itemHolder);
+        foreach ($itemHolder->getErrors() as $error) {
+            $app->addRequestError($error);
+        }
     }
 }
