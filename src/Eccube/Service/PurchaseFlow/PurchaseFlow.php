@@ -2,7 +2,6 @@
 
 namespace Eccube\Service\PurchaseFlow;
 
-
 use Eccube\Entity\ItemHolderInterface;
 use Eccube\Entity\ItemInterface;
 
@@ -19,8 +18,8 @@ class PurchaseFlow
      */
     protected $itemProsessors = [];
 
-    public function execute(ItemHolderInterface $itemHolder) {
-
+    public function execute(ItemHolderInterface $itemHolder)
+    {
         $this->calculateDeliveryFeeTotal($itemHolder);
         $this->calculateCharge($itemHolder);
         $this->calculateDiscount($itemHolder);
@@ -43,6 +42,7 @@ class PurchaseFlow
                 $itemHolder->addError($result->getErrorMessage());
             }
         }
+
         return $itemHolder;
     }
 
@@ -61,7 +61,7 @@ class PurchaseFlow
      */
     protected function calculateTotal(ItemHolderInterface $itemHolder)
     {
-        $total = array_reduce($itemHolder->getItems()->toArray(), function ($sum, ItemInterface $item) {
+        $total = $itemHolder->getItems()->reduce(function ($sum, ItemInterface $item) {
             $sum += $item->getPriceIncTax() * $item->getQuantity();
             return $sum;
         }, 0);
@@ -75,10 +75,9 @@ class PurchaseFlow
 
     protected function calculateSubTotal(ItemHolderInterface $itemHolder)
     {
-        $total = array_reduce($itemHolder->getItems()->filter(
-            function (ItemInterface $item) {
-                return $item->isProduct();
-            })->toArray(), function ($sum, ItemInterface $item) {
+        $total = $itemHolder->getItems()
+            ->getProductClasses()
+            ->reduce(function ($sum, ItemInterface $item) {
                 $sum += $item->getPriceIncTax() * $item->getQuantity();
                 return $sum;
             }, 0);
@@ -93,10 +92,9 @@ class PurchaseFlow
      */
     protected function calculateDeliveryFeeTotal(ItemHolderInterface $itemHolder)
     {
-        $total = array_reduce($itemHolder->getItems()->filter(
-            function (ItemInterface $item) {
-                return $item->isDeliveryFee();
-            })->toArray(), function ($sum, ItemInterface $item) {
+        $total = $itemHolder->getItems()
+            ->getDeliveryFees()
+            ->reduce(function ($sum, ItemInterface $item) {
                 $sum += $item->getPriceIncTax() * $item->getQuantity();
                 return $sum;
             }, 0);
@@ -108,10 +106,9 @@ class PurchaseFlow
      */
     protected function calculateDiscount(ItemHolderInterface $itemHolder)
     {
-        $total = array_reduce($itemHolder->getItems()->filter(
-            function (ItemInterface $item) {
-                return $item->isDiscount();
-            })->toArray(), function ($sum, ItemInterface $item) {
+        $total = $itemHolder->getItems()
+            ->getDiscounts()
+            ->reduce(function ($sum, ItemInterface $item) {
                 $sum += $item->getPriceIncTax() * $item->getQuantity();
                 return $sum;
             }, 0);
@@ -124,10 +121,9 @@ class PurchaseFlow
      */
     protected function calculateCharge(ItemHolderInterface $itemHolder)
     {
-        $total = array_reduce($itemHolder->getItems()->filter(
-            function (ItemInterface $item) {
-                return $item->isCharge();
-            })->toArray(), function ($sum, ItemInterface $item) {
+        $total = $itemHolder->getItems()
+            ->getCharges()
+            ->reduce(function ($sum, ItemInterface $item) {
                 $sum += $item->getPriceIncTax() * $item->getQuantity();
                 return $sum;
             }, 0);
@@ -139,10 +135,11 @@ class PurchaseFlow
      */
     protected function calculateTax(ItemHolderInterface $itemHolder)
     {
-        $total = array_reduce($itemHolder->getItems()->toArray(), function ($sum, ItemInterface $item) {
-            $sum += ($item->getPriceIncTax() - $item->getPrice()) * $item->getQuantity();
-            return $sum;
-        }, 0);
+        $total = $itemHolder->getItems()
+            ->reduce(function ($sum, ItemInterface $item) {
+                $sum += ($item->getPriceIncTax() - $item->getPrice()) * $item->getQuantity();
+                return $sum;
+            }, 0);
         $itemHolder->setTax($total);
     }
 }
