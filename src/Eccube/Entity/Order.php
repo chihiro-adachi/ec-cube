@@ -44,6 +44,11 @@ use Doctrine\ORM\Mapping as ORM;
 class Order extends \Eccube\Entity\AbstractEntity implements PurchaseInterface, ItemHolderInterface
 {
     /**
+     * @var ItemValidateException[]
+     */
+    private $errors = [];
+
+    /**
      * isMultiple
      * 
      * @return boolean
