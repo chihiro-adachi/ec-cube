@@ -99,6 +99,8 @@ class ProductRepository extends EntityRepository
         $qb = $this->createQueryBuilder('p')
             ->andWhere('p.Status = 1');
 
+        $qb->andWhere("p.note IS NULL OR p.note <> '[隠し商品]'");
+
         // category
         $categoryJoin = false;
         if (!empty($searchData['category_id']) && $searchData['category_id']) {
