@@ -628,7 +628,7 @@ class Order extends \Eccube\Entity\AbstractEntity implements PurchaseInterface, 
             ->setDelFlg(Constant::DISABLED);
 
         $this->OrderDetails = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->ShipmentItems = new \Eccube\Service\Calculator\ShipmentItemCollection();
+        $this->ShipmentItems = new \Eccube\Service\Calculator\ShipmentItemCollection([]);
         $this->MailHistories = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -1914,6 +1914,4 @@ class Order extends \Eccube\Entity\AbstractEntity implements PurchaseInterface, 
 
         return $quantity;
     }
-
-    protected $errors = [];
 }
