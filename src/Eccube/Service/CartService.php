@@ -53,13 +53,15 @@ class CartService
         $this->session = $session;
         $this->cart = $session->get('cart', new Cart());
         $this->em = $em;
+
+        $this->loadItems();
     }
 
+    /**
+     * @return ItemHolderInterface|Cart
+     */
     public function getCart()
     {
-        // LoadProcessorに切り離してもよい？
-        $this->loadItems();
-
         return $this->cart;
     }
 
