@@ -1565,7 +1565,7 @@ class Order extends \Eccube\Entity\AbstractEntity implements PurchaseInterface, 
     }
 
     /**
-     * Alias of getShipmentItems()
+     * Sorted to getShipmentItems()
      *
      * @return ItemCollection
      */
