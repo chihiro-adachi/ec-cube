@@ -3,13 +3,19 @@
 namespace Eccube\Service\PurchaseFlow;
 
 use Eccube\Entity\ItemHolderInterface;
+use Eccube\Service\PurchaseFlow\Processor\PurchaseContext;
 
 abstract class ValidatableItemHolderProcessor implements ItemHolderProcessor
 {
-    public final function process(ItemHolderInterface $itemHolder)
+    /**
+     * @param ItemHolderInterface $itemHolder
+     * @param PurchaseContext $context
+     * @return ProcessResult
+     */
+    public final function process(ItemHolderInterface $itemHolder, PurchaseContext $context)
     {
         try {
-            $this->validate($itemHolder);
+            $this->validate($itemHolder, $context);
 
             return ProcessResult::success();
         } catch (ItemValidateException $e) {
@@ -17,5 +23,5 @@ abstract class ValidatableItemHolderProcessor implements ItemHolderProcessor
         }
     }
 
-    protected abstract function validate(ItemHolderInterface $itemHolder);
+    protected abstract function validate(ItemHolderInterface $itemHolder, PurchaseContext $context);
 }
