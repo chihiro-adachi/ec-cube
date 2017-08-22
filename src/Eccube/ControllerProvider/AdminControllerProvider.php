@@ -39,26 +39,6 @@ class AdminControllerProvider implements ControllerProviderInterface
             $c->requireHttps();
         }
 
-        // content
-        $c->match('/content/layout', '\Eccube\Controller\Admin\Content\LayoutController::index')->bind('admin_content_layout');
-        $c->match('/content/layout/new', '\Eccube\Controller\Admin\Content\LayoutController::edit')->bind('admin_content_layout_new');
-        $c->match('/content/layout/{id}/edit', '\Eccube\Controller\Admin\Content\LayoutController::edit')->assert('id', '\d+')->bind('admin_content_layout_edit');
-        $c->match('/content/layout/{id}/preview', '\Eccube\Controller\Admin\Content\LayoutController::preview')->assert('id', '\d+')->bind('admin_content_layout_preview');
-        $c->delete('/content/layout/{id}/delete', '\Eccube\Controller\Admin\Content\LayoutController::delete')->assert('id', '\d+')->bind('admin_content_layout_delete');
-        $c->post('/content/layout/view_block', '\Eccube\Controller\Admin\Content\LayoutController::viewBlock')->bind('admin_content_layout_view_block');
-
-        $c->match('/content/block', '\Eccube\Controller\Admin\Content\BlockController::index')->bind('admin_content_block');
-        $c->match('/content/block/new', '\Eccube\Controller\Admin\Content\BlockController::edit')->bind('admin_content_block_new');
-        $c->match('/content/block/{id}/edit', '\Eccube\Controller\Admin\Content\BlockController::edit')->assert('id', '\d+')->bind('admin_content_block_edit');
-        $c->delete('/content/block/{id}/delete', '\Eccube\Controller\Admin\Content\BlockController::delete')->assert('id', '\d+')->bind('admin_content_block_delete');
-
-        $c->match('/content/page', '\Eccube\Controller\Admin\Content\PageController::index')->bind('admin_content_page');
-        $c->match('/content/page/new', '\Eccube\Controller\Admin\Content\PageController::edit')->bind('admin_content_page_new');
-        $c->match('/content/page/{id}/edit', '\Eccube\Controller\Admin\Content\PageController::edit')->assert('id', '\d+')->bind('admin_content_page_edit');
-        $c->delete('/content/page/{id}/delete', '\Eccube\Controller\Admin\Content\PageController::delete')->assert('id', '\d+')->bind('admin_content_page_delete');
-
-        $c->match('/content/cache', '\Eccube\Controller\Admin\Content\CacheController::index')->bind('admin_content_cache');
-
         // shop
 //        $c->match('/setting/shop', '\Eccube\Controller\Admin\Setting\Shop\ShopController::index')->bind('admin_setting_shop');
 
