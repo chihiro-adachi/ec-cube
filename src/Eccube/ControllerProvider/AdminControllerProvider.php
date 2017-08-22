@@ -39,35 +39,7 @@ class AdminControllerProvider implements ControllerProviderInterface
             $c->requireHttps();
         }
 
-        // root
-        $c->match('/', '\Eccube\Controller\Admin\AdminController::index')->bind('admin_homepage');
-        $c->post('/nonstock', '\Eccube\Controller\Admin\AdminController::searchNonStockProducts')->bind('admin_homepage_nonstock');
-
-        // login
-        $c->match('/login', '\Eccube\Controller\Admin\AdminController::login')->bind('admin_login');
-
-        // change password
-        $c->match('/change_password', '\Eccube\Controller\Admin\AdminController::changePassword')->bind('admin_change_password');
-
         // product
-        $c->match('/product', '\Eccube\Controller\Admin\Product\ProductController::index')->bind('admin_product');
-        $c->match('/product/export', '\Eccube\Controller\Admin\Product\ProductController::export')->bind('admin_product_export');
-        $c->match('/product/page/{page_no}', '\Eccube\Controller\Admin\Product\ProductController::index')->assert('page_no', '\d+')->bind('admin_product_page');
-        $c->match('/product/product/new', '\Eccube\Controller\Admin\Product\ProductController::edit')->bind('admin_product_product_new');
-        $c->match('/product/product/{id}/edit', '\Eccube\Controller\Admin\Product\ProductController::edit')->assert('id', '\d+')->bind('admin_product_product_edit');
-        $c->match('/product/product/class/{id}', '\Eccube\Controller\Admin\Product\ProductClassController::index')->assert('id', '\d+')->bind('admin_product_product_class');
-        $c->match('/product/product/{id}/display', '\Eccube\Controller\Admin\Product\ProductController::display')->assert('id', '\d+')->bind('admin_product_product_display');
-        $c->delete('/product/product/{id}/delete', '\Eccube\Controller\Admin\Product\ProductController::delete')->assert('id', '\d+')->bind('admin_product_product_delete');
-        $c->post('/product/product/{id}/copy', '\Eccube\Controller\Admin\Product\ProductController::copy')->assert('id', '\d+')->bind('admin_product_product_copy');
-        $c->post('/product/product/class/edit/{id}', '\Eccube\Controller\Admin\Product\ProductClassController::edit')->assert('id', '\d+')->bind('admin_product_product_class_edit');
-        $c->post('/product/product/image/add', '\Eccube\Controller\Admin\Product\ProductController::addImage')->bind('admin_product_image_add');
-
-        $c->match('/product/category', '\Eccube\Controller\Admin\Product\CategoryController::index')->bind('admin_product_category');
-        $c->match('/product/category/export', '\Eccube\Controller\Admin\Product\CategoryController::export')->bind('admin_product_category_export');
-        $c->match('/product/category/{parent_id}', '\Eccube\Controller\Admin\Product\CategoryController::index')->assert('parent_id', '\d+')->bind('admin_product_category_show');
-        $c->match('/product/category/{id}/edit', '\Eccube\Controller\Admin\Product\CategoryController::index')->assert('id', '\d+')->bind('admin_product_category_edit');
-        $c->delete('/product/category/{id}/delete', '\Eccube\Controller\Admin\Product\CategoryController::delete')->assert('id', '\d+')->bind('admin_product_category_delete');
-        $c->post('/product/category/rank/move', '\Eccube\Controller\Admin\Product\CategoryController::moveRank')->bind('admin_product_category_rank_move');
 
         $c->match('/product/class_name', '\Eccube\Controller\Admin\Product\ClassNameController::index')->bind('admin_product_class_name');
         $c->match('/product/class_name/{id}/edit', '\Eccube\Controller\Admin\Product\ClassNameController::index')->assert('id', '\d+')->bind('admin_product_class_name_edit');
