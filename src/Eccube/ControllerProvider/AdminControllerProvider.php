@@ -39,48 +39,7 @@ class AdminControllerProvider implements ControllerProviderInterface
             $c->requireHttps();
         }
 
-        // order
-        $c->match('/order', '\Eccube\Controller\Admin\Order\OrderController::index')->bind('admin_order');
-        $c->match('/order/page/{page_no}', '\Eccube\Controller\Admin\Order\OrderController::index')->assert('page_no', '\d+')->bind('admin_order_page');
-        //$c->match('/order/new', '\Eccube\Controller\Admin\Order\EditController::index')->bind('admin_order_new');
-        //$c->match('/order/{id}/edit', '\Eccube\Controller\Admin\Order\EditController::index')->assert('id', '\d+')->bind('admin_order_edit');
-        $c->delete('/order/{id}/delete', '\Eccube\Controller\Admin\Order\OrderController::delete')->assert('id', '\d+')->bind('admin_order_delete');
-        $c->match('/order/export/order', '\Eccube\Controller\Admin\Order\OrderController::exportOrder')->bind('admin_order_export_order');
-        $c->match('/order/export/shipping', '\Eccube\Controller\Admin\Order\OrderController::exportShipping')->bind('admin_order_export_shipping');
-        $c->post('/order/search/customer', '\Eccube\Controller\Admin\Order\EditController::searchCustomer')->bind('admin_order_search_customer');
-        $c->post('/order/search/customer/html', '\Eccube\Controller\Admin\Order\EditController::searchCustomerHtml')->bind('admin_order_search_customer_html');
-        $c->match('/order/search/customer/html/page/{page_no}', '\Eccube\Controller\Admin\Order\EditController::searchCustomerHtml')->assert('page_no', '\d+')->bind('admin_order_search_customer_html_page');
-        $c->post('/order/search/customer/id', '\Eccube\Controller\Admin\Order\EditController::searchCustomerById')->bind('admin_order_search_customer_by_id');
-        $c->post('/order/search/product', '\Eccube\Controller\Admin\Order\EditController::searchProduct')->bind('admin_order_search_product');
-        $c->match('/order/search/product/page/{page_no}', '\Eccube\Controller\Admin\Order\EditController::searchProduct')->assert('page_no', '\d+')->bind('admin_order_search_product_page');
-        $c->match('/order/search/product/id', '\Eccube\Controller\Admin\Order\EditController::searchProductById')->bind('admin_order_search_product_by_id');
-
-        $c->match('/order/{id}/mail', '\Eccube\Controller\Admin\Order\MailController::index')->assert('id', '\d+')->bind('admin_order_mail');
-        $c->match('/order/mail/mail_all', '\Eccube\Controller\Admin\Order\MailController::mailAll')->bind('admin_order_mail_all');
-        $c->match('/order/mail_complete', '\Eccube\Controller\Admin\Order\MailController::complete')->bind('admin_order_mail_complete');
-        $c->match('/order/mail/view', '\Eccube\Controller\Admin\Order\MailController::view')->bind('admin_order_mail_view');
-
         // content
-        // deprecated /content/ 3.1 delete. use /content/news
-        $c->match('/content', '\Eccube\Controller\Admin\Content\ContentsController::index')->bind('admin_content');
-        $c->match('/content/new', '\Eccube\Controller\Admin\Content\ContentsController::edit')->bind('admin_content_new');
-        $c->match('/content/{id}/edit', '\Eccube\Controller\Admin\Content\ContentsController::edit')->assert('id', '\d+')->bind('admin_content_edit');
-        $c->delete('/content/{id}/delete', '\Eccube\Controller\Admin\Content\ContentsController::delete')->assert('id', '\d+')->bind('admin_content_delete');
-        $c->put('/content/{id}/up', '\Eccube\Controller\Admin\Content\ContentsController::up')->assert('id', '\d+')->bind('admin_content_up');
-        $c->put('/content/{id}/down', '\Eccube\Controller\Admin\Content\ContentsController::down')->assert('id', '\d+')->bind('admin_content_down');
-
-        $c->match('/content/news', '\Eccube\Controller\Admin\Content\NewsController::index')->bind('admin_content_news');
-        $c->match('/content/news/new', '\Eccube\Controller\Admin\Content\NewsController::edit')->bind('admin_content_news_new');
-        $c->match('/content/news/{id}/edit', '\Eccube\Controller\Admin\Content\NewsController::edit')->assert('id', '\d+')->bind('admin_content_news_edit');
-        $c->delete('/content/news/{id}/delete', '\Eccube\Controller\Admin\Content\NewsController::delete')->assert('id', '\d+')->bind('admin_content_news_delete');
-        $c->put('/content/news/{id}/up', '\Eccube\Controller\Admin\Content\NewsController::up')->assert('id', '\d+')->bind('admin_content_news_up');
-        $c->put('/content/news/{id}/down', '\Eccube\Controller\Admin\Content\NewsController::down')->assert('id', '\d+')->bind('admin_content_news_down');
-
-        $c->match('/content/file_manager', '\Eccube\Controller\Admin\Content\FileController::index')->bind('admin_content_file');
-        $c->match('/content/file_view', '\Eccube\Controller\Admin\Content\FileController::view')->bind('admin_content_file_view');
-        $c->match('/content/file_download', '\Eccube\Controller\Admin\Content\FileController::download')->bind('admin_content_file_download');
-        $c->delete('/content/file_delete', '\Eccube\Controller\Admin\Content\FileController::delete')->bind('admin_content_file_delete');
-
         $c->match('/content/layout', '\Eccube\Controller\Admin\Content\LayoutController::index')->bind('admin_content_layout');
         $c->match('/content/layout/new', '\Eccube\Controller\Admin\Content\LayoutController::edit')->bind('admin_content_layout_new');
         $c->match('/content/layout/{id}/edit', '\Eccube\Controller\Admin\Content\LayoutController::edit')->assert('id', '\d+')->bind('admin_content_layout_edit');
