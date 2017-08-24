@@ -115,7 +115,6 @@ class InstallApplication extends \Silex\Application
             return $translator;
         });
 
-        $app->mount('', new ControllerProvider\InstallControllerProvider());
         $app->register(new ServiceProvider\InstallServiceProvider());
         $app->register(new \Silex\Provider\CsrfServiceProvider());
 
@@ -136,5 +135,16 @@ class InstallApplication extends \Silex\Application
             'eccube.di.generator.dir' => __DIR__.'/../../app/cache/provider',
             'eccube.di.generator.class' => 'InstallServiceProviderCache'
         ]);
+
+        $app->match('/', "\\Eccube\\Controller\\Install\\InstallController::index")->bind('install');
+        $app->match('/step1', "\\Eccube\\Controller\\Install\\InstallController::step1")->bind('install_step1');
+        $app->match('/step2', "\\Eccube\\Controller\\Install\\InstallController::step2")->bind('install_step2');
+        $app->match('/step3', "\\Eccube\\Controller\\Install\\InstallController::step3")->bind('install_step3');
+        $app->match('/step4', "\\Eccube\\Controller\\Install\\InstallController::step4")->bind('install_step4');
+        $app->match('/step5', "\\Eccube\\Controller\\Install\\InstallController::step5")->bind('install_step5');
+        $app->match('/complete', "\\Eccube\\Controller\\Install\\InstallController::complete")->bind('install_complete');
+        $app->match('/migration', "\\Eccube\\Controller\\Install\\InstallController::migration")->bind('migration');
+        $app->match('/migration_plugin', "\\Eccube\\Controller\\Install\\InstallController::migration_plugin")->bind('migration_plugin');
+        $app->match('/migration_end', "\\Eccube\\Controller\\Install\\InstallController::migration_end")->bind('migration_end');
     }
 }
