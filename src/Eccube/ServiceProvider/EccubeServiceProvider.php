@@ -146,7 +146,7 @@ class EccubeServiceProvider implements ServiceProviderInterface, EventListenerPr
 
         $app['paginator'] = $app->protect(function () {
             $paginator = new \Knp\Component\Pager\Paginator();
-            $paginator->subscribe(new \Eccube\EventListener\PaginatorListener());
+            //$paginator->subscribe(new \Eccube\EventListener\PaginatorListener());
 
             return $paginator;
         });
