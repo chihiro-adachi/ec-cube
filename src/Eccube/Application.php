@@ -38,6 +38,8 @@ use Eccube\ServiceProvider\CompatServiceProvider;
 use Eccube\ServiceProvider\DiServiceProvider;
 use Eccube\ServiceProvider\EntityEventServiceProvider;
 use Eccube\ServiceProvider\MobileDetectServiceProvider;
+use Eccube\Templating\TemplateGuesser;
+use Sergiors\Silex\EventListener\TemplateListener;
 use Sergiors\Silex\Routing\ChainUrlGenerator;
 use Sergiors\Silex\Routing\ChainUrlMatcher;
 use Symfony\Component\Dotenv\Dotenv;
@@ -226,6 +228,9 @@ class Application extends \Silex\Application
                 'auto_convert' => true
             ]
         ]);
+        $this->extend('sensio_framework_extra.view.listener', function ($listener, $app) {
+            return new TemplateListener($app['templating'], new TemplateGuesser());
+        });
         // init proxy
         $this->initProxy();
 
