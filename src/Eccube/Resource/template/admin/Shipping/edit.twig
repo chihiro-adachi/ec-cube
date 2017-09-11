@@ -369,6 +369,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                         >
 
                             {% for shipmentItemForm in form.ShipmentItems %}
+                                {% if shipmentItemForm.vars.value.order_id is not empty %}
                                 <div id="product_info_list__item--{{ loop.index }}" class="item_box">
                                     {{ form_widget(shipmentItemForm.Order) }}
                                     {{ form_widget(shipmentItemForm.Product) }}
@@ -440,6 +441,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                                         </div>
                                     {% endif %}
                                 </div><!-- /.item_box -->
+                                {% endif %}
                             {% endfor %}
 
                         </div>
