@@ -11,5 +11,27 @@
         {
             "url": "heroku/php"
         }
-    ]
+    ],
+    "env": {
+        "MAIL_BACKEND": {
+            "description": "mail backend",
+            "value": "smtp"
+        },
+        "MAIL_HOST": {
+            "description": "mail host",
+            "value": "smtp.sendgrid.net"
+        },
+        "MAIL_PORT": {
+            "description": "mail port",
+            "value": "25"
+        },
+        "MAIL_USER": {
+            "description": "mail user",
+            "value": ""
+        },
+        "MAIL_PASS": {
+            "description": "mail password",
+            "value": ""
+        }
+    }
 }
