@@ -68,6 +68,28 @@ class LayoutController extends AbstractController
     protected $layoutRepository;
 
     /**
+     * @Route("/{_admin}/content/layout_pc", name="admin_content_layout_pc")
+     * @Template("Content/layout_all.twig")
+     */
+    public function indexPc()
+    {
+        return [
+            'sub_title' => '💻PC'
+        ];
+    }
+
+    /**
+     * @Route("/{_admin}/content/layout_mobile", name="admin_content_layout_mobile")
+     * @Template("Content/layout_all.twig")
+     */
+    public function indexMobile()
+    {
+        return [
+            'sub_title' => '📱モバイル'
+        ];
+    }
+
+    /**
      * @Route("/{_admin}/content/layout", name="admin_content_layout")
      * @Template("Content/layout_list.twig")
      */

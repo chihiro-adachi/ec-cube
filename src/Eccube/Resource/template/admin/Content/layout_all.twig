@@ -1,0 +1,124 @@
+{#
+This file is part of EC-CUBE
+
+Copyright(c) 2000-2015 LOCKON CO.,LTD. All Rights Reserved.
+
+http://www.lockon.co.jp/
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+#}
+{% extends 'default_frame.twig' %}
+
+{% set menus = ['content', 'admin_content_layout', 'admin_content_layout_pc'] %}
+
+{% block title %}レイアウト管理{% endblock %}
+{% block sub_title %}{{ sub_title }}レイアウト設定{% endblock %}
+
+{% block javascript %}
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.core.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.widget.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.mouse.min.js"></script>
+    <script src="{{ app.config.admin_urlpath }}/assets/js/vendor/jquery.ui/jquery.ui.sortable.min.js"></script>
+    <script>
+        $(function() {
+            $(".tableish").sortable({
+                connectWith: '.tableish'
+            }).disableSelection();
+        });
+    </script>
+{% endblock %}
+
+{% block main %}
+    <form name="form1" method="post">
+        <div id="delivery_wrap" class="row">
+            <div class="col-md-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title"><a href="">トップページ用レイアウト</a></h3>
+                    </div>
+                    <div class="box-body no-padding no-border">
+                        <div class="sortable_list">
+                            <div class="tableish">
+                                <div class="item_box tr">
+                                    <div class="icon_sortable td">
+                                        <svg class="cb cb-ellipsis-v"> <use xlink:href="#cb-ellipsis-v" /></svg>
+                                    </div>
+                                    <div class="item_pattern td">トップページ</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title"><a href="">下層ページ用レイアウト</a></h3>
+                    </div>
+                    <div class="box-body no-padding no-border">
+                        <div class="sortable_list">
+                            <div class="tableish">
+                                <div class="item_box tr">
+                                    <div class="icon_sortable td">
+                                        <svg class="cb cb-ellipsis-v"> <use xlink:href="#cb-ellipsis-v" /></svg>
+                                    </div>
+                                    <div class="item_pattern td">商品一覧ページ</div>
+                                </div>
+                                <div class="item_box tr">
+                                    <div class="icon_sortable td">
+                                        <svg class="cb cb-ellipsis-v"> <use xlink:href="#cb-ellipsis-v" /></svg>
+                                    </div>
+                                    <div class="item_pattern td">商品詳細ページ</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+
+                <div class="box">
+                    <div id="delivery_list__header" class="box-header">
+                        <h3 class="box-title"><a href="">購入フローページ用レイアウト(カートボタン非表示)</a></h3>
+                    </div>
+                    <div class="box-body no-padding no-border">
+                        <div class="sortable_list">
+                            <div class="tableish">
+                                <div class="item_box tr">
+                                    <div class="icon_sortable td">
+                                        <svg class="cb cb-ellipsis-v"> <use xlink:href="#cb-ellipsis-v" /></svg>
+                                    </div>
+                                    <div class="item_pattern td">カートページ</div>
+                                </div>
+                                <div class="item_box tr">
+                                    <div class="icon_sortable td">
+                                        <svg class="cb cb-ellipsis-v"> <use xlink:href="#cb-ellipsis-v" /></svg>
+                                    </div>
+                                    <div class="item_pattern td">購入確認ページ</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+            </div><!-- /.col -->
+        </div>
+    </form>
+
+    <div class="row">
+        <div class="col-md-6">
+            <button class="btn btn-primary btn-block">適用するページを保存</button>
+        </div>
+        <div class="col-md-6">
+            <button class="btn btn-primary btn-block">レイアウトを新規登録</button>
+        </div>
+    </div>
+{% endblock %}
