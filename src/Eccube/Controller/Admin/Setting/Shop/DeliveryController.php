@@ -46,7 +46,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
- * @Route(service=DeliveryController::class)
+ * @Route
  */
 class DeliveryController extends AbstractController
 {

@@ -42,7 +42,7 @@ use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @Route(service=WithdrawController::class)
+ * @Route
  */
 class WithdrawController extends AbstractController
 {

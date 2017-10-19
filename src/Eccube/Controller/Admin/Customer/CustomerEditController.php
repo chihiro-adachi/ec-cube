@@ -44,7 +44,7 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactory;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 /**
- * @Route(service=CustomerEditController::class)
+ * @Route
  */
 class CustomerEditController extends AbstractController
 {

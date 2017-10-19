@@ -39,7 +39,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Process\Process;
 
 /**
- * @Route(service=OwnerStoreController::class)
+ * @Route
  */
 class OwnerStoreController extends AbstractController
 {

@@ -47,7 +47,7 @@ use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @Route(service=PageController::class)
+ * @Route
  */
 class PageController extends AbstractController
 {

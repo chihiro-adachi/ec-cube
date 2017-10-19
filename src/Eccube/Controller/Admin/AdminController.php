@@ -49,7 +49,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 /**
- * @Route(service=AdminController::class)
+ * @Route
  */
 class AdminController extends AbstractController
 {

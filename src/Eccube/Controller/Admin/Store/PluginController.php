@@ -53,7 +53,7 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @Route(service=PluginController::class)
+ * @Route
  */
 class PluginController extends AbstractController
 {

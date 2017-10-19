@@ -45,7 +45,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * @Route(service=CategoryController::class)
+ * @Route
  */
 class CategoryController extends AbstractController
 {

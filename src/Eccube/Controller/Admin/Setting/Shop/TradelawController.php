@@ -39,7 +39,7 @@ use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @Route(service=TradelawController::class)
+ * @Route
  */
 class TradelawController extends AbstractController
 {

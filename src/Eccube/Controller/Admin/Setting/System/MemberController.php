@@ -42,7 +42,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 /**
- * @Route(service=MemberController::class)
+ * @Route
  */
 class MemberController extends AbstractController
 {

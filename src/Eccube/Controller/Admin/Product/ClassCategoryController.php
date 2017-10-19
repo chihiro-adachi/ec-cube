@@ -43,7 +43,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * @Route(service=ClassCategoryController::class)
+ * @Route
  */
 class ClassCategoryController extends AbstractController
 {

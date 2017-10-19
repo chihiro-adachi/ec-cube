@@ -43,7 +43,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\RecursiveValidator;
 
 /**
- * @Route(service=ForgotController::class)
+ * @Route
  */
 class ForgotController extends AbstractController
 {

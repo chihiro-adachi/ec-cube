@@ -58,7 +58,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @Route(service=ProductClassController::class)
+ * @Route
  */
 class ProductClassController
 {

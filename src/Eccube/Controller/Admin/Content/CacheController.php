@@ -37,7 +37,7 @@ use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @Route(service=CacheController::class)
+ * @Route
  */
 class CacheController extends AbstractController
 {

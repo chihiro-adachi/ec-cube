@@ -42,7 +42,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @Route(service=CsvController::class)
+ * @Route
  */
 class CsvController extends AbstractController
 {

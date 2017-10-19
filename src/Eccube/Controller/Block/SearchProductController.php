@@ -36,7 +36,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * @Route(service=SearchProductController::class)
+ * @Route
  */
 class SearchProductController
 {

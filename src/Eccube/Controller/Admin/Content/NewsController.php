@@ -43,7 +43,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * 新着情報のコントローラクラス
  *
- * @Route(service=NewsController::class)
+ * @Route
  */
 class NewsController extends AbstractController
 {

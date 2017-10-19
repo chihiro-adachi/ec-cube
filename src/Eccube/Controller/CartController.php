@@ -40,7 +40,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @Route(service=CartController::class)
+ * @Route
  */
 class CartController extends AbstractController
 {

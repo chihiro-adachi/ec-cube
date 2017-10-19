@@ -45,7 +45,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * @Route(service=TaxRuleController::class)
+ * @Route
  */
 class TaxRuleController extends AbstractController
 {

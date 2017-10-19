@@ -31,7 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
- * @Route(service=ShippingController::class)
+ * @Route
  */
 class ShippingController
 {

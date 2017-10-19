@@ -45,7 +45,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
 /**
- * @Route(service=PaymentController::class)
+ * @Route
  */
 class PaymentController extends AbstractController
 {

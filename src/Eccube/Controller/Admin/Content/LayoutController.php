@@ -45,7 +45,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 // todo プレビュー実装
 /**
- * @Route(service=LayoutController::class)
+ * @Route
  */
 class LayoutController extends AbstractController
 {

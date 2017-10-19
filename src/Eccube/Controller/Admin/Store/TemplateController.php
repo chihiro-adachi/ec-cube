@@ -45,7 +45,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
- * @Route(service=TemplateController::class)
+ * @Route
  */
 class TemplateController extends AbstractController
 {

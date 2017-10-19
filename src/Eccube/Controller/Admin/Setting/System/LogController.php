@@ -36,7 +36,7 @@ use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @Route(service=LogController::class)
+ * @Route
  */
 class LogController
 {

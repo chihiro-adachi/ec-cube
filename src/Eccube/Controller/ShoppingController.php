@@ -55,7 +55,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * @Route(service=ShoppingController::class)
+ * @Route
  */
 class ShoppingController extends AbstractShoppingController
 {

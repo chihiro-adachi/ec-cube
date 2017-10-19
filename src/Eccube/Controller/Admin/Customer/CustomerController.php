@@ -50,7 +50,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * @Route(service=CustomerController::class)
+ * @Route
  */
 class CustomerController extends AbstractController
 {

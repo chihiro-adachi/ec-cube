@@ -60,7 +60,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
 /**
- * @Route(service=ProductController::class)
+ * @Route
  */
 class ProductController extends AbstractController
 {

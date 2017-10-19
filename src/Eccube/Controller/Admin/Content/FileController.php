@@ -41,7 +41,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * @Route(service=FileController::class)
+ * @Route
  */
 class FileController extends AbstractController
 {

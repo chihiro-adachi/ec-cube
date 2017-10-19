@@ -39,7 +39,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Twig_Loader_Chain;
 
 /**
- * @Route(service=UserDataController::class)
+ * @Route
  */
 class UserDataController
 {

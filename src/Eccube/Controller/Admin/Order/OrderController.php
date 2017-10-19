@@ -51,7 +51,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
- * @Route(service=OrderController::class)
+ * @Route
  */
 class OrderController extends AbstractController
 {

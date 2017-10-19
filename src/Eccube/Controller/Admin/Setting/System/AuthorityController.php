@@ -40,7 +40,7 @@ use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @Route(service=AuthorityController::class)
+ * @Route
  */
 class AuthorityController extends AbstractController
 {

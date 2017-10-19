@@ -53,7 +53,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * @Route(service=ProductController::class)
+ * @Route
  */
 class ProductController
 {

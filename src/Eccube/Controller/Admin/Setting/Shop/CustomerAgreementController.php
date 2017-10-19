@@ -38,7 +38,7 @@ use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @Route(service=CustomerAgreementController::class)
+ * @Route
  */
 class CustomerAgreementController extends AbstractController
 {

@@ -50,7 +50,7 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * @Route(service=MypageController::class)
+ * @Route
  */
 class MypageController extends AbstractController
 {

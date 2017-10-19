@@ -32,7 +32,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @Route(service=HelpController::class)
+ * @Route
  */
 class HelpController extends AbstractController
 {

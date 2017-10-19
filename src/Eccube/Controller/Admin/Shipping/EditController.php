@@ -32,7 +32,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Serializer\Serializer;
 
 /**
- * @Route(service=EditController::class)
+ * @Route
  */
 class EditController
 {

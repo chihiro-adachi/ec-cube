@@ -40,7 +40,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Twig_Environment;
 
 /**
- * @Route(service=ShopController::class)
+ * @Route
  */
 class ShopController extends AbstractController
 {
