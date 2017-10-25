@@ -31,12 +31,13 @@ use Eccube\Application;
 use Eccube\Controller\AbstractController;
 use Eccube\Entity\BlockPosition;
 use Eccube\Entity\Layout;
+use Eccube\Entity\Master\DeviceType;
 use Eccube\Form\Type\Master\DeviceTypeType;
 use Eccube\Repository\BlockRepository;
 use Eccube\Repository\LayoutRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -44,6 +45,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 // todo プレビュー実装
+
 /**
  * @Route(service=LayoutController::class)
  */
@@ -73,8 +75,15 @@ class LayoutController extends AbstractController
      */
     public function indexPc()
     {
+        $Layouts = $this->layoutRepository->findBy([
+            'DeviceType' => DeviceType::DEVICE_TYPE_PC,
+        ], [
+            'id' => 'ASC',
+        ]);
+
         return [
-            'sub_title' => '💻PC'
+            'sub_title' => '💻',
+            'Layouts' => $Layouts,
         ];
     }
 
@@ -84,8 +93,15 @@ class LayoutController extends AbstractController
      */
     public function indexMobile()
     {
+        $Layouts = $this->layoutRepository->findBy([
+            'DeviceType' => DeviceType::DEVICE_TYPE_SP,
+        ], [
+            'id' => 'ASC',
+        ]);
+
         return [
-            'sub_title' => '📱モバイル'
+            'sub_title' => '📱',
+            'Layouts' => $Layouts,
         ];
     }
 

@@ -143,17 +143,11 @@ class ProductController extends AbstractController
     protected $formFactory;
 
     /**
-     * @Inject("session")
-     * @var Session
-     */
-    protected $session;
-
-    /**
      * @Route("/{_admin}/product", name="admin_product")
      * @Route("/{_admin}/product/page/{page_no}", requirements={"page_no" = "\d+"}, name="admin_product_page")
      * @Template("Product/index.twig")
      */
-    public function index(Application $app, Request $request, $page_no = null)
+    public function index(Application $app, Request $request, Session $session, $page_no = null)
     {
 
         $session = $this->session;
@@ -197,6 +191,7 @@ class ProductController extends AbstractController
                     ),
                     $request
                 );
+
                 $this->eventDispatcher->dispatch(EccubeEvents::ADMIN_PRODUCT_INDEX_SEARCH, $event);
                 $searchData = $event->getArgument('searchData');
 
