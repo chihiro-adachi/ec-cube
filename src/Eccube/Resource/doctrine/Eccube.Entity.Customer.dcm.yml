@@ -1,6 +1,7 @@
 Eccube\Entity\Customer:
     type: entity
-    table: dtb_customer
+    # サイトAのDBを参照
+    table: aaa_db.dtb_customer
     repositoryClass: Eccube\Repository\CustomerRepository
     uniqueConstraints:
         secret_key:

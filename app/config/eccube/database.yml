@@ -1,0 +1,10 @@
+database:
+    driver: pdo_mysql
+    host: xxx.xxx.xxx.xxx
+    # サイトBのデータベースを参照
+    dbname: bbb_db
+    user: root
+    port: 5432
+    password: password
+    charset: utf8
+    defaultTableOptions: { collate: utf8_general_ci }

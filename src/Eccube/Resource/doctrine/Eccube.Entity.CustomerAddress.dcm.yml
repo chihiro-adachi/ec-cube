@@ -1,6 +1,7 @@
 Eccube\Entity\CustomerAddress:
     type: entity
-    table: dtb_customer_address
+    # サイトAのDBを参照
+    table: aaa_db.dtb_customer_address
     repositoryClass: Eccube\Repository\CustomerAddressRepository
     id:
         id:

@@ -1,0 +1,13 @@
+# auth magicは両サイトで共通にする
+auth_magic: 8I7lbzVnMxCGNA12eImIPcT2spw4VgYD
+password_hash_algos: sha256
+shop_name: 'EC-CUBE SHOP'
+force_ssl: null
+admin_allow_host: {  }
+cookie_lifetime: 0
+locale: ja
+timezone: Asia/Tokyo
+eccube_install: 1
+
+trusted_proxies_connection_only: false
+trusted_proxies: {  }
