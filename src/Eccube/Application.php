@@ -432,7 +432,19 @@ class Application extends ApplicationTrait
     {
         $this->register(new \Silex\Provider\DoctrineServiceProvider(), array(
             'dbs.options' => array(
-                'default' => $this['config']['database']
+                // DB_FUGA
+                'default' => $this['config']['database'],
+                // DB_HOGE
+                'hoge' => [
+                    'driver' => 'pdo_mysql',
+                    'dbname' => 'db_hoge',
+                    'host' => 'localhost',
+                    'port' => '5432',
+                    'user' => 'root',
+                    'password' => 'password',
+                    'charset' => 'utf-8',
+                    'defaultTableOptions' => ['collate' => 'utf8_general_ci']
+                ]
             )));
         $this->register(new \Saxulum\DoctrineOrmManagerRegistry\Silex\Provider\DoctrineOrmManagerRegistryProvider());
 

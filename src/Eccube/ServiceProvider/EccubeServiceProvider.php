@@ -140,7 +140,7 @@ class EccubeServiceProvider implements ServiceProviderInterface
             return $CategoryRepository;
         });
         $app['eccube.repository.customer'] = $app->share(function () use ($app) {
-            return $app['orm.em']->getRepository('Eccube\Entity\Customer');
+            return $app['orm.ems']['hoge']->getRepository('Eccube\Entity\Customer');
         });
         $app['eccube.repository.news'] = $app->share(function () use ($app) {
             return $app['orm.em']->getRepository('Eccube\Entity\News');
@@ -217,7 +217,7 @@ class EccubeServiceProvider implements ServiceProviderInterface
             return $orderRepository;
         });
         $app['eccube.repository.customer_address'] = $app->share(function () use ($app) {
-            return $app['orm.em']->getRepository('Eccube\Entity\CustomerAddress');
+            return $app['orm.ems']['hoge']->getRepository('Eccube\Entity\CustomerAddress');
         });
         $app['eccube.repository.shipping'] = $app->share(function () use ($app) {
             return $app['orm.em']->getRepository('Eccube\Entity\Shipping');
