@@ -53,7 +53,9 @@ use Eccube\ServiceProvider\TransactionServiceProvider;
 use Eccube\ServiceProvider\TwigLintServiceProvider;
 use Sergiors\Silex\Routing\ChainUrlGenerator;
 use Sergiors\Silex\Routing\ChainUrlMatcher;
+use Symfony\Bridge\Twig\Form\TwigRenderer;
 use Symfony\Component\Dotenv\Dotenv;
+use Symfony\Component\Form\FormRenderer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -487,6 +489,14 @@ class Application extends \Silex\Application
             $twig->addExtension(new \Twig_Extension_StringLoader());
 
             return $twig;
+        });
+        $this->extend('twig.runtimes', function ($runtimes) {
+            // symfony 3.4でTwigRendererがdeprecatedになり, FormRendererをロードしようとするため
+            // runtimesに追加しています.
+            // @see https://github.com/silexphp/Silex/pull/1571
+            $runtimes[FormRenderer::class] = 'twig.form.renderer';
+
+            return $runtimes;
         });
 
         $this->before(function (Request $request, \Silex\Application $app) {
