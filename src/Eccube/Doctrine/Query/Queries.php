@@ -11,16 +11,24 @@ use Psr\Log\InvalidArgumentException;
 
 class Queries
 {
+    /**
+     * @var AnnotationReader
+     */
+    private $reader;
 
     private $customizers = [];
+
+    public function __construct(AnnotationReader $reader)
+    {
+        $this->reader = $reader;
+    }
 
     public function addCustomizer(QueryCustomizer $customizer) {
         if (!$customizer) {
             throw new InvalidArgumentException('Customizer should not be null.');
         }
-        $reader = new AnnotationReader();
         $rc = new \ReflectionClass($customizer);
-        $anno = $reader->getClassAnnotation($rc, QueryExtension::class);
+        $anno = $this->reader->getClassAnnotation($rc, QueryExtension::class);
         if (!$anno) {
             throw new InvalidArgumentException(get_class($customizer).' doesn\'t have any '.QueryExtension::class.' annotation.');
         }

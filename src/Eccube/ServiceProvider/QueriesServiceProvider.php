@@ -20,8 +20,8 @@ class QueriesServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $app)
     {
-        $app['eccube.queries'] = function () {
-            return new \Eccube\Doctrine\Query\Queries();
+        $app['eccube.queries'] = function (Container $app) {
+            return new \Eccube\Doctrine\Query\Queries($app['annotations']);
         };
     }
 }
