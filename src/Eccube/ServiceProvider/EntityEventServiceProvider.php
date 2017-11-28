@@ -21,7 +21,7 @@ class EntityEventServiceProvider implements ServiceProviderInterface
     public function register(Container $container)
     {
         $container['eccube.entity.event.dispatcher'] = function($container) {
-            return new EntityEventDispatcher($container['orm.em']);
+            return new EntityEventDispatcher($container['orm.em'], $container['annotations']);
         };
     }
 }

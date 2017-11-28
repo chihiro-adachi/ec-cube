@@ -35,23 +35,27 @@ use Eccube\Annotation\TargetEvent;
 
 class EntityEventDispatcher
 {
+    /**
+     * @var AnnotationReader
+     */
+    private $reader;
 
     private $eventListeners = [];
 
     private $entityManager;
 
-    function __construct(EntityManager $em)
+    function __construct(EntityManager $em, AnnotationReader $reader)
     {
         $this->entityManager = $em;
+        $this->reader = $reader;
     }
 
     public function addEventListener(EntityEventListener $listener)
     {
-        $reader = new AnnotationReader();
         $rc = new \ReflectionClass($listener);
-        $annotations = $reader->getClassAnnotations($rc);
+        $annotations = $this->reader->getClassAnnotations($rc);
         foreach ($annotations as $ann) {
-            $eventAnn = $reader->getClassAnnotation(new \ReflectionClass($ann), TargetEvent::class);
+            $eventAnn = $this->reader->getClassAnnotation(new \ReflectionClass($ann), TargetEvent::class);
             if ($eventAnn) {
                 if (!isset($this->eventListeners[$eventAnn->value])) {
                     $this->entityManager->getEventManager()->addEventListener($eventAnn->value, $this);
