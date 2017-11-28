@@ -4,7 +4,7 @@
 namespace Eccube\Doctrine\Query;
 
 
-use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\QueryBuilder;
 use Eccube\Annotation\QueryExtension;
 use Psr\Log\InvalidArgumentException;
@@ -12,13 +12,13 @@ use Psr\Log\InvalidArgumentException;
 class Queries
 {
     /**
-     * @var AnnotationReader
+     * @var Reader
      */
     private $reader;
 
     private $customizers = [];
 
-    public function __construct(AnnotationReader $reader)
+    public function __construct(Reader $reader)
     {
         $this->reader = $reader;
     }
