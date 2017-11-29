@@ -43,6 +43,12 @@ use Zend\Code\Reflection\ClassReflection;
 class EntityProxyService
 {
     /**
+     * @Inject("annotations")
+     * @var AnnotationReader
+     */
+    protected $reader;
+
+    /**
      * @Inject("orm.em")
      * @var EntityManager
      */

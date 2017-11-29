@@ -25,8 +25,7 @@
 namespace Eccube\Entity\Event;
 
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
@@ -36,7 +35,7 @@ use Eccube\Annotation\TargetEvent;
 class EntityEventDispatcher
 {
     /**
-     * @var AnnotationReader
+     * @var Reader
      */
     private $reader;
 
@@ -44,7 +43,7 @@ class EntityEventDispatcher
 
     private $entityManager;
 
-    function __construct(EntityManager $em, AnnotationReader $reader)
+    function __construct(EntityManager $em, Reader $reader)
     {
         $this->entityManager = $em;
         $this->reader = $reader;
