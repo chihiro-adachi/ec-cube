@@ -22,7 +22,8 @@
  */
 
 namespace Eccube\Service;
-use Doctrine\Common\Annotations\AnnotationReader;
+
+use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use Eccube\Annotation\Inject;
@@ -35,6 +36,12 @@ use Eccube\Util\StringUtil;
  */
 class SchemaService
 {
+
+    /**
+     * @Inject("annotations")
+     * @var Reader
+     */
+    protected $reader;
 
     /**
      * @Inject("orm.em")
@@ -53,7 +60,7 @@ class SchemaService
             foreach ($drivers as $namespace => $oldDriver) {
                 if ('Eccube\Entity' === $namespace) {
                     $newDriver = new ReloadSafeAnnotationDriver(
-                        new AnnotationReader(),
+                        $this->reader,
                         $oldDriver->getPaths()
                     );
                     $newDriver->setFileExtension($oldDriver->getFileExtension());
