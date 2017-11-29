@@ -23,6 +23,7 @@
 
 namespace Eccube\Tests\DI\AutoWiring;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\QueryBuilder;
 use Eccube\DI\AutoWiring\QueryExtensionAutoWiring;
 use Eccube\Doctrine\Query\Queries;
@@ -35,7 +36,7 @@ class QueryExtensionScannerTest extends AbstractAutowiringTest
     {
         parent::setUp();
         $this->container['eccube.queries'] = function() {
-            return new Queries();
+            return new Queries(new AnnotationReader());
         };
     }
 

@@ -23,8 +23,10 @@
 
 namespace Eccube\Tests\Service;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Eccube\Annotation\EntityExtension;
 use Eccube\Service\EntityProxyService;
+use Eccube\Util\ReflectionUtil;
 use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Tokens;
 
@@ -50,6 +52,8 @@ class EntityProxyServiceTest extends \PHPUnit_Framework_TestCase
     public function testGenerate()
     {
         $generator = new EntityProxyService();
+        ReflectionUtil::setValue('reader', new AnnotationReader());
+
         $generator->generate([__DIR__], [], $this->tempOutputDir);
 
         $generatedFile = $this->tempOutputDir.'/Product.php';
@@ -74,6 +78,8 @@ class EntityProxyServiceTest extends \PHPUnit_Framework_TestCase
     public function testGenerateExcluded()
     {
         $generator = new EntityProxyService();
+        ReflectionUtil::setValue('reader', new AnnotationReader());
+
         $generator->generate([__DIR__], [], $this->tempOutputDir);
 
         $generatedFile = $this->tempOutputDir.'/Product.php';

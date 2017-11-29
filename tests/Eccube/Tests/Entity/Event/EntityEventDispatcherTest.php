@@ -21,7 +21,7 @@ class EntityEventDispatcherTest extends EccubeTestCase
      */
     public function addEventListener()
     {
-        $dispatcher = new EntityEventDispatcher($this->app['orm.em']);
+        $dispatcher = new EntityEventDispatcher($this->app['orm.em'], $this->app['annotations']);
         $listener = new EntityEventDispatcherTest_SimpleEventListener();
         $dispatcher->addEventListener($listener);
         $actualListeners = $dispatcher->getEventListeners(Events::preUpdate);
@@ -33,7 +33,7 @@ class EntityEventDispatcherTest extends EccubeTestCase
      */
     public function addEventListener_with_multi_entity_listener()
     {
-        $dispatcher = new EntityEventDispatcher($this->app['orm.em']);
+        $dispatcher = new EntityEventDispatcher($this->app['orm.em'], $this->app['annotations']);
         $listener = new EntityEventDispatcherTest_MultiEntityEventListener();
         $dispatcher->addEventListener($listener);
         $actualListeners = $dispatcher->getEventListeners(Events::preUpdate);

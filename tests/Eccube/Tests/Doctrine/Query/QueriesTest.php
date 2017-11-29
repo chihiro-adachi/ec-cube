@@ -2,6 +2,7 @@
 
 namespace Eccube\Tests\Doctrine\Query;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\QueryBuilder;
 use Eccube\Annotation\QueryExtension;
 use Eccube\Doctrine\Query\Queries;
@@ -15,7 +16,7 @@ class QueriesTest extends EccubeTestCase
     public function testCustomizerShouldBeCalled()
     {
         $customizer = new QueriesTest_Customizer();
-        $queries = new Queries();
+        $queries = new Queries(new AnnotationReader());
         $queries->addCustomizer($customizer);
 
         $queries->customize(QueriesTest::class, $this->queryBuilder(), null);
@@ -26,7 +27,7 @@ class QueriesTest extends EccubeTestCase
     public function testCustomizerShouldNotBeCalled()
     {
         $customizer = new QueriesTest_Customizer();
-        $queries = new Queries();
+        $queries = new Queries(new AnnotationReader());
         $queries->addCustomizer($customizer);
 
         $queries->customize('Dummy', $this->queryBuilder(), null);
@@ -37,7 +38,7 @@ class QueriesTest extends EccubeTestCase
     public function testAddCustomizerWithoutAnnotation()
     {
         $customizer = new QueriesTest_CustomizerWithoutAnnotation();
-        $queries = new Queries();
+        $queries = new Queries(new AnnotationReader());
 
         $this->setExpectedException(InvalidArgumentException::class);
 

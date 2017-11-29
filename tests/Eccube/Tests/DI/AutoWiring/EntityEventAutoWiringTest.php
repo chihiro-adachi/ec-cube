@@ -23,6 +23,7 @@
 
 namespace Eccube\Tests\DI\AutoWiring;
 
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\EventManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -41,7 +42,8 @@ class EntityEventAutoWiringTest extends AbstractAutowiringTest
             $eventManager = $this->createMock(EventManager::class);
             $em = $this->createMock(EntityManager::class);
             $em->method('getEventManager')->willReturn($eventManager);
-            return new EntityEventDispatcher($em);
+
+            return new EntityEventDispatcher($em, new AnnotationReader());
         };
     }
 
