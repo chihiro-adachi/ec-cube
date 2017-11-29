@@ -24,7 +24,7 @@
 namespace Eccube\Service;
 
 
-use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\Reader;
 use Doctrine\ORM\EntityManager;
 use Eccube\Annotation\EntityExtension;
 use Eccube\Annotation\Inject;
@@ -44,7 +44,7 @@ class EntityProxyService
 {
     /**
      * @Inject("annotations")
-     * @var AnnotationReader
+     * @var Reader
      */
     protected $reader;
 
@@ -143,12 +143,11 @@ class EntityProxyService
         }
 
         // TraitをEntityごとにまとめる
-        $reader = new AnnotationReader();
         $proxySets = [];
         foreach ($traitSets as $traits) {
             $proxies = [];
             foreach ($traits as $trait) {
-                $anno = $reader->getClassAnnotation(new \ReflectionClass($trait), EntityExtension::class);
+                $anno = $this->reader->getClassAnnotation(new \ReflectionClass($trait), EntityExtension::class);
                 if ($anno) {
                     $proxies[$anno->value][] = $trait;
                 }
