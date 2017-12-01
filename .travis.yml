@@ -43,8 +43,6 @@ matrix:
     # カバレッジレポートはphp7.1のmatrixで実行
     - php: 7.1
       env: DB=pgsql ECCUBE_DB_USERNAME=postgres ECCUBE_DB_PASSWORD=password COVERAGE=true
-    # php7.2
-    - php: 7.2
 
 install:
   # @see https://github.com/sj26/mailcatcher/issues/277
@@ -59,8 +57,8 @@ before_script:
   - mailcatcher
 
 script:
-  - if [ $COVERAGE ]  ; then phpdbg -qrr vendor/bin/phpunit --coverage-clover=coverage.clover ; fi
-  - if [ ! $COVERAGE ]; then vendor/bin/phpunit; fi
+  - if [ $COVERAGE ]  ; then phpdbg -qrr vendor/bin/simple-phpunit --coverage-clover=coverage.clover ; fi
+  - if [ ! $COVERAGE ]; then vendor/bin/simple-phpunit; fi
 
 after_script:
   - if [ $COVERAGE ]; then wget https://scrutinizer-ci.com/ocular.phar ; fi
