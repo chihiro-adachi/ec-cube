@@ -25,8 +25,9 @@
 namespace Eccube\Tests\Form\Type\Install;
 
 use Eccube\Tests\Mock\CsrfTokenManagerMock;
+use PHPUnit\Framework\TestCase;
 
-abstract class AbstractTypeTestCase extends \PHPUnit_Framework_TestCase
+abstract class AbstractTypeTestCase extends TestCase
 {
     public function setUp()
     {

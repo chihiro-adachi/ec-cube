@@ -26,8 +26,9 @@ namespace Eccube\Tests\DI\AutoWiring;
 use Eccube\DI\AutoWiring\RepositoryDefinition;
 use Eccube\Repository\ProductRepository;
 use Eccube\Tests\DI\Test\Repository\TestRepository;
+use PHPUnit\Framework\TestCase;
 
-class RepositoryDefinitionTest extends \PHPUnit_Framework_TestCase
+class RepositoryDefinitionTest extends TestCase
 {
     public function testGetEntityName_Ecucube_Entity()
     {

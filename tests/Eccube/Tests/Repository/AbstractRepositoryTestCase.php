@@ -24,11 +24,12 @@
 namespace Eccube\Tests\Repository;
 
 use Eccube\Application;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @deprecated Eccube\Tests\EccubeTestCase を使用してください
  */
-class AbstractRepositoryTestCase extends \PHPUnit_Framework_TestCase
+class AbstractRepositoryTestCase extends TestCase
 {
 
     /**
