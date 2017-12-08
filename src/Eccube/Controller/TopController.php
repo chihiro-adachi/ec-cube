@@ -25,6 +25,7 @@
 namespace Eccube\Controller;
 
 use Eccube\Application;
+use Eccube\Entity\Customer;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,6 +41,12 @@ class TopController extends AbstractController
      */
     public function index(Application $app, Request $request)
     {
+        $em = $app['orm.ems']['for_plugin_update'];
+        $Customer = $em->getRepository(Customer::class)->find(123);
+
+        $em->persist($Customer);
+        $em->flush($Customer);
+
         return [];
     }
 }

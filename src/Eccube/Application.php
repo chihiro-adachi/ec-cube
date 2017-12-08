@@ -685,7 +685,9 @@ class Application extends \Silex\Application
         $this->register(new EntityEventServiceProvider());
         $this->register(new \Silex\Provider\DoctrineServiceProvider(), array(
             'dbs.options' => array(
-                'default' => $this['config']['database'][$this['config']['database']['default']]
+                'default' => $this['config']['database'][$this['config']['database']['default']],
+                // プラグイン更新用
+                'for_plugin_update' => $this['config']['database'][$this['config']['database']['default']]
             )
         ));
         $this->register(new \Saxulum\DoctrineOrmManagerRegistry\Provider\DoctrineOrmManagerRegistryProvider());
