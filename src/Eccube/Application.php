@@ -622,6 +622,9 @@ class Application extends ApplicationTrait
             return new \Symfony\Component\Security\Core\Authorization\AccessDecisionManager($app['security.voters'], 'unanimous');
         });
 
+        $this['security.http_utils'] = $this->share(function ($app) {
+            return new \Symfony\Component\Security\Http\HttpUtils(isset($app['url_generator']) ? $app['url_generator'] : null, $app['url_matcher'], '{https?://%s}i');
+        });
     }
 
     /**
