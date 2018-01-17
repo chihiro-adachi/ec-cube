@@ -71,11 +71,11 @@ class ShoppingControllerWithNonmemberTest extends AbstractShoppingControllerTest
     {
         $client = $this->client;
         $c = $this->scenarioCartIn();
-        $c = $this->client->followRedirect();
+        //$c = $this->client->followRedirect();
 
         $formData = $this->createNonmemberFormData();
         $this->scenarioInput($formData);
-        $c = $this->client->followRedirect();
+        //$c = $this->client->followRedirect();
 
         $client->request('GET', $this->generateUrl('shopping'));
         $crawler = $client->followRedirect();

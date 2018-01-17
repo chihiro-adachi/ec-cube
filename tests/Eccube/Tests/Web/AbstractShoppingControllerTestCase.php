@@ -81,9 +81,11 @@ abstract class AbstractShoppingControllerTestCase extends AbstractWebTestCase
             ),
             [Constant::TOKEN_NAME => $token]
         );
-        $this->container->get(CartService::class)->lock();
-        $this->container->get(CartService::class)->save();
 
+        $this->client->request(
+            'GET',
+            $this->generateUrl('cart_buystep')
+        );
         return $crawler;
     }
 
@@ -96,8 +98,7 @@ abstract class AbstractShoppingControllerTestCase extends AbstractWebTestCase
             $this->generateUrl('shopping_nonmember'),
             ['nonmember' => $formData, '_token' => $token]
         );
-        $this->container->get(CartService::class)->lock();
-        $this->container->get(CartService::class)->save();
+
         return $crawler;
     }
 
