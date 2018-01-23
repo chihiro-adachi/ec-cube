@@ -1,0 +1,3 @@
+[submodule "assets/Eccube-Styleguide"]
+	path = assets/Eccube-Styleguide
+	url = https://github.com/EC-CUBE/Eccube-Styleguide.git
