@@ -49,7 +49,7 @@ class Generator {
         $faker = $this->getFaker();
         $Member = new Member();
         if (is_null($username)) {
-            $username = $faker->word;
+            $username = $faker->randomAscii;
         }
         $Work = $this->app['orm.em']->getRepository('Eccube\Entity\Master\Work')->find(1);
         $Authority = $this->app['eccube.repository.master.authority']->find(0);
