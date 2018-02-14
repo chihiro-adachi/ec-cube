@@ -49,7 +49,7 @@ class Generator {
         $faker = $this->getFaker();
         $Member = new Member();
         if (is_null($username)) {
-            $username = $faker->randomAscii;
+            $username = str_repeat($faker->randomLetter, $this->app['config']['id_min_len']);
         }
         $Work = $this->app['orm.em']->getRepository('Eccube\Entity\Master\Work')->find(1);
         $Authority = $this->app['eccube.repository.master.authority']->find(0);
@@ -639,7 +639,7 @@ class Generator {
      * Faker を生成する.
      *
      * @param string $locale ロケールを指定する. デフォルト ja_JP
-     * @return Faker\Generator
+     * @return \Faker\Generator
      * @link https://github.com/fzaninotto/Faker
      */
     protected function getFaker($locale = 'ja_JP')
