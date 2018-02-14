@@ -25,6 +25,7 @@
 namespace Eccube\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Eccube\Application;
 use Eccube\Common\Constant;
 use Eccube\Entity\Customer;
 use Eccube\Entity\Master\CustomerStatus;
@@ -34,6 +35,9 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Util\SecureRandom;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\ConstraintViolationList;
 
 /**
  * CustomerRepository
@@ -80,6 +84,13 @@ class CustomerRepository extends EntityRepository implements UserProviderInterfa
      */
     public function loadUserByUsername($username)
     {
+        $errors = $this->app['validator']->validate($username, array(
+            new Email(),
+        ));
+        if ($errors->count() > 0) {
+            throw new UsernameNotFoundException(sprintf('Username "%s" is invalid.', $username));
+        }
+
         // 本会員ステータスの会員のみ有効.
         $CustomerStatus = $this
             ->getEntityManager()

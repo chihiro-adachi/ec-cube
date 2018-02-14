@@ -140,7 +140,10 @@ class EccubeServiceProvider implements ServiceProviderInterface
             return $CategoryRepository;
         });
         $app['eccube.repository.customer'] = $app->share(function () use ($app) {
-            return $app['orm.em']->getRepository('Eccube\Entity\Customer');
+            $customerRepository = $app['orm.em']->getRepository('Eccube\Entity\Customer');
+            $customerRepository->setApplication($app);
+
+            return $customerRepository;
         });
         $app['eccube.repository.news'] = $app->share(function () use ($app) {
             return $app['orm.em']->getRepository('Eccube\Entity\News');
