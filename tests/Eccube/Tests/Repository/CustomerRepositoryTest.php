@@ -42,14 +42,27 @@ class CustomerRepositoryTest extends EccubeTestCase
         $this->verify();
     }
 
-    public function testLoadUserByUsernameWithException()
+    public function testLoadUserByUsernameWithNotFoundException()
+    {
+        $username = 'customer_not_found@example.com';
+        try {
+            $Customer = $this->app['eccube.repository.customer']->loadUserByUsername($username);
+            $this->fail();
+        } catch (UsernameNotFoundException $e) {
+            $this->expected = sprintf('Username "%s" does not exist.', $username);
+            $this->actual = $e->getMessage();
+        }
+        $this->verify();
+    }
+
+    public function testLoadUserByUsernameWithInvalidEmailException()
     {
         $username = 'aaaaa';
         try {
             $Customer = $this->app['eccube.repository.customer']->loadUserByUsername($username);
             $this->fail();
         } catch (UsernameNotFoundException $e) {
-            $this->expected = sprintf('Username "%s" does not exist.', $username);
+            $this->expected = sprintf('Username "%s" is invalid.', $username);
             $this->actual = $e->getMessage();
         }
         $this->verify();

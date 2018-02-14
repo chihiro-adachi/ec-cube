@@ -33,6 +33,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Util\SecureRandom;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Regex;
 
 /**
  * MemberRepository
@@ -79,7 +81,11 @@ class MemberRepository extends EntityRepository implements UserProviderInterface
     public function loadUserByUsername($username)
     {
         $errors = $this->app['validator']->validate($username, array(
-            new Email(),
+            new Length(array(
+                'min' => $this->app['config']['id_min_len'],
+                'max' => $this->app['config']['id_max_len'],
+            )),
+            new Regex(array('pattern' => '/^[[:graph:][:space:]]+$/i')),
         ));
         if ($errors->count() > 0) {
             throw new UsernameNotFoundException(sprintf('Username "%s" is invalid.', $username));
