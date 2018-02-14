@@ -154,6 +154,8 @@ class EccubeServiceProvider implements ServiceProviderInterface
         $app['eccube.repository.member'] = $app->share(function () use ($app) {
             $memberRepository = $app['orm.em']->getRepository('Eccube\Entity\Member');
             $memberRepository->setEncoderFactorty($app['security.encoder_factory']);
+            $memberRepository->setApplication($app);
+
             return $memberRepository;
         });
         $app['eccube.repository.order'] = $app->share(function () use ($app) {
