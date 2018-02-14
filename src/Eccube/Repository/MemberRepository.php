@@ -47,6 +47,13 @@ class MemberRepository extends EntityRepository implements UserProviderInterface
      */
     private $encoder_factory;
 
+    protected $app;
+
+    public function setApplication($app)
+    {
+        $this->app = $app;
+    }
+
     /**
      * @param EncoderFactoryInterface $encoder_factory
      */
@@ -71,6 +78,13 @@ class MemberRepository extends EntityRepository implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
+        $errors = $this->app['validator']->validate($username, array(
+            new Email(),
+        ));
+        if ($errors->count() > 0) {
+            throw new UsernameNotFoundException(sprintf('Username "%s" is invalid.', $username));
+        }
+
         $Work = $this
             ->getEntityManager()
             ->getRepository('Eccube\Entity\Master\Work')
