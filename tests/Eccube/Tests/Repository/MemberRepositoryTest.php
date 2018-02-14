@@ -71,7 +71,7 @@ class MemberRepositoryTest extends EccubeTestCase
             $Member = $this->app['eccube.repository.member']->loadUserByUsername($username);
             $this->fail();
         } catch (UsernameNotFoundException $e) {
-            $this->expected = sprintf('Username "%s" does not exist.', $username);
+            $this->expected = sprintf('Username "%s" is invalid.', $username);
             $this->actual = $e->getMessage();
         }
         $this->verify();
