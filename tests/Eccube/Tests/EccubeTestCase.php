@@ -58,6 +58,9 @@ abstract class EccubeTestCase extends WebTestCase
         $this->container = $this->client->getContainer();
         $this->entityManager = $this->container->get('doctrine')->getManager();
         $this->eccubeConfig = $this->container->get(EccubeConfig::class);
+
+
+        dump($this->entityManager->getConnection()->getDatabasePlatform()->getName());
     }
 
     /**
