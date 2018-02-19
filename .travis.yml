@@ -53,7 +53,9 @@ matrix:
 
 install:
   - composer install --dev --no-interaction -o
-  - composer run-script installer-scripts
+  - bin/console doctrine:database:create
+  - bin/console doctrine:schema:create
+  - bin/console eccube:fixtures:load
   - ./vendor/bin/simple-phpunit install
 
 before_script:
