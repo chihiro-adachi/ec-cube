@@ -12,18 +12,18 @@ class TestCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         $defs = $container->getDefinitions();
-        $patterns = $this->getPatterns();
+        $services = $this->getPublicServices();
         foreach ($defs as $def) {
             $class = $def->getClass();
-            foreach ($patterns as $pattern) {
-                if (0 === strpos($class, $pattern)) {
+            foreach ($services as $service) {
+                if (0 === strpos($class, $service)) {
                     $def->setPublic(true);
                 }
             }
         }
     }
 
-    protected function getPattern()
+    protected function getPublicServices()
     {
         return [
             'Eccube\\Repository',
