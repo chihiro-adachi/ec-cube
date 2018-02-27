@@ -12,6 +12,7 @@ use Eccube\Repository\Master\PageMaxRepository;
 use Eccube\Repository\Master\ProductStatusRepository;
 use Eccube\Repository\ShippingRepository;
 use Knp\Component\Pager\Paginator;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,7 +57,7 @@ class ShippingController extends AbstractController
      * @Route("/%eccube_admin_route%/shipping/page/{page_no}", name="admin_shipping_page")
      * @Template("@admin/Shipping/index.twig")
      */
-    public function index(Request $request, $page_no = null, Paginator $paginator)
+    public function index(Request $request, $page_no = null, PaginatorInterface $paginator)
     {
         $session = $request->getSession();
 

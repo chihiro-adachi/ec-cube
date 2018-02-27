@@ -40,6 +40,7 @@ use Eccube\Repository\OrderRepository;
 use Eccube\Repository\ProductRepository;
 use Eccube\Service\CartService;
 use Knp\Component\Pager\Paginator;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -137,7 +138,7 @@ class MypageController extends AbstractController
      * @Route("/mypage/", name="mypage")
      * @Template("Mypage/index.twig")
      */
-    public function index(Request $request, Paginator $paginator)
+    public function index(Request $request, PaginatorInterface $paginator)
     {
         $Customer = $this->getUser();
 
@@ -283,7 +284,7 @@ class MypageController extends AbstractController
      * @Route("/mypage/favorite", name="mypage_favorite")
      * @Template("Mypage/favorite.twig")
      */
-    public function favorite(Request $request, Paginator $paginator)
+    public function favorite(Request $request, PaginatorInterface $paginator)
     {
         if (!$this->BaseInfo->isOptionFavoriteProduct()) {
             throw new NotFoundHttpException();

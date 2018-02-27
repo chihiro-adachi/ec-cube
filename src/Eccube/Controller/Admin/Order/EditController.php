@@ -44,6 +44,7 @@ use Eccube\Service\PurchaseFlow\PurchaseException;
 use Eccube\Service\PurchaseFlow\PurchaseFlow;
 use Eccube\Service\TaxRuleService;
 use Knp\Component\Pager\Paginator;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -393,7 +394,7 @@ class EditController extends AbstractController
      * @param integer $page_no
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
-    public function searchCustomerHtml(Request $request, $page_no = null, Paginator $paginator)
+    public function searchCustomerHtml(Request $request, $page_no = null, PaginatorInterface $paginator)
     {
         if ($request->isXmlHttpRequest()) {
             log_debug('search customer start.');
@@ -554,7 +555,7 @@ class EditController extends AbstractController
      * @Route("/%eccube_admin_route%/order/search/product/page/{page_no}", requirements={"page_no" = "\d+"}, name="admin_order_search_product_page")
      * @Template("@admin/Order/search_product.twig")
      */
-    public function searchProduct(Request $request, $page_no = null, Paginator $paginator)
+    public function searchProduct(Request $request, $page_no = null, PaginatorInterface $paginator)
     {
         if ($request->isXmlHttpRequest()) {
             log_debug('search product start.');

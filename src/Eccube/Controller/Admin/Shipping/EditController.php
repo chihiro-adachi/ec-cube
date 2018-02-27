@@ -19,6 +19,7 @@ use Eccube\Repository\OrderItemRepository;
 use Eccube\Repository\ShippingRepository;
 use Eccube\Service\TaxRuleService;
 use Knp\Component\Pager\Paginator;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -269,7 +270,7 @@ class EditController extends AbstractController
      * @Route("/%eccube_admin_route%/shipping/search/product", name="admin_shipping_search_product")
      * @Template("@admin/shipping/search_product.twig")
      */
-    public function searchProduct(Request $request, $page_no = null, Paginator $paginator)
+    public function searchProduct(Request $request, $page_no = null, PaginatorInterface $paginator)
     {
         if ($request->isXmlHttpRequest()) {
             log_debug('search product start.');

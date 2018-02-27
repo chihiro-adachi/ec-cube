@@ -39,6 +39,7 @@ use Eccube\Repository\Master\SexRepository;
 use Eccube\Service\CsvExportService;
 use Eccube\Service\MailService;
 use Knp\Component\Pager\Paginator;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -100,7 +101,7 @@ class CustomerController extends AbstractController
      * @Route("/%eccube_admin_route%/customer/page/{page_no}", requirements={"page_no" = "\d+"}, name="admin_customer_page")
      * @Template("@admin/Customer/index.twig")
      */
-    public function index(Request $request, $page_no = null, Paginator $paginator)
+    public function index(Request $request, $page_no = null, PaginatorInterface $paginator)
     {
         $pagination = array();
         $builder = $this->formFactory

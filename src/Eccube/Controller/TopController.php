@@ -28,6 +28,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Eccube\Application;
 use Knp\Bundle\PaginatorBundle\Pagination\SlidingPagination;
 use Knp\Component\Pager\Paginator;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,7 +66,7 @@ class TopController extends AbstractController
      * @param EntityManagerInterface $em
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function index2(Paginator $paginator, EntityManagerInterface $em)
+    public function index2(PaginatorInterface $paginator, EntityManagerInterface $em)
     {
         $qb = $em->createQueryBuilder()
             ->select('c')

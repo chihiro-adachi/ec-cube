@@ -39,6 +39,7 @@ use Eccube\Repository\OrderRepository;
 use Eccube\Repository\PaymentRepository;
 use Eccube\Service\CsvExportService;
 use Knp\Component\Pager\Paginator;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -123,7 +124,7 @@ class OrderController extends AbstractController
      * @Route("/%eccube_admin_route%/order/page/{page_no}", requirements={"page_no" = "\d+"}, name="admin_order_page")
      * @Template("@admin/Order/index.twig")
      */
-    public function index(Request $request, $page_no = null, Paginator $paginator)
+    public function index(Request $request, $page_no = null, PaginatorInterface $paginator)
     {
         $builder = $this->formFactory
             ->createBuilder(SearchOrderType::class);
