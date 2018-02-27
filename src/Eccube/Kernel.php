@@ -19,6 +19,7 @@ use Eccube\DependencyInjection\Compiler\NavCompilerPass;
 use Eccube\DependencyInjection\Compiler\PluginPass;
 use Eccube\DependencyInjection\Compiler\QueryCustomizerPass;
 use Eccube\DependencyInjection\Compiler\TemplateListenerPass;
+use Eccube\DependencyInjection\Compiler\TestCompilerPass;
 use Eccube\DependencyInjection\Compiler\TwigExtensionPass;
 use Eccube\DependencyInjection\Compiler\WebServerDocumentRootPass;
 use Eccube\DependencyInjection\EccubeExtension;
@@ -174,6 +175,10 @@ class Kernel extends BaseKernel
         $container->registerForAutoconfiguration(EccubeNav::class)
             ->addTag(NavCompilerPass::NAV_TAG);
         $container->addCompilerPass(new NavCompilerPass());
+
+        if ('test' === $this->getEnvironment()) {
+            $container->addCompilerPass(new TestCompilerPass());
+        }
     }
 
     protected function addEntityExtensionPass(ContainerBuilder $container)
