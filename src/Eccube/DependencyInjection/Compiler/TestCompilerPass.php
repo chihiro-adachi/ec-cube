@@ -13,10 +13,10 @@ class TestCompilerPass implements CompilerPassInterface
     {
         $defs = $container->getDefinitions();
         $services = $this->getPublicServices();
-        foreach ($defs as $def) {
+        foreach ($defs as $id => $def) {
             $class = $def->getClass();
             foreach ($services as $service) {
-                if (0 === strpos($class, $service)) {
+                if (0 === strpos($class, $service) || 0 === strpos($id, $service)) {
                     $def->setPublic(true);
                 }
             }
@@ -26,6 +26,14 @@ class TestCompilerPass implements CompilerPassInterface
     protected function getPublicServices()
     {
         return [
+            'logger',
+            'eccube.logger',
+            'security.encoder_factory',
+            'Knp\\Component\\Pager\\PaginatorInterface',
+            'Eccube\\Entity\\BaseInfo',
+            'Eccube\\Util\\CacheUtil',
+            'Eccube\\Security\\Core\\Encoder\\PasswordEncoder',
+            'Eccube\\Service',
             'Eccube\\Repository',
         ];
     }
