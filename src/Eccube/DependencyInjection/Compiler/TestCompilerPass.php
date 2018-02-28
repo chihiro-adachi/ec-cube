@@ -37,7 +37,7 @@ class TestCompilerPass implements CompilerPassInterface
             'Eccube\\Service\\PluginService',
             'Eccube\\Service\\MailService',
             'Eccube\\Service\\EntityProxyService',
-            'Eccube\\Service\\PurchaseFlow\\Processor',
+            'Eccube\\Service\\PurchaseFlow\\Processor\\DisplayStatusValidator',
             'Eccube\\Service\\CsvExportService',
             'Eccube\\Util\\CacheUtil',
         ];
