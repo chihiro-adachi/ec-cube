@@ -26,14 +26,19 @@ class TestCompilerPass implements CompilerPassInterface
     protected function getPublicServices()
     {
         return [
-//            'logger',
+            'logger',
             'eccube.logger',
             'security.encoder_factory',
             'Knp\\Component\\Pager\\PaginatorInterface',
             'Eccube\\Entity\\BaseInfo',
             'Eccube\\Util\\CacheUtil',
             'Eccube\\Security\\Core\\Encoder\\PasswordEncoder',
-            //'Eccube\\Service',
+            'Eccube\\Service\\CartService',
+            'Eccube\\Service\\PluginService',
+            'Eccube\\Service\\MailService',
+            'Eccube\\Service\\EntityProxyService',
+            'Eccube\\Service\\PurchaseFlow',
+            'Eccube\\Service\\CsvExportService',
             'Eccube\\Repository',
         ];
     }
