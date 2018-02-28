@@ -27,7 +27,7 @@ class TestCompilerPass implements CompilerPassInterface
     {
         return [
 //            'logger',
-//            'eccube.logger',
+            'eccube.logger',
             'security.encoder_factory',
             'Knp\\Component\\Pager\\PaginatorInterface',
             'Eccube\\Entity\\BaseInfo',
