@@ -31,7 +31,7 @@ class TestCompilerPass implements CompilerPassInterface
 //            'security.encoder_factory',
 //            'Knp\\Component\\Pager\\PaginatorInterface',
             'Eccube\\Entity\\BaseInfo',
-            //'Eccube\\Util\\CacheUtil',
+            'Eccube\\Util\\CacheUtil',
             //'Eccube\\Security\\Core\\Encoder\\PasswordEncoder',
             //'Eccube\\Service',
             'Eccube\\Repository',
