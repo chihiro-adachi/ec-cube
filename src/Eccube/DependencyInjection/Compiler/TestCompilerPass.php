@@ -32,7 +32,7 @@ class TestCompilerPass implements CompilerPassInterface
 //            'Knp\\Component\\Pager\\PaginatorInterface',
             'Eccube\\Entity\\BaseInfo',
             'Eccube\\Util\\CacheUtil',
-            //'Eccube\\Security\\Core\\Encoder\\PasswordEncoder',
+            'Eccube\\Security\\Core\\Encoder\\PasswordEncoder',
             //'Eccube\\Service',
             'Eccube\\Repository',
         ];
