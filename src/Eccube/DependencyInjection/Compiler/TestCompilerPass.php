@@ -31,15 +31,15 @@ class TestCompilerPass implements CompilerPassInterface
             'security.encoder_factory',
             'Knp\\Component\\Pager\\PaginatorInterface',
             'Eccube\\Entity\\BaseInfo',
-            'Eccube\\Util\\CacheUtil',
+            'Eccube\\Repository',
             'Eccube\\Security\\Core\\Encoder\\PasswordEncoder',
             'Eccube\\Service\\CartService',
             'Eccube\\Service\\PluginService',
             'Eccube\\Service\\MailService',
             'Eccube\\Service\\EntityProxyService',
-            'Eccube\\Service\\PurchaseFlow',
+            //'Eccube\\Service\\PurchaseFlow',
             'Eccube\\Service\\CsvExportService',
-            'Eccube\\Repository',
+            'Eccube\\Util\\CacheUtil',
         ];
     }
 }
