@@ -52,18 +52,19 @@
                                 <div class="card rounded border-0 mb-4">
                                     <div class="card-header">
                                         <div class="row">
-
                                             <div class="col-8">
                                                 {% if Layout.DeviceType is not empty and Layout.DeviceType.id == 10 %}
-                                                <i class="fa fa-desktop fa-lg mr-2"></i>
+                                                    <i class="fa fa-desktop fa-lg mr-2"></i>
                                                 {% else %}
                                                     <i class="fa fa-mobile fa-lg mr-2"></i>
                                                 {% endif %}
                                                 <a class="card-title align-middle" href="{{ url('admin_content_layout_edit', { id : Layout.id } ) }}">{{ Layout.name }}</a>
                                                 {% if Layout.id == 1 or Layout.id == 3   %}
                                                 {% elseif Layout.Pages|length > 0 %}
+                                                    <button class="btn btn-ec-sub" type="button" disabled="disabled">{{ 'admin.content.layout_list.delete_layout'|trans }}</button>
+
                                                 {% else %}
-                                                <button class="btn btn-ec-sub" type="button" data-toggle="modal" data-target="#layoutDelete">{{ 'admin.content.layout_list.delete_layout'|trans }}</button>
+                                                <button class="btn btn-ec-delete" type="button" data-toggle="modal" data-target="#layoutDelete">{{ 'admin.content.layout_list.delete_layout'|trans }}</button>
                                                 {% endif %}
                                             </div>
                                             <div class="col-4 text-right"><a data-toggle="collapse" href="#topPageLayout-pc-{{ Layout.id }}" aria-expanded="false" aria-controls="topPageLayout-pc-{{ Layout.id }}"><i class="fa fa-angle-down fa-lg"></i></a></div>
@@ -76,6 +77,7 @@
                                              data-layout-id="{{ Layout.id }}"
                                              id="topPageLayout-pc-{{ Layout.id }}">
                                             {% for Page in Layout.pages %}
+                                                {% if Page.id != 0 %}
                                                 <div class="card-body p-0"
                                                      data-page-id="{{ Page.id }}"
                                                      data-layout-id="{{ Layout.id }}"
@@ -86,10 +88,11 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                            {% endif %}
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        <div class="collapse show ec-cardCollapse sortables"
+                                        <div class="collapse ec-cardCollapse sortables"
                                              data-layout-id="{{ Layout.id }}"
                                              id="topPageLayout-pc-{{ Layout.id }}">
                                             <div class="p-0 empty-item">
