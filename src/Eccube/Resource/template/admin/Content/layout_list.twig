@@ -28,109 +28,7 @@
 {% block title %}{{'admin.content.layout_list.46'|trans}}{% endblock %}
 {% block sub_title %}{{'admin.content.layout_list.45'|trans}}{% endblock %}
 
-{% block javascript %}
-    <script src="{{ asset('assets/js/vendor/jquery.ui/jquery.ui.core.min.js', 'admin') }}"></script>
-    <script src="{{ asset('assets/js/vendor/jquery.ui/jquery.ui.widget.min.js', 'admin') }}"></script>
-    <script src="{{ asset('assets/js/vendor/jquery.ui/jquery.ui.mouse.min.js', 'admin') }}"></script>
-    <script src="{{ asset('assets/js/vendor/jquery.ui/jquery.ui.sortable.min.js', 'admin') }}"></script>
-    <script>
-        $(function () {
-            var update = [];
-            var confirmMove = $('#confirmMove');
-            var containerRows = $('div.sortables');
-            containerRows.each(function () {
-                updateSortNumber($(this));
-            });
-
-            confirmMove.on('click', 'button', function () {
-                if ($(this).hasClass('btn-ec-conversion')) {
-                    confirmMove.data('confirm', true);
-                } else {
-                    confirmMove.data('confirm', false);
-                }
-            });
-
-            function updateSortNumber(mainRows) {
-                var layoutId = mainRows.attr('data-layout-id');
-
-                mainRows.sortable({
-                    items: ' > div.card-body',
-                    connectWith: "div.ec-cardCollapse",
-                    cursor: 'move',
-                    start: function (ev, ui) {
-                        ui.item.prop('main', ui.item.parent());
-                        ui.item.prop('isUpdate', false);
-                        ui.item.prop('isOtherList', false);
-                    },
-                    beforeStop: function (ev, ui) {
-                        if (ui.item.prop('main').attr('id') != ui.item.parent().attr('id')) {
-                            ui.item.prop('isOtherList', true);
-                            confirmMove.modal('show');
-                            confirmMove.off('hidden.bs.modal');
-                            confirmMove.on('hidden.bs.modal', function () {
-                                if (confirmMove.data('confirm') == false) {
-                                    mainRows.sortable("cancel");
-                                }
-
-                                if (confirmMove.data('confirm') == true) {
-                                    if (ui.item.parent().find('[data-page-id="' + ui.item.data('page-id') + '"]').length > 1) {
-                                        $('#duplicateNotification').modal('show');
-                                        mainRows.sortable("cancel");
-                                    } else {
-                                        $.each(update, function (a, b) {
-                                            updateSortNo(b[0], b[1]);
-                                        });
-                                        update = [];
-                                    }
-                                }
-                            });
-                        }
-                    },
-                    update: function (e, ui) {
-                        if (ui.item.prop('isOtherList')) {
-                            update.push([mainRows, layoutId]);
-                        } else {
-                            updateSortNo(mainRows, layoutId);
-                        }
-                    }
-                });
-            }
-
-            function updateSortNo(mainRows, layoutId) {
-                $(".modal-backdrop").remove();
-                $("body").append($('<div class="modal-backdrop show"></div>'));
-                var items = $('div.card-body', mainRows);
-                if (items.length > 0) {
-                    var newSortNos = {};
-                    var i = 1;
-                    items.each(function () {
-                        if (this.dataset.pageId != undefined && this.dataset.layoutId != undefined) {
-                            newSortNos[this.dataset.pageId + '-' + this.dataset.layoutId] = i;
-                            i++;
-                        }
-                    });
-
-                    $.ajax({
-                        url: '{{ url('admin_content_layout_sort_no_move') }}',
-                        type: 'POST',
-                        data: {'newSortNos': newSortNos, 'targetLayoutId': layoutId}
-                    }).done(function (data) {
-                        $('div.empty-item', mainRows).hide();
-                        items.each(function () {
-                            $(this).attr('data-layout-id', layoutId);
-                        });
-                        $(".modal-backdrop").remove();
-                    }).fail(function () {
-                        console.log('Failed');
-                        $(".modal-backdrop").remove();
-                    });
-                } else {
-                    $('div.empty-item', mainRows).show();
-                }
-            }
-        });
-    </script>
-{% endblock %}
+{% block javascript %}{% endblock %}
 
 {% block stylesheet %}
     <style>
@@ -139,73 +37,42 @@
 {% endblock stylesheet %}
 
 {% block main %}
-    <div class="c-outsideBlock">
-        <div class="c-outsideBlock__contents">
-            <div class="row">
-                <div class="col text-center">
-                    <div class="btn-group nav d-inline-flex" id="pills-tab" role="tablist">
-                        <a class="nav-link active btn btn-ec-tab py-2 pl-4 pr-4" id="pills-pc-tab" data-toggle="pill" href="#pills-pc" role="tab" aria-controls="pills-pc" aria-selected="true">{{ 'admin.content.layout_list.device_pc'|trans }}</a>
-                        <a class="nav-link btn btn-ec-tab py-2 pl-4 pr-4" id="pills-mobile-tab" data-toggle="pill" href="#pills-mobile" role="tab" aria-controls="pills-mobile" aria-selected="false">{{ 'admin.content.layout_list.device_mobile'|trans }}</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="c-contentsArea__cols">
         <div class="c-contentsArea__primaryCol">
             <div class="c-primaryCol">
                 <div class="tab-content" id="pills-tabContent">
                     <div class="tab-pane fade show active" id="pills-pc" role="tabpanel" aria-labelledby="pills-pc-tab">
                         <div class="d-block mb-3">
-                            <a class="btn btn-ec-regular" href="{{ url('admin_content_layout_new')}}?DeviceType={{ constant('\\Eccube\\Entity\\Master\\DeviceType::DEVICE_TYPE_PC') }}">{{ 'admin.content.layout_list.add_pc_layout'|trans }}</a>
-                        </div>
-                        <div class="card rounded border-0 mb-4">
-                            <div class="card-header">
-                                <div class="row">
-                                    <div class="col-8">
-                                        <div class="d-inline-block" data-toggle="tooltip" data-placement="top" title="Tooltip"><span class="card-title">{{ 'admin.content.layout_list.default_layout'|trans }}</span><i class="fa fa-question-circle fa-lg ml-1"></i></div>
-                                    </div>
-                                    <div class="col-4 text-right"><a data-toggle="collapse" href="#defaultLayout-pc" aria-expanded="false" aria-controls="defaultLayout-pc"><i class="fa fa-angle-up fa-lg"></i></a></div>
-                                </div>
-                            </div>
-                            <div class="collapse show ec-cardCollapse" id="defaultLayout-pc">
-                                <div class="card-body">
-                                    {# TODO デフォルトのレイアウトを選択して登録できるようにする #}
-                                    <div class="row">
-                                        <div class="col-3 pr-0">
-                                            <form>
-                                                <select class="form-control">
-                                                    {% for Layout in Layouts %}
-                                                        <option value="">{{ Layout.name }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </form>
-                                        </div>
-                                        <div class="col">
-                                            <button class="btn btn-ec-regular" type="button">{{ 'common.label.save'|trans }}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <a class="btn btn-ec-regular" href="{{ url('admin_content_layout_new') }}">レイアウトを追加</a>
                         </div>
 
                         {# layouts #}
                         {% for Layout in Layouts %}
-                            {% if Layout.devicetype.id == constant('\\Eccube\\Entity\\Master\\DeviceType::DEVICE_TYPE_PC') %}
+                            {% if Layout.devicetype.id %}
                                 <div class="card rounded border-0 mb-4">
                                     <div class="card-header">
                                         <div class="row">
-                                            <div class="col-8"><a class="card-title align-middle" href="{{ url('admin_content_layout_edit', { id : Layout.id } ) }}">{{ Layout.name }}</a>
-                                                <button class="btn btn-ec-regular" type="button" data-toggle="modal" data-target="#addPage">{{ 'admin.content.layout_list.add_page'|trans }}</button>
+
+                                            <div class="col-8">
+                                                {% if Layout.DeviceType is not empty and Layout.DeviceType.id == 10 %}
+                                                <i class="fa fa-desktop fa-lg mr-2"></i>
+                                                {% else %}
+                                                    <i class="fa fa-mobile fa-lg mr-2"></i>
+                                                {% endif %}
+                                                <a class="card-title align-middle" href="{{ url('admin_content_layout_edit', { id : Layout.id } ) }}">{{ Layout.name }}</a>
+                                                {% if Layout.id == 1 or Layout.id == 3   %}
+                                                {% elseif Layout.Pages|length > 0 %}
+                                                {% else %}
                                                 <button class="btn btn-ec-sub" type="button" data-toggle="modal" data-target="#layoutDelete">{{ 'admin.content.layout_list.delete_layout'|trans }}</button>
+                                                {% endif %}
                                             </div>
-                                            <div class="col-4 text-right"><a data-toggle="collapse" href="#topPageLayout-pc-{{ Layout.id }}" aria-expanded="false" aria-controls="topPageLayout-pc-{{ Layout.id }}"><i class="fa fa-angle-up fa-lg"></i></a></div>
+                                            <div class="col-4 text-right"><a data-toggle="collapse" href="#topPageLayout-pc-{{ Layout.id }}" aria-expanded="false" aria-controls="topPageLayout-pc-{{ Layout.id }}"><i class="fa fa-angle-down fa-lg"></i></a></div>
                                         </div>
                                     </div>
 
                                     {# Pages #}
                                     {% if Layout.pages|length > 0 %}
-                                        <div class="collapse show ec-cardCollapse sortables"
+                                        <div class="collapse ec-cardCollapse sortables"
                                              data-layout-id="{{ Layout.id }}"
                                              id="topPageLayout-pc-{{ Layout.id }}">
                                             {% for Page in Layout.pages %}
@@ -215,7 +82,7 @@
                                                      data-sort-no="{{ Page.getSortNo(Layout.id) }}">
                                                     <div class="row justify-content-between p-3">
                                                         <div class="col-auto">
-                                                            <i class="fa fa-bars text-ec-gray mr-3"></i><span>{{ Page.name }}</span>
+                                                            <i class="fa fa-bars text-ec-gray mr-3"></i><span><a href="{{ url('admin_content_page_edit', {id : Page.id}) }}">{{ Page.name }}</a></span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -269,43 +136,6 @@
                                 </div>
                             </div>
                         </div>
-                        {# layouts #}
-                        {% for Layout in Layouts %}
-                            {% if Layout.devicetype.id == constant('\\Eccube\\Entity\\Master\\DeviceType::DEVICE_TYPE_SP') %}
-                                <div class="card rounded border-0 mb-4">
-                                    <div class="card-header">
-                                        <div class="row">
-                                            <div class="col-8"><a class="card-title align-middle" href="{{ url('admin_content_layout_edit', { id : Layout.id } ) }}">{{ Layout.name }}</a>
-                                                <button class="btn btn-ec-regular" type="button" data-toggle="modal" data-target="#addPage">{{ 'admin.content.layout_list.add_page'|trans }}</button>
-                                                <button class="btn btn-ec-sub" type="button" data-toggle="modal" data-target="#layoutDelete">{{ 'admin.content.layout_list.delete_layout'|trans }}</button>
-                                            </div>
-                                            <div class="col-4 text-right">
-                                                <a data-toggle="collapse" href="#topPageLayout-mobile-{{ Layout.devicetype.id }}" aria-expanded="false" aria-controls="topPageLayout-mobile-{{ Layout.devicetype.id }}"><i class="fa fa-angle-up fa-lg"></i></a></div>
-                                        </div>
-                                    </div>
-
-                                    {# Pages #}
-                                    {% if Layout.pages|length > 0 %}
-                                        {# TODO ページをドラッグ＆ドロップで移動できるようにする #}
-                                        <div class="collapse show ec-cardCollapse" id="topPageLayout-mobile-{{ Layout.devicetype.id }}">
-                                            {% for Page in Layout.pages %}
-                                                <div class="card-body p-0">
-                                                    <div class="row justify-content-between p-3">
-                                                        <div class="col-auto"><i class="fa fa-bars text-ec-gray mr-3"></i><span>{{ Page.name }}</span></div>
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-                                    {% else %}
-                                        <div class="collapse show ec-cardCollapse" id="lpLayout-mobile">
-                                            <div class="card-body p-0">
-                                                <div class="d-block p-3"><span class="text-muted">{{ 'admin.content.layout_list.no_pages_message'|trans }}</span></div>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                </div>
-                            {% endif %}
-                        {% endfor %}
                     </div>
                 </div>
                 <div class="modal fade" id="addPage" tabindex="-1" role="dialog" aria-labelledby="addPage" aria-hidden="true">
