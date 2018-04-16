@@ -130,6 +130,12 @@ class ShippingEditPage extends AbstractAdminPageStyleGuide
         return $this;
     }
 
+    public function スクロール_配達用メモの位置まで()
+    {
+        $this->tester->scrollTo('#shipping_note');
+        return $this;
+    }
+
     public function 商品検索($value = '')
     {
         $this->tester->click(['xpath' => '//*[@id="shipmentItem"]/div/div/div/button']);
