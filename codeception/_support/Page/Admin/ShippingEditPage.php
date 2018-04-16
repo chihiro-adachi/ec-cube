@@ -133,7 +133,7 @@ class ShippingEditPage extends AbstractAdminPageStyleGuide
     public function 商品検索($value = '')
     {
         $this->tester->click(['xpath' => '//*[@id="shipmentItem"]/div/div/div/button']);
-        $this->tester->waitForElement(['id' => 'addProduct']);
+        $this->tester->waitForElementVisible(['id' => 'addProduct']);
         $this->tester->click(['id' => 'searchItemsButton']);
         return $this;
     }
