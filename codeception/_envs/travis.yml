@@ -1,9 +1,9 @@
 modules:
     config:
-        Db:
-            user: 'postgres'
-            password: ''
-            dsn: 'pgsql:host=localhost;dbname=eccube_db'
+#        Db:
+#            user: 'postgres'
+#            password: ''
+#            dsn: 'pgsql:host=localhost;dbname=eccube_db'
         WebDriver:
             host: 'localhost'
             port: 9515
