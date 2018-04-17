@@ -228,7 +228,8 @@ $deleteShippingNotExistsOfItem = function () use ($entityManager) {
     if ($Shippings) {
         dump(count($Shippings));
         foreach ($Shippings as $Shipping) {
-            if ($Shipping->getOrderItems()->isEmpty()) {
+            $Items = $Shipping->getOrderItems();
+            if (empty($Items) || count($Items) < 1) {
                 dump('empty');
                 $entityManager->remove($Shipping);
             } else {
