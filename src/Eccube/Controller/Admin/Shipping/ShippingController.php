@@ -200,10 +200,21 @@ class ShippingController extends AbstractController
             $this->shippingRepository->save($Shipping);
 
             if ($request->get('notificationMail')) {
+                dump('bbb');
+                $Orders = $Shipping->getOrders();
+                foreach ($Orders as $order) {
+                    dump('ship id: '.$Shipping->getId());
+                    dump('order id: '.$order->getId());
+                }
                 $this->mailService->sendShippingNotifyMail($Shipping);
+            } else {
+                dump('aaaa');
             }
 
             $this->entityManager->flush();
+        } else {
+            dump('shipping status is shipped');
+            dump($Shipping->getId());
         }
 
         return new JsonResponse(['success' => true]);
