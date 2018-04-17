@@ -235,11 +235,14 @@ $deleteShippingNotExistsOfItem = function () use ($entityManager) {
 
             foreach ($orders as $order) {
                 dump('--> order id:'.$order->getId());
+                dump('--> order email:'.$order->getEmail());
+
             }
 
             foreach ($Items as  $item) {
                 dump('--> item id: '.$item->getId());
                 dump('--> order id: '.$item->getOrder() ? $item->getOrder()->getId() : 'null');
+                dump('--> order email: '.$item->getOrder() ? $item->getOrder()->getEmail() : 'null');
                 dump('--> ship id: '.$item->getOrder() ? $item->getShipping()->getId() : 'null');
             }
 
