@@ -292,6 +292,7 @@ $createOrders = function ($Customer, $numberOfOrders = 5, $ProductClasses = arra
         $Status = $entityManager->getRepository('Eccube\Entity\Master\OrderStatus')->find($faker->numberBetween(1, 7));
         $OrderDate = $faker->dateTimeThisYear();
         $Order->setOrderStatus($Status);
+        $Order->setEmail('hoge@example.com');
         $Order->setOrderDate($OrderDate);
         $entityManager->flush($Order);
         $Orders[] = $Order;
