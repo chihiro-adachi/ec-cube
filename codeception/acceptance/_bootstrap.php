@@ -226,9 +226,13 @@ $deleteShippingNotExistsOfItem = function () use ($entityManager) {
     $Shippings= $entityManager->getRepository('Eccube\Entity\Shipping')->findAll();
 
     if ($Shippings) {
+        dump(count($Shippings));
         foreach ($Shippings as $Shipping) {
             if ($Shipping->getOrderItems()->isEmpty()) {
+                dump('empty');
                 $entityManager->remove($Shipping);
+            } else {
+                dump('exists');
             }
         }
         $entityManager->flush();
