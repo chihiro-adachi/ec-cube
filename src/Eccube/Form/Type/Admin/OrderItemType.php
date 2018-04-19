@@ -201,11 +201,17 @@ class OrderItemType extends AbstractType
             $event->setData($OrderItem);
         });
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+
+
+
             // モーダルからのPOST時に、金額等をセットする.
             if ('modal' === $this->requestStack->getCurrentRequest()->get('modal')) {
+
+                dump($this->requestStack->getCurrentRequest()->get('modal'));
                 $data = $event->getData();
-                // 新規明細行の場合にセット.
-                if (isset($data['new'])) {
+
+                dump($data);
+
                     // 受注済み明細の場合
                     if (array_key_exists('id', $data) && isset($data['id'])) {
                         /** @var \Eccube\Entity\OrderItem $OrderItem */
@@ -270,6 +276,7 @@ class OrderItemType extends AbstractType
                                 break;
                             case OrderItemTypeMaster::PRODUCT:
                             default:
+                                dump(111);
                                 /** @var \Eccube\Entity\ProductClass $ProductClass */
                                 $ProductClass = $this->productClassRepository
                                     ->find($data['ProductClass']);
@@ -297,7 +304,6 @@ class OrderItemType extends AbstractType
                     }
                     $event->setData($data);
                 }
-            }
         });
     }
 
