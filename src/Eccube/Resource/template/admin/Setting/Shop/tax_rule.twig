@@ -52,7 +52,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
             var inputDate = document.createElement('input');
             inputDate.setAttribute('type', 'date');
             if (inputDate.type !== 'date') {
-                $('input[name$="apply_date]"]').datetimepicker({
+                $('input[name$="tax_rule[apply_date][date]"]').datetimepicker({
                     locale: 'ja',
                     format: 'YYYY-MM-DD',
                     useCurrent: false,
@@ -123,7 +123,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                                         {% if TargetTaxRule.default_tax_rule %}
                                             {{ 'admin.setting.shop.tax_rule.tax_rule_default'|trans }}
                                         {% else %}
-                                            {{ form_widget(form.apply_date) }}
+                                            {{ form_widget(form.apply_date.date) }}
+                                            {{ form_widget(form.apply_date.time, {'attr': {'placeholder': '--:--'}}) }}
                                             {{ form_errors(form.apply_date) }}
                                         {% endif %}
                                     </td>
@@ -165,7 +166,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
                                                 {% if TaxRule.default_tax_rule %}
                                                     {{ 'admin.setting.shop.tax_rule.tax_rule_default'|trans }}
                                                 {% else %}
-                                                    {{ form_widget(forms[TaxRule.id].apply_date) }}
+                                                    {{ form_widget(forms[TaxRule.id].apply_date.date) }}
+                                                    {{ form_widget(forms[TaxRule.id].apply_date.time, {'attr': {'placeholder': '--'}}) }}
+                                                    {{ form_errors(forms[TaxRule.id].apply_date) }}
                                                 {% endif %}
                                             </div>
                                             <div class="list">
