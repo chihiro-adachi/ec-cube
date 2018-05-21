@@ -37,6 +37,7 @@ before_install:
 
 install:
   - composer install --dev --no-interaction -o --apcu-autoloader
+  - vendor/bin/php-cs-fixer fix --config=.php_cs.dist --dry-run
   - echo "APP_ENV=codeception" > .env
   - bin/console doctrine:database:create
   - bin/console doctrine:schema:create
