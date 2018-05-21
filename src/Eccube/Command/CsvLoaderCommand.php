@@ -66,6 +66,9 @@ EOF
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $hoge = array();
+        $hoge = 'aaa' . 'bbb';
+
         /** @var \Eccube\Application $app */
         $app = $this->getSilexApplication();
 
