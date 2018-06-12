@@ -166,13 +166,10 @@ class CartService
     public function getCart()
     {
         $Carts = $this->getCarts();
-//        if (!$Carts) {
-//            if (!$this->cart) {
-//                $this->cart = new Cart();
-//            }
-//
-//            return $this->cart;
-//        }
+
+        if (empty($Carts)) {
+            return null;
+        }
 
         return current($Carts);
     }
@@ -377,7 +374,7 @@ class CartService
         $removed = array_splice($Carts, 0, 1);
         if (!empty($removed)) {
             $this->entityManager->remove($removed[0]);
-            $this->entityManager->flush($removed);
+            $this->entityManager->flush($removed[0]);
         }
         $this->carts = $Carts;
 
