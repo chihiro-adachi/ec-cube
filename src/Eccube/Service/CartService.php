@@ -18,10 +18,12 @@ use Eccube\Entity\CartItem;
 use Eccube\Entity\Customer;
 use Eccube\Entity\ItemHolderInterface;
 use Eccube\Entity\ProductClass;
+use Eccube\Repository\CartRepository;
 use Eccube\Repository\ProductClassRepository;
 use Eccube\Repository\OrderRepository;
 use Eccube\Service\Cart\CartItemAllocator;
 use Eccube\Service\Cart\CartItemComparator;
+use Eccube\Util\StringUtil;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -55,6 +57,11 @@ class CartService
      * @var ProductClassRepository
      */
     protected $productClassRepository;
+
+    /**
+     * @var CartRepository
+     */
+    protected $cartRepository;
 
     /**
      * @var CartItemComparator
@@ -102,6 +109,7 @@ class CartService
         SessionInterface $session,
         EntityManagerInterface $entityManager,
         ProductClassRepository $productClassRepository,
+        CartRepository $cartRepository,
         CartItemComparator $cartItemComparator,
         CartItemAllocator $cartItemAllocator,
         OrderHelper $orderHelper,
@@ -112,6 +120,7 @@ class CartService
         $this->session = $session;
         $this->entityManager = $entityManager;
         $this->productClassRepository = $productClassRepository;
+        $this->cartRepository = $cartRepository;
         $this->cartItemComparator = $cartItemComparator;
         $this->cartItemAllocator = $cartItemAllocator;
         $this->orderHelper = $orderHelper;
@@ -122,18 +131,12 @@ class CartService
 
     public function getCarts()
     {
-        if (is_null($this->carts)) {
-            $this->carts = $this->session->get('carts', []);
+        if (!empty($this->carts)) {
+            return $this->carts;
         }
 
-        foreach ($this->carts as &$Cart) {
-            /** @var CartItem $item */
-            foreach ($Cart->getItems() as $item) {
-                /** @var ProductClass $ProductClass */
-                $ProductClass = $this->productClassRepository->find($item->getProductClassId());
-                $item->setProductClass($ProductClass);
-            }
-        }
+        $cartKeys = $this->session->get('cart_keys', []);
+        $this->carts = $this->cartRepository->findBy(['cart_key' => $cartKeys], ['id' => 'DESC']);
 
         return $this->carts;
     }
@@ -166,15 +169,15 @@ class CartService
     public function getCart()
     {
         $Carts = $this->getCarts();
-        if (!$Carts) {
-            if (!$this->cart) {
-                $this->cart = new Cart();
-            }
+//        if (!$Carts) {
+//            if (!$this->cart) {
+//                $this->cart = new Cart();
+//            }
+//
+//            return $this->cart;
+//        }
 
-            return $this->cart;
-        }
-
-        return current($this->getCarts());
+        return current($Carts);
     }
 
     /**
@@ -248,15 +251,16 @@ class CartService
             $cartId = $this->cartItemAllocator->allocate($item);
             if (isset($Carts[$cartId])) {
                 $Carts[$cartId]->addCartItem($item);
+                $item->setCart($Carts[$cartId]);
             } else {
                 $Cart = new Cart();
+                $Cart->setCartKey(StringUtil::random());
                 $Cart->addCartItem($item);
+                $item->setCart($Cart);
                 $Carts[$cartId] = $Cart;
             }
         }
 
-        // 配列のkeyを0からにする
-        $this->session->set('carts', array_values($Carts));
         $this->carts = array_values($Carts);
     }
 
@@ -336,7 +340,20 @@ class CartService
             $this->carts = $Carts;
         }
 
-        return $this->session->set('carts', $this->carts);
+        $cartKeys = [];
+        foreach ($this->carts as $Cart) {
+            $this->entityManager->persist($Cart);
+            foreach ($Cart->getCartItems() as $item) {
+                $this->entityManager->persist($item);
+                $this->entityManager->flush($item);
+            }
+            $this->entityManager->flush($Cart);
+            $cartKeys[] = $Cart->getCartKey();
+        }
+
+        $this->session->set('cart_keys', $cartKeys);
+
+        return;
     }
 
     /**
