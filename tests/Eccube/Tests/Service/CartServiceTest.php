@@ -21,7 +21,6 @@ use Eccube\Service\PurchaseFlow\PurchaseFlow;
 use Eccube\Util\StringUtil;
 use Eccube\Entity\Product;
 use Eccube\Entity\Master\SaleType;
-use Eccube\Entity\Master\OrderStatus;
 use Eccube\Repository\OrderRepository;
 use Eccube\Repository\Master\SaleTypeRepository;
 
@@ -232,7 +231,6 @@ class CartServiceTest extends AbstractServiceTestCase
         $this->actual = $this->cartService->getCart()->getPreOrderId();
         $this->verify();
     }
-
 }
 
 /**
