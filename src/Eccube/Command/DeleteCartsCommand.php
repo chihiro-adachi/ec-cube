@@ -14,6 +14,7 @@
 namespace Eccube\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Eccube\Entity\Cart;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -126,10 +127,15 @@ class DeleteCartsCommand extends Command
 
             $iterableResult = $q->iterate();
             while (($row = $iterableResult->next()) !== false) {
-                $this->entityManager->remove($row[0]);
+                /** @var Cart $Cart */
+                $Cart = $row[0];
+                foreach ($Cart->getCartItems() as $Item) {
+                    $this->entityManager->remove($Item);
+                }
+                $this->entityManager->remove($Cart);
                 if (($i % $batchSize) === 0) {
-                    $this->flush(); // Executes all deletions.
-                    $this->clear(); // Detaches all objects from Doctrine!
+                    $this->entityManager->flush(); // Executes all deletions.
+                    $this->entityManager->clear(); // Detaches all objects from Doctrine!
                 }
                 ++$i;
             }
