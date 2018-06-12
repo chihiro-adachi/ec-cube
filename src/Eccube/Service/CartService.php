@@ -368,16 +368,6 @@ class CartService
     }
 
     /**
-     * @return bool
-     *
-     * @deprecated
-     */
-    public function isLocked()
-    {
-        return $this->getCart()->getLock();
-    }
-
-    /**
      * @param  string $pre_order_id
      *
      * @return \Eccube\Service\CartService
