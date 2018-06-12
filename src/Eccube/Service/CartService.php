@@ -178,25 +178,6 @@ class CartService
     }
 
     /**
-     * @deprecated
-     */
-    protected function loadItems()
-    {
-        foreach ($this->getCarts() as &$Cart) {
-            if ($Cart->getPreOrderId() && $Order = $this->orderRepository->findOneBy(['pre_order_id' => $Cart->getPreOrderId()])) {
-                $Cart = $this->orderHelper->convertToCart($Order);
-            } else {
-                /** @var CartItem $item */
-                foreach ($Cart->getItems() as $item) {
-                    /** @var ProductClass $ProductClass */
-                    $ProductClass = $this->productClassRepository->find($item->getProductClassId());
-                    $item->setProductClass($ProductClass);
-                }
-            }
-        }
-    }
-
-    /**
      * @param CartItem[] $cartItems
      *
      * @return CartItem[]
