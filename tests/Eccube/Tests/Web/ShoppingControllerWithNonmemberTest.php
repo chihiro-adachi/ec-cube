@@ -14,7 +14,6 @@
 namespace Eccube\Tests\Web;
 
 use Eccube\Entity\BaseInfo;
-use Eccube\Service\CartService;
 
 /**
  * Class ShoppingControllerWithNonmemberTest
