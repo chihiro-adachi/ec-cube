@@ -48,14 +48,6 @@ class ShoppingControllerTest extends AbstractShoppingControllerTestCase
         $this->verify();
     }
 
-    public function testShoppingIndexWithCartUnlock()
-    {
-        $this->container->get(CartService::class)->unlock();
-        $this->client->request('GET', $this->generateUrl('shopping'));
-
-        $this->assertTrue($this->client->getResponse()->isRedirect($this->generateUrl('cart')));
-    }
-
     public function testComplete()
     {
         $this->container->get('session')->set('eccube.front.shopping.order.id', 111);

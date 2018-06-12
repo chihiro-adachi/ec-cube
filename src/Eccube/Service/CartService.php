@@ -368,24 +368,6 @@ class CartService
     }
 
     /**
-     * @deprecated
-     */
-    public function unlock()
-    {
-        $this->getCart()
-            ->setLock(false);
-    }
-
-    /**
-     * @deprecated
-     */
-    public function lock()
-    {
-        $this->getCart()
-            ->setLock(true);
-    }
-
-    /**
      * @return bool
      *
      * @deprecated

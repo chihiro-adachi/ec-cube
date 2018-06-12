@@ -83,20 +83,6 @@ class CartServiceTest extends AbstractServiceTestCase
         $this->entityManager->flush();
     }
 
-    public function testUnlock()
-    {
-        $this->cartService->unlock();
-
-        $this->assertFalse($this->cartService->isLocked());
-    }
-
-    public function testLock()
-    {
-        $this->cartService->lock();
-
-        $this->assertTrue($this->cartService->isLocked());
-    }
-
     public function testClear_PreOrderId()
     {
         $this->cartService->clear();
