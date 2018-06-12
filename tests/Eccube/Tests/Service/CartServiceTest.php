@@ -90,14 +90,6 @@ class CartServiceTest extends AbstractServiceTestCase
         $this->assertNull($this->cartService->getPreOrderId());
     }
 
-    public function testClear_Lock()
-    {
-        $this->cartService->clear();
-
-        $this->assertFalse($this->cartService->isLocked());
-        $this->assertCount(0, $this->cartService->getCart()->getCartItems());
-    }
-
     public function testClear_Products()
     {
         $this->cartService->addProduct(1);
