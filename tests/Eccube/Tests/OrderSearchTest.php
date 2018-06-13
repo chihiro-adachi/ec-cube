@@ -97,6 +97,21 @@ class OrderSearchTest extends EccubeTestCase
         // 明細は1つ, お届け先は1つになってるはず
         self::assertCount(1, $Order->getProductOrderItems());
         self::assertCount(1, $Order->getShippings());
+
+        /*
+         * Shippingを検索対象にして検索し、マッチしない場合
+         */
+        $this->entityManager->clear();
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->select('o, oi, s')
+            ->from(Order::class, 'o')
+            ->innerJoin('o.OrderItems', 'oi')
+            ->innerJoin('oi.Shipping', 's', 'WITH', 's.note = :note')
+            ->setParameter('note', 'ここが検索条件ですよーーー');
+
+        $Orders = $qb->getQuery()->getResult();
+        // 受注はヒットしないはず
+        self::assertCount(0, $Orders);
     }
 
     protected function createDelivery()
