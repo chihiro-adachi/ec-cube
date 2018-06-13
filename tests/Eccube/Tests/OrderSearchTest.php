@@ -17,10 +17,93 @@ use Eccube\Entity\Master\ShippingStatus;
 use Eccube\Entity\Order;
 use Eccube\Entity\Shipping;
 use Eccube\Tests\Fixture\Generator;
+use Knp\Component\Pager\PaginatorInterface;
 
 class OrderSearchTest extends EccubeTestCase
 {
-    public function test_Shippingを検索対象にする()
+    public function test_ページネータでLimitOffset()
+    {
+        $this->createMultipleShippingOrder('あ');
+        $this->createMultipleShippingOrder('あ');
+        $this->createMultipleShippingOrder('あ');
+        $this->createMultipleShippingOrder('あ');
+        $this->createMultipleShippingOrder('い');
+
+        /*
+         * ページネータで検索する(検索条件なし)
+         */
+        $this->entityManager->clear();
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->select('o, oi, s')
+            ->from(Order::class, 'o')
+            ->innerJoin('o.OrderItems', 'oi')
+            ->innerJoin('oi.Shipping', 's');
+
+        $pagination = $this->container->get(PaginatorInterface::class)
+            ->paginate($qb, 1, 3);
+
+        // トータルの件数は5件
+        self::assertSame(5, $pagination->getTotalItemCount());
+        // 取得した件数は3件
+        self::assertCount(3, $pagination);
+
+        foreach ($pagination as $Order) {
+            // 明細は3つ, お届け先は２つになってるはず
+            self::assertCount(3, $Order->getProductOrderItems());
+            self::assertCount(2, $Order->getShippings());
+        }
+
+        /*
+         * ページネータで検索する(Shippingを検索対象にして検索する)
+         */
+        $this->entityManager->clear();
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->select('o, oi, s')
+            ->from(Order::class, 'o')
+            ->innerJoin('o.OrderItems', 'oi')
+            ->innerJoin('oi.Shipping', 's', 'WITH', 's.note = :note')
+            ->setParameter('note', 'あ');
+
+        $pagination = $this->container->get(PaginatorInterface::class)
+            ->paginate($qb, 1, 2);
+
+        // トータル件数は4件
+        self::assertSame(4, $pagination->getTotalItemCount());
+        // 取得した件数は2件
+        self::assertCount(2, $pagination);
+
+        foreach ($pagination as $Order) {
+            // 明細は1つ, お届け先は1つになってるはず
+            self::assertCount(1, $Order->getProductOrderItems());
+            self::assertCount(1, $Order->getShippings());
+        }
+
+        /*
+         * ページネータで検索する(検索条件にヒットしない)
+         */
+        $this->entityManager->clear();
+        $qb = $this->entityManager->createQueryBuilder();
+        $qb->select('o, oi, s')
+            ->from(Order::class, 'o')
+            ->innerJoin('o.OrderItems', 'oi')
+            ->innerJoin('oi.Shipping', 's', 'WITH', 's.note = :note')
+            ->setParameter('note', 'ん');
+
+        $pagination = $this->container->get(PaginatorInterface::class)
+            ->paginate($qb, 1, 2);
+
+        // トータル件数は0件
+        self::assertSame(0, $pagination->getTotalItemCount());
+        // 取得した件数は0件
+        self::assertCount(0, $pagination);
+    }
+
+    protected function createDelivery()
+    {
+        return $this->container->get(Generator::class)->createDelivery();
+    }
+
+    protected function createMultipleShippingOrder($searchWord)
     {
         /**
          * 単一出荷の受注を作成する
@@ -41,7 +124,7 @@ class OrderSearchTest extends EccubeTestCase
         $Shipping
             ->setPref($Customer->getPref())
             ->setDelivery($this->createDelivery())
-            ->setNote('ここが検索条件です');
+            ->setNote($searchWord);
         $ShippingStatus = $this->entityManager->find(ShippingStatus::class, ShippingStatus::PREPARED);
         $Shipping->setShippingStatus($ShippingStatus);
         $this->entityManager->persist($Shipping);
@@ -61,61 +144,6 @@ class OrderSearchTest extends EccubeTestCase
         self::assertCount(3, $Order->getProductOrderItems());
         self::assertCount(2, $Order->getShippings());
 
-        /*
-         * 条件なしで検索する
-         */
-        $this->entityManager->clear();
-        $qb = $this->entityManager->createQueryBuilder();
-        $qb->select('o, oi, s')
-            ->from(Order::class, 'o')
-            ->innerJoin('o.OrderItems', 'oi')
-            ->innerJoin('oi.Shipping', 's');
-
-        $Orders = $qb->getQuery()->getResult();
-        self::assertCount(1, $Orders);
-
-        $Order = $Orders[0];
-        // 明細は3つ, お届け先は２つになってるはず
-        self::assertCount(3, $Order->getProductOrderItems());
-        self::assertCount(2, $Order->getShippings());
-
-        /*
-         * Shippingを検索対象にして検索する
-         */
-        $this->entityManager->clear();
-        $qb = $this->entityManager->createQueryBuilder();
-        $qb->select('o, oi, s')
-            ->from(Order::class, 'o')
-            ->innerJoin('o.OrderItems', 'oi')
-            ->innerJoin('oi.Shipping', 's', 'WITH', 's.note = :note')
-            ->setParameter('note', 'ここが検索条件です');
-
-        $Orders = $qb->getQuery()->getResult();
-        self::assertCount(1, $Orders);
-
-        $Order = $Orders[0];
-        // 明細は1つ, お届け先は1つになってるはず
-        self::assertCount(1, $Order->getProductOrderItems());
-        self::assertCount(1, $Order->getShippings());
-
-        /*
-         * Shippingを検索対象にして検索し、マッチしない場合
-         */
-        $this->entityManager->clear();
-        $qb = $this->entityManager->createQueryBuilder();
-        $qb->select('o, oi, s')
-            ->from(Order::class, 'o')
-            ->innerJoin('o.OrderItems', 'oi')
-            ->innerJoin('oi.Shipping', 's', 'WITH', 's.note = :note')
-            ->setParameter('note', 'ここが検索条件ですよーーー');
-
-        $Orders = $qb->getQuery()->getResult();
-        // 受注はヒットしないはず
-        self::assertCount(0, $Orders);
-    }
-
-    protected function createDelivery()
-    {
-        return $this->container->get(Generator::class)->createDelivery();
+        return ;
     }
 }
