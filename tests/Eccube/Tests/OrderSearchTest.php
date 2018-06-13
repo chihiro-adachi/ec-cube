@@ -1,7 +1,17 @@
 <?php
 
-namespace Eccube\Tests;
+/*
+ * This file is part of EC-CUBE
+ *
+ * Copyright(c) LOCKON CO.,LTD. All Rights Reserved.
+ *
+ * http://www.lockon.co.jp/
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
+namespace Eccube\Tests;
 
 use Eccube\Entity\Master\ShippingStatus;
 use Eccube\Entity\Order;
@@ -51,7 +61,7 @@ class OrderSearchTest extends EccubeTestCase
         self::assertCount(3, $Order->getProductOrderItems());
         self::assertCount(2, $Order->getShippings());
 
-        /**
+        /*
          * 条件なしで検索する
          */
         $this->entityManager->clear();
@@ -69,7 +79,7 @@ class OrderSearchTest extends EccubeTestCase
         self::assertCount(3, $Order->getProductOrderItems());
         self::assertCount(2, $Order->getShippings());
 
-        /**
+        /*
          * Shippingを検索対象にして検索する
          */
         $this->entityManager->clear();
@@ -92,6 +102,5 @@ class OrderSearchTest extends EccubeTestCase
     protected function createDelivery()
     {
         return $this->container->get(Generator::class)->createDelivery();
-
     }
 }
