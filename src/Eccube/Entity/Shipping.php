@@ -21,7 +21,9 @@ use Eccube\Service\PurchaseFlow\ItemCollection;
 /**
  * Shipping
  *
- * @ORM\Table(name="dtb_shipping")
+ * @ORM\Table(name="dtb_shipping", indexes={
+ *     @ORM\Index(name="dtb_shipping_tracking_number_idx", columns={"tracking_number"})
+ * })
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="discriminator_type", type="string", length=255)
  * @ORM\HasLifecycleCallbacks()
@@ -242,6 +244,16 @@ class Shipping extends \Eccube\Entity\AbstractEntity
      * @ORM\Column(name="update_date", type="datetimetz")
      */
     private $update_date;
+
+    /**
+     * @var \Eccube\Entity\Order
+     *
+     * @ORM\ManyToOne(targetEntity="Eccube\Entity\Order", inversedBy="Shippings")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="order_id", referencedColumnName="id")
+     * })
+     */
+    private $Order;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -962,6 +974,32 @@ class Shipping extends \Eccube\Entity\AbstractEntity
     public function getUpdateDate()
     {
         return $this->update_date;
+    }
+
+    /**
+     * Get Order.
+     *
+     * @param \Eccube\Entity\OrderItem $OrderItem
+     *
+     * @return Order
+     */
+    public function getOrder()
+    {
+        return $this->Order;
+    }
+
+    /**
+     * Set Order.
+     *
+     * @param Order $Order
+     *
+     * @return $this
+     */
+    public function setOrder(Order $Order)
+    {
+        $this->Order = $Order;
+
+        return $this;
     }
 
     /**

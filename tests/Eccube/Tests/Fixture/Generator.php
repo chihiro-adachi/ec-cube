@@ -615,11 +615,13 @@ class Generator
         $Shipping = new Shipping();
         $Shipping->copyProperties($Customer);
         $Shipping
+            ->setOrder($Order)
             ->setPref($Pref)
             ->setDelivery($Delivery)
             ->setFeeId($DeliveryFee->getId())
             ->setShippingDeliveryFee($fee)
-            ->setShippingDeliveryName($Delivery->getName());
+            ->setShippingDeliveryName($Delivery->getName())
+            ->setTrackingNumber(StringUtil::random());
         $ShippingStatus = $this->entityManager->find(ShippingStatus::class, ShippingStatus::PREPARED);
         $Shipping->setShippingStatus($ShippingStatus);
 

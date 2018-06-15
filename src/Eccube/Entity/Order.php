@@ -363,6 +363,31 @@ class Order extends \Eccube\Entity\AbstractEntity implements PurchaseInterface, 
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
+     * @ORM\OneToMany(targetEntity="Eccube\Entity\Shipping", mappedBy="Order")
+     */
+    private $Shippings;
+
+    // TODO メソッド名を調整する必要あり
+    public function getShippingsXxx()
+    {
+        return $this->Shippings;
+    }
+
+    public function addShippingXxx(Shipping $Shipping)
+    {
+        $this->Shippings->add($Shipping);
+
+        return $this;
+    }
+
+    public function removeShippingXxx(Shipping $Shipping)
+    {
+        return $this->Shippings->removeElement($Shipping);
+    }
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
      * @ORM\OneToMany(targetEntity="Eccube\Entity\MailHistory", mappedBy="Order", cascade={"remove"})
      * @ORM\OrderBy({
      *     "send_date"="DESC"
