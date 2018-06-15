@@ -261,6 +261,7 @@ class OrderRepository extends AbstractRepository
     public function getQueryBuilderBySearchDataForAdmin($searchData)
     {
         $qb = $this->createQueryBuilder('o');
+        $qb->innerJoin('o.OrderItems', 'oi');
 
         // order_id_start
         if (isset($searchData['order_id']) && StringUtil::isNotBlank($searchData['order_id'])) {
@@ -352,13 +353,6 @@ class OrderRepository extends AbstractRepository
             $qb
                 ->andWhere('CONCAT(o.tel01, o.tel02, o.tel03) LIKE :tel')
                 ->setParameter('tel', '%'.$tel.'%');
-        }
-
-        // sex
-        if (!empty($searchData['sex']) && count($searchData['sex']) > 0) {
-            $qb
-                ->andWhere($qb->expr()->in('o.Sex', ':sex'))
-                ->setParameter('sex', $searchData['sex']->toArray());
         }
 
         // payment
@@ -457,9 +451,40 @@ class OrderRepository extends AbstractRepository
                 ->setParameter('buy_product_name', '%'.$searchData['buy_product_name'].'%');
         }
 
+        /**
+         * 出荷に対する検索条件
+         */
+        $shippingConditions = [];
+
+        // 伝票番号
+        if (!empty($searchData['tracking_number'])) {
+            $shippingConditions[] = 's.tracking_number = :tracking_number';
+            $qb
+                ->setParameter('tracking_number', $searchData['tracking_number']);
+        }
+        // お届け希望日/予定日(開始)
+        if (!empty($searchData['shipping_delivery_date_start'])) {
+            $shippingConditions[] = 's.shipping_delivery_date_start >= :shipping_delivery_date_start';
+            $qb
+                ->setParameter('shipping_delivery_date_start', $searchData['shipping_delivery_date_start']);
+        }
+        // お届け希望日/予定日(終了)
+        if (!empty($searchData['shipping_delivery_date_end'])) {
+            $shippingConditions[] = 's.shipping_delivery_date_end >= :shipping_delivery_date_end';
+            $qb
+                ->setParameter(
+                    'shipping_delivery_date_end',
+                    (clone $searchData['shipping_delivery_date_end'])->modify('+1 days'));
+        }
+
+        if (!empty($shippingConditions)) {
+            $andX = implode(' AND ', $shippingConditions);
+            $qb->innerJoin('oi.Shipping', 's', 'WITH', $andX);
+        }
+
         // Order By
-        $qb->orderBy('o.update_date', 'DESC');
-        $qb->addorderBy('o.id', 'DESC');
+        $qb->orderBy('o.order_date', 'DESC');
+        $qb->addOrderBy('o.id', 'DESC');
 
         return $this->queries->customize(QueryKey::ORDER_SEARCH_ADMIN, $qb, $searchData);
     }

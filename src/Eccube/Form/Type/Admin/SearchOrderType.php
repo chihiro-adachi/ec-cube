@@ -94,11 +94,19 @@ class SearchOrderType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('sex', SexType::class, [
-                'label' => 'searchorder.label.sex',
+            ->add('tel', TextType::class, [
+                'label' => 'common.label.phone_number',
                 'required' => false,
-                'expanded' => true,
-                'multiple' => true,
+                'constraints' => [
+                    new Assert\Regex([
+                        'pattern' => "/^[\d-]+$/u",
+                        'message' => 'form.type.admin.nottelstyle',
+                    ]),
+                ],
+            ])
+            ->add('tracking_number', TextType::class, [
+                'label' => '伝票番号',
+                'required' => false,
             ])
             ->add('payment', PaymentType::class, [
                 'label' => 'searchorder.label.payment_method',
@@ -181,6 +189,22 @@ class SearchOrderType extends AbstractType
             ->add('buy_product_name', TextType::class, [
                 'label' => 'searchorder.label.purchased_products',
                 'required' => false,
+            ])
+            ->add('shipping_delivery_date_start', DateType::class, [
+                'label' => 'お届け予定日(開始)',
+                'required' => false,
+                'input' => 'datetime',
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd',
+                'placeholder' => ['year' => '----', 'month' => '--', 'day' => '--'],
+            ])
+            ->add('shipping_delivery_date_end', DateType::class, [
+                'label' => 'お届け予定日(終了)',
+                'required' => false,
+                'input' => 'datetime',
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd',
+                'placeholder' => ['year' => '----', 'month' => '--', 'day' => '--'],
             ])
         ;
     }

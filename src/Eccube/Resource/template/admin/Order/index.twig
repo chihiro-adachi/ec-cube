@@ -260,30 +260,30 @@ file that was distributed with this source code.
             </div>
             <div class="row">
                 <div class="col">
-                    <div class="form-row">
-                        <div class="col-12">
-                            <p class="col-form-label">{{ 'admin.order.index.303'|trans }}</p>
-                            {{ form_widget(searchForm.sex, { 'label_attr': { 'class': 'checkbox-inline'}}) }}
-                            {{ form_errors(searchForm.sex) }}
+                    <label class="col-form-label">{{ '伝票番号'|trans }}</label>
+                    {{ form_widget(searchForm.tracking_number) }}
+                    {{ form_errors(searchForm.tracking_number) }}
+                </div>
+                <div class="col">
+                    <label class="col-form-label">{{ 'お届け予定日'|trans }}</label>
+                    <div class="form-row align-items-center">
+                        <div class="col">
+                            <div class="input-group">
+                                {{ form_widget(searchForm.shipping_delivery_date_start) }}
+                                {{ form_errors(searchForm.shipping_delivery_date_start) }}
+                            </div>
+                        </div>
+                        <div class="col-auto text-center">{{ '〜'|trans }}</div>
+                        <div class="col">
+                            <div class="input-group">
+                                {{ form_widget(searchForm.shipping_delivery_date_end) }}
+                                {{ form_errors(searchForm.shipping_delivery_date_end) }}
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col"></div>
             </div>
-
-            {# TODO: Need allow plg fields arrange two cols #}
-            {% for f in searchForm.getIterator %}
-                {% if f.vars.name matches '[^plg*]' %}
-                    <div class="row">
-                        <div class="col">
-                            <p class="col-form-label">{{ f.vars.label|trans }}</p>
-                            {{ form_widget(f) }}
-                            {{ form_errors(f) }}
-                        </div>
-                    </div>
-                {% endif %}
-            {% endfor %}
-
+            <div class="mb-4"></div>
             <div class="d-block text-center">
                 <button class="btn btn-ec-regular" type="button">{{ 'admin.order.index.btn_clear_criteria'|trans }}</button>
             </div>
