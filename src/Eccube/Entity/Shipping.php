@@ -244,6 +244,16 @@ class Shipping extends \Eccube\Entity\AbstractEntity
     private $update_date;
 
     /**
+     * @var \Eccube\Entity\Order
+     *
+     * @ORM\ManyToOne(targetEntity="Eccube\Entity\Order", inversedBy="Shippings")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="order_id", referencedColumnName="id")
+     * })
+     */
+    private $Order;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\OneToMany(targetEntity="Eccube\Entity\OrderItem", mappedBy="Shipping", cascade={"persist"})
@@ -1104,6 +1114,30 @@ class Shipping extends \Eccube\Entity\AbstractEntity
     public function setProductClassOfTemp(\Eccube\Entity\ProductClass $ProductClassOfTemp)
     {
         $this->ProductClassOfTemp = $ProductClassOfTemp;
+
+        return $this;
+    }
+
+    /**
+     * Get Order.
+     *
+     * @return Order
+     */
+    public function getOrder()
+    {
+        return $this->Order;
+    }
+
+    /**
+     * Set Order.
+     *
+     * @param Order $Order
+     *
+     * @return $this
+     */
+    public function setOrder(Order $Order)
+    {
+        $this->Order = $Order;
 
         return $this;
     }
