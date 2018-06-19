@@ -619,12 +619,15 @@ class Generator
             ->setDelivery($Delivery)
             ->setFeeId($DeliveryFee->getId())
             ->setShippingDeliveryFee($fee)
-            ->setShippingDeliveryName($Delivery->getName());
+            ->setShippingDeliveryName($Delivery->getName())
+            ->setOrder($Order);
         $ShippingStatus = $this->entityManager->find(ShippingStatus::class, ShippingStatus::PREPARED);
         $Shipping->setShippingStatus($ShippingStatus);
 
         $this->entityManager->persist($Shipping);
         $this->entityManager->flush($Shipping);
+
+        $Order->addShipping($Shipping);
 
         if (empty($ProductClasses)) {
             $Product = $this->createProduct();
