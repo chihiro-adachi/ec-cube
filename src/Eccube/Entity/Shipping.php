@@ -13,6 +13,7 @@
 
 namespace Eccube\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Eccube\Entity\Master\ShippingStatus;
 use Eccube\Service\Calculator\OrderItemCollection;
@@ -1149,22 +1150,10 @@ class Shipping extends \Eccube\Entity\AbstractEntity
      */
     public function getOrders()
     {
-        $Orders = [];
-        foreach ($this->getOrderItems() as $OrderItem) {
-            $Order = $OrderItem->getOrder();
-            if (is_object($Order)) {
-                $name = $Order->getName01(); // XXX lazy loading
-                $Orders[$Order->getId()] = $Order;
-            }
-        }
-        $Result = new \Doctrine\Common\Collections\ArrayCollection();
-        foreach ($Orders as $Order) {
-            $Result->add($Order);
-        }
+        $Orders = new ArrayCollection();
+        $Orders->add($this->Order);
 
-        return $Result;
-        // XXX 以下のロジックだと何故か空の Collection になってしまう場合がある
-        // return new \Doctrine\Common\Collections\ArrayCollection(array_values($Orders));
+        return $Orders;
     }
 
     /**
