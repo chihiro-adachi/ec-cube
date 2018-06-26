@@ -51,6 +51,7 @@ class Environment extends \Twig_Environment
         $template = $this->twig->createTemplate($event->getSource());
 
         // レンダリング実行.
+        $event->setParameter('eccube_snippets', $event->getSnippets());
         $content = $template->render($event->getParameters());
 
         return $content;

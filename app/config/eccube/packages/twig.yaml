@@ -2,6 +2,7 @@ twig:
     globals:
       BaseInfo: null
       eccube_config: '@Eccube\Common\EccubeConfig'
+      eccube_snippets: []
     paths:
       '%eccube_theme_front_dir%': ~
       '%eccube_theme_front_default_dir%': ~

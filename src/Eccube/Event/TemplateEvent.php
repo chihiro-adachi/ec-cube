@@ -42,6 +42,11 @@ class TemplateEvent extends Event
     private $response;
 
     /**
+     * @var array
+     */
+    private $snippets = [];
+
+    /**
      * TemplateEvent constructor.
      *
      * @param string $view
@@ -148,5 +153,21 @@ class TemplateEvent extends Event
     public function setResponse($response)
     {
         $this->response = $response;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSnippets()
+    {
+        return $this->snippets;
+    }
+
+    /**
+     * @param $snippet
+     */
+    public function addSnippet($snippet)
+    {
+        $this->snippets[] = $snippet;
     }
 }

@@ -69,5 +69,11 @@ file that was distributed with this source code.
 
 {% block javascript %}{% endblock %}
 
+<div class="d-none">
+    {% for snippet in eccube_snippets %}
+        {{ include(template_from_string(snippet)) }}
+    {% endfor %}
+</div>
+
 </body>
 </html>
