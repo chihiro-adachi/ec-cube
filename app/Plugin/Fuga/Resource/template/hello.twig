@@ -1,0 +1,20 @@
+<script>
+    $(function () {
+        $('#nick_name').prependTo($('#ordererInfo > div'));
+    });
+</script>
+
+<div id="nick_name" class="row mb-2">
+    <div class="col-3">
+        <span>ニックネーム</span>
+        <span class="badge badge-primary ml-1">必須</span>
+    </div>
+    <div class="col">
+        <div class="row">
+            <div class="col">
+                {{ form_widget(form.nick_name) }}
+                {{ form_errors(form.nick_name) }}
+            </div>
+        </div>
+    </div>
+</div>
