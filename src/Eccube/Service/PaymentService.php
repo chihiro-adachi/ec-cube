@@ -23,7 +23,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  *
  * 必要に応じて決済代行会社ごとに継承して実装する
  */
-class PaymentService
+class PaymentService implements PaymentServiceInterface
 {
     /**
      * @var RequestStack

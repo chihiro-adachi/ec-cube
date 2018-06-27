@@ -17,6 +17,7 @@ use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappi
 use Eccube\Common\EccubeNav;
 use Eccube\DependencyInjection\Compiler\AutoConfigurationTagPass;
 use Eccube\DependencyInjection\Compiler\NavCompilerPass;
+use Eccube\DependencyInjection\Compiler\PaymentServicePass;
 use Eccube\DependencyInjection\Compiler\PluginPass;
 use Eccube\DependencyInjection\Compiler\QueryCustomizerPass;
 use Eccube\DependencyInjection\Compiler\TemplateListenerPass;
@@ -28,6 +29,9 @@ use Eccube\Doctrine\DBAL\Types\UTCDateTimeTzType;
 use Eccube\Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Eccube\Doctrine\Query\QueryCustomizer;
 use Eccube\Plugin\ConfigManager;
+use Eccube\Service\Payment\Method\CreditCard;
+use Eccube\Service\Payment\PaymentMethod;
+use Eccube\Service\PaymentServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
@@ -175,6 +179,15 @@ class Kernel extends BaseKernel
         $container->registerForAutoconfiguration(EccubeNav::class)
             ->addTag(NavCompilerPass::NAV_TAG);
         $container->addCompilerPass(new NavCompilerPass());
+
+        // PaymentService, PaymentMethodをpublicに設定する
+        $container->registerForAutoconfiguration(PaymentServiceInterface::class)
+            ->addTag(PaymentServicePass::TAG);
+        $container->registerForAutoconfiguration(CreditCard::class)
+            ->addTag(PaymentServicePass::TAG);
+        $container->registerForAutoconfiguration(PaymentMethod::class)
+            ->addTag(PaymentServicePass::TAG);
+        $container->addCompilerPass(new PaymentServicePass());
     }
 
     protected function addEntityExtensionPass(ContainerBuilder $container)
