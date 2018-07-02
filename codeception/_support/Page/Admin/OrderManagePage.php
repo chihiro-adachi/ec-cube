@@ -37,6 +37,15 @@ class OrderManagePage extends AbstractAdminPageStyleGuide
         return $this;
     }
 
+    public function 詳細検索_注文番号($value = '')
+    {
+        $this->tester->click(self::$詳細検索ボタン);
+        $this->tester->wait(1);
+        $this->tester->fillField(['id' => 'admin_search_order_code'], $value);
+        $this->tester->click('#search_form #search_submit');
+        return $this;
+    }
+
     public function 詳細検索_電話番号($value = '')
     {
         $this->tester->click(self::$詳細検索ボタン);
