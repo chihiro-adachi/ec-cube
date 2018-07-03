@@ -364,6 +364,9 @@ file that was distributed with this source code.
                 {% else %}
                     {{ form_widget(form.use_point, {'type': 'hidden'}) }}
                 {% endif %}
+
+                {{ eccube_block_sample_payment_credit_form({ Order: Order, form: form }) }}
+
                 <div class="ec-orderConfirm">
                     <div class="ec-rectHeading">
                         <h2>{{ 'common.label.inquiry'|trans }}</h2>

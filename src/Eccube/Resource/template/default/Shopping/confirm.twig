@@ -316,7 +316,7 @@ $(function() {
                     {{ form_widget(form.Payment, {'type': 'hidden'}) }}
                 </div>
             </div>
-
+            {{ eccube_block_sample_payment_credit_form_confirm({ Order: Order, form: form }) }}
             <div class="ec-orderConfirm">
                 <div class="ec-rectHeading">
                     <h2>お問い合わせ</h2>
