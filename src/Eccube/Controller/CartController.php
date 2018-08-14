@@ -45,9 +45,9 @@ class CartController extends AbstractController
     protected $purchaseFlow;
 
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $baseInfo;
+    protected $baseInfoRepository;
 
     /**
      * CartController constructor.
@@ -66,7 +66,7 @@ class CartController extends AbstractController
         $this->productClassRepository = $productClassRepository;
         $this->cartService = $cartService;
         $this->purchaseFlow = $cartPurchaseFlow;
-        $this->baseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
     }
 
     /**
@@ -88,23 +88,24 @@ class CartController extends AbstractController
         $totalPrice = 0;
         $totalQuantity = 0;
 
+        $BaseInfo = $this->baseInfoRepository->get();
         foreach ($Carts as $Cart) {
             $quantity[$Cart->getCartKey()] = 0;
             $isDeliveryFree[$Cart->getCartKey()] = false;
 
-            if ($this->baseInfo->getDeliveryFreeQuantity()) {
-                if ($this->baseInfo->getDeliveryFreeQuantity() > $Cart->getQuantity()) {
-                    $quantity[$Cart->getCartKey()] = $this->baseInfo->getDeliveryFreeQuantity() - $Cart->getQuantity();
+            if ($BaseInfo->getDeliveryFreeQuantity()) {
+                if ($BaseInfo->getDeliveryFreeQuantity() > $Cart->getQuantity()) {
+                    $quantity[$Cart->getCartKey()] = $BaseInfo->getDeliveryFreeQuantity() - $Cart->getQuantity();
                 } else {
                     $isDeliveryFree[$Cart->getCartKey()] = true;
                 }
             }
 
-            if ($this->baseInfo->getDeliveryFreeAmount()) {
-                if (!$isDeliveryFree[$Cart->getCartKey()] && $this->baseInfo->getDeliveryFreeAmount() <= $Cart->getTotalPrice()) {
+            if ($BaseInfo->getDeliveryFreeAmount()) {
+                if (!$isDeliveryFree[$Cart->getCartKey()] && $BaseInfo->getDeliveryFreeAmount() <= $Cart->getTotalPrice()) {
                     $isDeliveryFree[$Cart->getCartKey()] = true;
                 } else {
-                    $least[$Cart->getCartKey()] = $this->baseInfo->getDeliveryFreeAmount() - $Cart->getTotalPrice();
+                    $least[$Cart->getCartKey()] = $BaseInfo->getDeliveryFreeAmount() - $Cart->getTotalPrice();
                 }
             }
 

@@ -37,9 +37,9 @@ class UsePointProcessor implements ItemHolderProcessor
     protected $entityManager;
 
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * UsePointProcessor constructor.
@@ -50,7 +50,7 @@ class UsePointProcessor implements ItemHolderProcessor
     public function __construct(EntityManagerInterface $entityManager, BaseInfoRepository $baseInfoRepository)
     {
         $this->entityManager = $entityManager;
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
     }
 
     /**
@@ -139,6 +139,6 @@ class UsePointProcessor implements ItemHolderProcessor
      */
     protected function usePointToPrice($usePoint)
     {
-        return ($usePoint * $this->BaseInfo->getPointConversionRate()) * -1;
+        return ($usePoint * $this->baseInfoRepository->get()->getPointConversionRate()) * -1;
     }
 }

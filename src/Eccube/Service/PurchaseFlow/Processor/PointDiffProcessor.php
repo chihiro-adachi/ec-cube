@@ -34,9 +34,9 @@ class PointDiffProcessor extends ItemHolderValidator implements PurchaseProcesso
     protected $entityManager;
 
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * AddPointProcessor constructor.
@@ -47,7 +47,7 @@ class PointDiffProcessor extends ItemHolderValidator implements PurchaseProcesso
     public function __construct(EntityManagerInterface $entityManager, BaseInfoRepository $baseInfoRepository)
     {
         $this->entityManager = $entityManager;
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
     }
 
     /*
@@ -142,7 +142,7 @@ class PointDiffProcessor extends ItemHolderValidator implements PurchaseProcesso
      */
     private function supports(ItemHolderInterface $itemHolder, PurchaseContext $context)
     {
-        if (!$this->BaseInfo->isOptionPoint()) {
+        if (!$this->baseInfoRepository->get()->isOptionPoint()) {
             return false;
         }
 

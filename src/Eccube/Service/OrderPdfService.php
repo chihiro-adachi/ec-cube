@@ -117,7 +117,7 @@ class OrderPdfService extends TcpdfFpdi
     public function __construct(EccubeConfig $eccubeConfig, OrderRepository $orderRepository, ShippingRepository $shippingRepository, TaxRuleService $taxRuleService, BaseInfoRepository $baseInfoRepository, EccubeExtension $eccubeExtension)
     {
         $this->eccubeConfig = $eccubeConfig;
-        $this->baseInfoRepository = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
         $this->orderRepository = $orderRepository;
         $this->shippingRepository = $shippingRepository;
         $this->taxRuleService = $taxRuleService;
@@ -284,20 +284,21 @@ class OrderPdfService extends TcpdfFpdi
         $this->setBasePosition();
 
         // ショップ名
-        $this->lfText(125, 60, $this->baseInfoRepository->getShopName(), 8, 'B');
+        $BaseInfo = $this->baseInfoRepository->get();
+        $this->lfText(125, 60, $BaseInfo->getShopName(), 8, 'B');
 
         // 都道府県+所在地
-        $text = $this->baseInfoRepository->getAddr01();
+        $text = $BaseInfo->getAddr01();
         $this->lfText(125, 65, $text, 8);
-        $this->lfText(125, 69, $this->baseInfoRepository->getAddr02(), 8);
+        $this->lfText(125, 69, $BaseInfo->getAddr02(), 8);
 
         // 電話番号
-        $text = 'TEL: '.$this->baseInfoRepository->getPhoneNumber();
+        $text = 'TEL: '.$BaseInfo->getPhoneNumber();
         $this->lfText(125, 72, $text, 8); //TEL・FAX
 
         // メールアドレス
-        if (strlen($this->baseInfoRepository->getEmail01()) > 0) {
-            $text = 'Email: '.$this->baseInfoRepository->getEmail01();
+        if (strlen($BaseInfo->getEmail01()) > 0) {
+            $text = 'Email: '.$BaseInfo->getEmail01();
             $this->lfText(125, 75, $text, 8); // Email
         }
 

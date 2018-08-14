@@ -33,9 +33,9 @@ class TaxRuleRepository extends AbstractRepository
     private $rules = [];
 
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $baseInfo;
+    protected $baseInfoRepository;
 
     /**
      * @var AuthorizationCheckerInterface
@@ -66,7 +66,7 @@ class TaxRuleRepository extends AbstractRepository
         parent::__construct($registry, TaxRule::class);
         $this->tokenStorage = $tokenStorage;
         $this->authorizationChecker = $authorizationChecker;
-        $this->baseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
         $this->eccubeConfig = $eccubeConfig;
     }
 
@@ -108,7 +108,7 @@ class TaxRuleRepository extends AbstractRepository
         }
 
         // 商品単位税率設定がOFFの場合
-        if (!$this->baseInfo->isOptionProductTaxRule()) {
+        if (!$this->baseInfoRepository->get()->isOptionProductTaxRule()) {
             $Product = null;
             $ProductClass = null;
         }

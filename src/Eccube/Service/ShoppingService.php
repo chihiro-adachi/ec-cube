@@ -141,9 +141,9 @@ class ShoppingService
     protected $orderRepository;
 
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * @var \Eccube\Service\CartService
@@ -236,7 +236,7 @@ class ShoppingService
         $this->orderRepository = $orderRepository;
         $this->cartService = $cartService;
         $this->orderService = $orderService;
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
         $this->authorizationChecker = $authorizationChecker;
         $this->mobileDetect = $mobileDetect;
     }
@@ -623,7 +623,8 @@ class ShoppingService
 
         // 商品ごとの配送料合計
         $productDeliveryFeeTotal = 0;
-        if ($this->BaseInfo->isOptionProductDeliveryFee()) {
+        $BaseInfo = $this->baseInfoRepository->get();
+        if ($BaseInfo->isOptionProductDeliveryFee()) {
             $productDeliveryFeeTotal = $ProductClass->getDeliveryFee() * $quantity;
         }
 
@@ -712,7 +713,8 @@ class ShoppingService
 
         // 商品ごとの配送料合計
         $productDeliveryFeeTotal = 0;
-        if ($this->BaseInfo->isOptionProductDeliveryFee()) {
+        $BaseInfo = $this->baseInfoRepository->get();
+        if ($BaseInfo->isOptionProductDeliveryFee()) {
             $productDeliveryFeeTotal += $this->getProductDeliveryFee($Shipping);
         }
 
@@ -728,7 +730,8 @@ class ShoppingService
     public function setDeliveryFreeAmount(Order $Order)
     {
         // 配送料無料条件(合計金額)
-        $deliveryFreeAmount = $this->BaseInfo->getDeliveryFreeAmount();
+        $BaseInfo = $this->baseInfoRepository->get();
+        $deliveryFreeAmount = $BaseInfo->getDeliveryFreeAmount();
         if (!is_null($deliveryFreeAmount)) {
             // 合計金額が設定金額以上であれば送料無料
             if ($Order->getSubTotal() >= $deliveryFreeAmount) {
@@ -750,7 +753,8 @@ class ShoppingService
     public function setDeliveryFreeQuantity(Order $Order)
     {
         // 配送料無料条件(合計数量)
-        $deliveryFreeQuantity = $this->BaseInfo->getDeliveryFreeQuantity();
+        $BaseInfo = $this->baseInfoRepository->get();
+        $deliveryFreeQuantity = $BaseInfo->getDeliveryFreeQuantity();
         if (!is_null($deliveryFreeQuantity)) {
             // 合計数量が設定数量以上であれば送料無料
             if ($this->orderService->getTotalQuantity($Order) >= $deliveryFreeQuantity) {
@@ -780,6 +784,7 @@ class ShoppingService
         $Order->setMessage($data['message']);
         // お届け先情報を更新
         $shippings = $data['shippings'];
+        $BaseInfo = $this->baseInfoRepository->get();
         foreach ($shippings as $Shipping) {
             $Delivery = $Shipping->getDelivery();
             $deliveryFee = $this->deliveryFeeRepository->findOneBy([
@@ -794,7 +799,7 @@ class ShoppingService
             $Shipping->setDeliveryFee($deliveryFee);
             // 商品ごとの配送料合計
             $productDeliveryFeeTotal = 0;
-            if ($this->BaseInfo->isOptionProductDeliveryFee()) {
+            if ($BaseInfo->isOptionProductDeliveryFee()) {
                 $productDeliveryFeeTotal += $this->getProductDeliveryFee($Shipping);
             }
             $Shipping->setShippingDeliveryFee($deliveryFee->getFee() + $productDeliveryFeeTotal);

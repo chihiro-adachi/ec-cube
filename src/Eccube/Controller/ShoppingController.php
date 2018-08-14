@@ -47,9 +47,9 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class ShoppingController extends AbstractShoppingController
 {
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * @var OrderHelper
@@ -95,7 +95,7 @@ class ShoppingController extends AbstractShoppingController
         OrderRepository $orderRepository,
         ParameterBag $parameterBag
     ) {
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
         $this->orderHelper = $orderHelper;
         $this->cartService = $cartService;
         $this->shoppingService = $shoppingService;

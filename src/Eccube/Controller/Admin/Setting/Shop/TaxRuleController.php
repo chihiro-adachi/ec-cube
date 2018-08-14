@@ -31,9 +31,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class TaxRuleController extends AbstractController
 {
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * @var TaxRuleRepository
@@ -48,7 +48,7 @@ class TaxRuleController extends AbstractController
      */
     public function __construct(BaseInfoRepository $baseInfoRepository, TaxRuleRepository $taxRuleRepository)
     {
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
         $this->taxRuleRepository = $taxRuleRepository;
     }
 
@@ -68,7 +68,6 @@ class TaxRuleController extends AbstractController
         $event = new EventArgs(
             [
                 'builder' => $builder,
-                'BaseInfo' => $this->BaseInfo,
                 'TargetTaxRule' => $TargetTaxRule,
             ],
             $request
@@ -87,7 +86,6 @@ class TaxRuleController extends AbstractController
                 $event = new EventArgs(
                     [
                         'form' => $form,
-                        'BaseInfo' => $this->BaseInfo,
                         'TargetTaxRule' => $TargetTaxRule,
                     ],
                     $request

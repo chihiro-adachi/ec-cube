@@ -59,9 +59,9 @@ class ProductController extends AbstractController
     protected $productRepository;
 
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * @var AuthenticationUtils
@@ -92,7 +92,7 @@ class ProductController extends AbstractController
         $this->customerFavoriteProductRepository = $customerFavoriteProductRepository;
         $this->cartService = $cartService;
         $this->productRepository = $productRepository;
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
         $this->helper = $helper;
     }
 

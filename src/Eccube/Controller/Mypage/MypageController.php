@@ -50,9 +50,9 @@ class MypageController extends AbstractController
     protected $customerFavoriteProductRepository;
 
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * @var CartService
@@ -87,7 +87,7 @@ class MypageController extends AbstractController
     ) {
         $this->orderRepository = $orderRepository;
         $this->customerFavoriteProductRepository = $customerFavoriteProductRepository;
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
         $this->cartService = $cartService;
         $this->purchaseFlow = $purchaseFlow;
     }
@@ -312,7 +312,7 @@ class MypageController extends AbstractController
      */
     public function favorite(Request $request, Paginator $paginator)
     {
-        if (!$this->BaseInfo->isOptionFavoriteProduct()) {
+        if (!$this->baseInfoRepository->get()->isOptionFavoriteProduct()) {
             throw new NotFoundHttpException();
         }
         $Customer = $this->getUser();

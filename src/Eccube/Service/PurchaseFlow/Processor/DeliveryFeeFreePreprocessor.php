@@ -25,9 +25,9 @@ use Eccube\Service\PurchaseFlow\PurchaseContext;
 class DeliveryFeeFreePreprocessor implements ItemHolderPreprocessor
 {
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * DeliveryFeeProcessor constructor.
@@ -36,7 +36,7 @@ class DeliveryFeeFreePreprocessor implements ItemHolderPreprocessor
      */
     public function __construct(BaseInfoRepository $baseInfoRepository)
     {
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
     }
 
     /**
@@ -46,16 +46,17 @@ class DeliveryFeeFreePreprocessor implements ItemHolderPreprocessor
     public function process(ItemHolderInterface $itemHolder, PurchaseContext $context)
     {
         $isDeliveryFree = false;
+        $BaseInfo = $this->baseInfoRepository->get();
 
-        if ($this->BaseInfo->getDeliveryFreeAmount()) {
-            if ($this->BaseInfo->getDeliveryFreeAmount() <= $itemHolder->getTotal()) {
+        if ($BaseInfo->getDeliveryFreeAmount()) {
+            if ($BaseInfo->getDeliveryFreeAmount() <= $itemHolder->getTotal()) {
                 // 送料無料（金額）を超えている
                 $isDeliveryFree = true;
             }
         }
 
-        if ($this->BaseInfo->getDeliveryFreeQuantity()) {
-            if ($this->BaseInfo->getDeliveryFreeQuantity() <= $itemHolder->getQuantity()) {
+        if ($BaseInfo->getDeliveryFreeQuantity()) {
+            if ($BaseInfo->getDeliveryFreeQuantity() <= $itemHolder->getQuantity()) {
                 // 送料無料（個数）を超えている
                 $isDeliveryFree = true;
             }

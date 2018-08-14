@@ -34,8 +34,8 @@ use Eccube\Service\PurchaseFlow\PurchaseContext;
  */
 class DeliveryFeePreprocessor implements ItemHolderPreprocessor
 {
-    /** @var BaseInfo */
-    protected $BaseInfo;
+    /** @var BaseInfoRepository */
+    protected $baseInfoRepository;
 
     /**
      * @var EntityManagerInterface
@@ -66,7 +66,7 @@ class DeliveryFeePreprocessor implements ItemHolderPreprocessor
         TaxRuleRepository $taxRuleRepository,
         DeliveryFeeRepository $deliveryFeeRepository
     ) {
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
         $this->entityManager = $entityManager;
         $this->taxRuleRepository = $taxRuleRepository;
         $this->deliveryFeeRepository = $deliveryFeeRepository;
@@ -114,14 +114,14 @@ class DeliveryFeePreprocessor implements ItemHolderPreprocessor
             ->find(TaxDisplayType::class, TaxDisplayType::INCLUDED);
         $Taxion = $this->entityManager
             ->find(TaxType::class, TaxType::TAXATION);
-
+        $BaseInfo = $this->baseInfoRepository->get();
         /** @var Order $Order */
         $Order = $itemHolder;
         /* @var Shipping $Shipping */
         foreach ($Order->getShippings() as $Shipping) {
             // 送料の計算
             $deliveryFeeProduct = 0;
-            if ($this->BaseInfo->isOptionProductDeliveryFee()) {
+            if ($BaseInfo->isOptionProductDeliveryFee()) {
                 /** @var OrderItem $orderItem */
                 foreach ($Shipping->getOrderItems() as $orderItem) {
                     if (!$orderItem->isProduct()) {

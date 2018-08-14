@@ -39,9 +39,9 @@ class PointProcessor extends ItemHolderValidator implements ItemHolderPreprocess
     protected $entityManager;
 
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * AddPointProcessor constructor.
@@ -52,7 +52,7 @@ class PointProcessor extends ItemHolderValidator implements ItemHolderPreprocess
     public function __construct(EntityManagerInterface $entityManager, BaseInfoRepository $baseInfoRepository)
     {
         $this->entityManager = $entityManager;
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
     }
 
     /*
@@ -104,7 +104,7 @@ class PointProcessor extends ItemHolderValidator implements ItemHolderPreprocess
         // 支払い金額 < 利用ポイント
         if ($itemHolder->getTotal() < 0) {
             // 利用ポイントが支払い金額を上回っていた場合は支払い金額が0円以上となるようにポイントを調整
-            $overPoint = floor($itemHolder->getTotal() / $this->BaseInfo->getPointConversionRate());
+            $overPoint = floor($itemHolder->getTotal() / $this->baseInfoRepository->get()->getPointConversionRate());
             $itemHolder->setUsePoint($itemHolder->getUsePoint() + $overPoint);
             $this->throwInvalidItemException('利用ポイントがお支払い金額を上回っています.');
         }
@@ -169,7 +169,7 @@ class PointProcessor extends ItemHolderValidator implements ItemHolderPreprocess
      */
     private function supports(ItemHolderInterface $itemHolder)
     {
-        if (!$this->BaseInfo->isOptionPoint()) {
+        if (!$this->baseInfoRepository->get()->isOptionPoint()) {
             return false;
         }
 
@@ -193,7 +193,7 @@ class PointProcessor extends ItemHolderValidator implements ItemHolderPreprocess
      */
     private function calculateAddPoint(ItemHolderInterface $itemHolder)
     {
-        $basicPointRate = $this->BaseInfo->getBasicPointRate();
+        $basicPointRate = $this->baseInfoRepository->get()->getBasicPointRate();
 
         // 明細ごとのポイントを集計
         $totalPoint = array_reduce($itemHolder->getItems()->toArray(), function ($carry, ItemInterface $item) use ($basicPointRate) {
@@ -268,6 +268,6 @@ class PointProcessor extends ItemHolderValidator implements ItemHolderPreprocess
      */
     private function pointToPrice($point)
     {
-        return intval($point * $this->BaseInfo->getPointConversionRate()) * -1;
+        return intval($point * $this->baseInfoRepository->get()->getPointConversionRate()) * -1;
     }
 }

@@ -36,9 +36,9 @@ class ShopController extends AbstractController
     protected $twig;
 
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * ShopController constructor.
@@ -48,7 +48,7 @@ class ShopController extends AbstractController
      */
     public function __construct(Twig_Environment $twig, BaseInfoRepository $baseInfoRepository)
     {
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
         $this->twig = $twig;
     }
 
@@ -62,16 +62,17 @@ class ShopController extends AbstractController
      */
     public function index(Request $request, CacheUtil $cacheUtil)
     {
+        $BaseInfo = $this->baseInfoRepository->get();
         $builder = $this->formFactory
-            ->createBuilder(ShopMasterType::class, $this->BaseInfo);
+            ->createBuilder(ShopMasterType::class, $BaseInfo);
 
-        $CloneInfo = clone $this->BaseInfo;
+        $CloneInfo = clone $BaseInfo;
         $this->entityManager->detach($CloneInfo);
 
         $event = new EventArgs(
             [
                 'builder' => $builder,
-                'BaseInfo' => $this->BaseInfo,
+                'BaseInfo' => $BaseInfo,
             ],
             $request
         );
@@ -82,13 +83,13 @@ class ShopController extends AbstractController
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
-                $this->entityManager->persist($this->BaseInfo);
+                $this->entityManager->persist($BaseInfo);
                 $this->entityManager->flush();
 
                 $event = new EventArgs(
                     [
                         'form' => $form,
-                        'BaseInfo' => $this->BaseInfo,
+                        'BaseInfo' => $BaseInfo,
                     ],
                     $request
                 );

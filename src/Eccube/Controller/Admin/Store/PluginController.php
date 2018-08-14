@@ -53,9 +53,9 @@ class PluginController extends AbstractController
     protected $pluginService;
 
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * @var PluginRepository
@@ -74,7 +74,7 @@ class PluginController extends AbstractController
         $this->pluginRepository = $pluginRepository;
         $this->pluginService = $pluginService;
         $this->pluginEventHandlerRepository = $eventHandlerRepository;
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
     }
 
     /**
@@ -134,7 +134,8 @@ class PluginController extends AbstractController
 
         // Todo: Need new authentication mechanism
         // オーナーズストアからダウンロード可能プラグイン情報を取得
-        $authKey = $this->BaseInfo->getAuthenticationKey();
+        $BaseInfo = $this->baseInfoRepository->get();
+        $authKey = $BaseInfo->getAuthenticationKey();
         // オーナーズストア通信
         $url = $this->eccubeConfig['eccube_package_repo_url'].'/search/packages.json';
         list($json, $info) = $this->getRequestApi($request, $authKey, $url);
@@ -469,8 +470,9 @@ class PluginController extends AbstractController
      */
     public function authenticationSetting(Request $request)
     {
+        $BaseInfo = $this->baseInfoRepository->get();
         $builder = $this->formFactory
-            ->createBuilder(FormType::class, $this->BaseInfo);
+            ->createBuilder(FormType::class, $BaseInfo);
         $builder->add(
             'authentication_key',
             TextType::class,
@@ -487,8 +489,8 @@ class PluginController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // 認証キーの登録
-            $this->BaseInfo = $form->getData();
-            $this->entityManager->persist($this->BaseInfo);
+            $BaseInfo = $form->getData();
+            $this->entityManager->persist($BaseInfo);
             $this->entityManager->flush();
 
             $this->addSuccess('admin.plugin.authentication.setting.complete', 'admin');

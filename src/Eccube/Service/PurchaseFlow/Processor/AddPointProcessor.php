@@ -14,7 +14,6 @@
 namespace Eccube\Service\PurchaseFlow\Processor;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Eccube\Entity\BaseInfo;
 use Eccube\Entity\ItemHolderInterface;
 use Eccube\Entity\BaseInfoRepository;
 use Eccube\Service\PurchaseFlow\ItemHolderProcessor;
@@ -32,9 +31,9 @@ class AddPointProcessor implements ItemHolderProcessor
     protected $entityManager;
 
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * AddPointProcessor constructor.
@@ -45,7 +44,7 @@ class AddPointProcessor implements ItemHolderProcessor
     public function __construct(EntityManagerInterface $entityManager, BaseInfoRepository $baseInfoRepository)
     {
         $this->entityManager = $entityManager;
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
     }
 
     /**
@@ -60,7 +59,7 @@ class AddPointProcessor implements ItemHolderProcessor
         foreach ($itemHolder->getItems() as $item) {
             $rate = $item->getPointRate();
             if ($rate === null) {
-                $rate = $this->BaseInfo->getBasicPointRate();
+                $rate = $this->baseInfoRepository->get()->getBasicPointRate();
             }
             $addPoint += $this->priceToAddPoint($rate, $item->getPriceIncTax(), $item->getQuantity());
         }

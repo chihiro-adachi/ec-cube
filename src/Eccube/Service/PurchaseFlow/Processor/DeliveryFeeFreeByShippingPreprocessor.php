@@ -29,7 +29,7 @@ class DeliveryFeeFreeByShippingPreprocessor implements ItemHolderPreprocessor
     /**
      * @var BaseInfo
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * DeliveryFeeProcessor constructor.
@@ -38,7 +38,7 @@ class DeliveryFeeFreeByShippingPreprocessor implements ItemHolderPreprocessor
      */
     public function __construct(BaseInfoRepository $baseInfoRepository)
     {
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
     }
 
     /**
@@ -47,7 +47,8 @@ class DeliveryFeeFreeByShippingPreprocessor implements ItemHolderPreprocessor
      */
     public function process(ItemHolderInterface $itemHolder, PurchaseContext $context)
     {
-        if (!($this->BaseInfo->getDeliveryFreeAmount() || $this->BaseInfo->getDeliveryFreeQuantity())) {
+        $BaseInfo = $this->baseInfoRepository->get();
+        if (!($BaseInfo->getDeliveryFreeAmount() || $BaseInfo->getDeliveryFreeQuantity())) {
             return;
         }
 
@@ -64,14 +65,14 @@ class DeliveryFeeFreeByShippingPreprocessor implements ItemHolderPreprocessor
                     $quantity += $Item->getQuantity();
                 }
                 // 送料無料（金額）を超えている
-                if ($this->BaseInfo->getDeliveryFreeAmount()) {
-                    if ($total >= $this->BaseInfo->getDeliveryFreeAmount()) {
+                if ($BaseInfo->getDeliveryFreeAmount()) {
+                    if ($total >= $BaseInfo->getDeliveryFreeAmount()) {
                         $isFree = true;
                     }
                 }
                 // 送料無料（個数）を超えている
-                if ($this->BaseInfo->getDeliveryFreeQuantity()) {
-                    if ($quantity >= $this->BaseInfo->getDeliveryFreeQuantity()) {
+                if ($BaseInfo->getDeliveryFreeQuantity()) {
+                    if ($quantity >= $BaseInfo->getDeliveryFreeQuantity()) {
                         $isFree = true;
                     }
                 }
