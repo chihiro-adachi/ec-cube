@@ -15,7 +15,6 @@ namespace Eccube\Form\Type\Admin;
 
 use Doctrine\ORM\EntityRepository;
 use Eccube\Common\EccubeConfig;
-use Eccube\Entity\BaseInfo;
 use Eccube\Entity\Delivery;
 use Eccube\Entity\Shipping;
 use Eccube\Form\Type\AddressType;

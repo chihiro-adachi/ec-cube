@@ -16,7 +16,6 @@ namespace Eccube\Form\Type\Admin;
 use Eccube\Entity\Category;
 use Eccube\Entity\Master\ProductStatus;
 use Eccube\Entity\ProductStock;
-use Eccube\Form\Type\Master\CategoryType as MasterCategoryType;
 use Eccube\Form\Type\Master\ProductStatusType;
 use Eccube\Repository\CategoryRepository;
 use Eccube\Repository\Master\ProductStatusRepository;

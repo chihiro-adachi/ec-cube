@@ -13,7 +13,6 @@
 
 namespace Eccube\Controller;
 
-use Eccube\Entity\BaseInfo;
 use Eccube\Entity\ProductClass;
 use Eccube\Event\EccubeEvents;
 use Eccube\Event\EventArgs;

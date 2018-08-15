@@ -15,7 +15,6 @@ namespace Eccube\Repository;
 
 use Doctrine\ORM\NoResultException;
 use Eccube\Common\EccubeConfig;
-use Eccube\Entity\BaseInfo;
 use Eccube\Entity\Customer;
 use Eccube\Entity\TaxRule;
 use Symfony\Bridge\Doctrine\RegistryInterface;

@@ -13,7 +13,6 @@
 
 namespace Eccube\Service\PurchaseFlow\Processor;
 
-use Eccube\Entity\BaseInfo;
 use Eccube\Entity\ItemHolderInterface;
 use Eccube\Repository\BaseInfoRepository;
 use Eccube\Service\PurchaseFlow\ItemHolderPreprocessor;

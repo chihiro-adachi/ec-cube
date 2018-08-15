@@ -14,7 +14,6 @@
 namespace Eccube\Service\PurchaseFlow\Processor;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Eccube\Entity\BaseInfo;
 use Eccube\Entity\ItemHolderInterface;
 use Eccube\Entity\ItemInterface;
 use Eccube\Entity\Master\OrderItemType;

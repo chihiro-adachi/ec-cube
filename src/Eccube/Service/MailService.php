@@ -14,7 +14,6 @@
 namespace Eccube\Service;
 
 use Eccube\Common\EccubeConfig;
-use Eccube\Entity\BaseInfo;
 use Eccube\Entity\Customer;
 use Eccube\Entity\MailHistory;
 use Eccube\Entity\MailTemplate;

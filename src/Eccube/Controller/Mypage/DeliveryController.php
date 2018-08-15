@@ -14,7 +14,6 @@
 namespace Eccube\Controller\Mypage;
 
 use Eccube\Controller\AbstractController;
-use Eccube\Entity\BaseInfo;
 use Eccube\Entity\CustomerAddress;
 use Eccube\Event\EccubeEvents;
 use Eccube\Event\EventArgs;

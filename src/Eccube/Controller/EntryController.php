@@ -13,7 +13,6 @@
 
 namespace Eccube\Controller;
 
-use Eccube\Entity\BaseInfo;
 use Eccube\Entity\Master\CustomerStatus;
 use Eccube\Event\EccubeEvents;
 use Eccube\Event\EventArgs;
@@ -271,7 +270,7 @@ class EntryController extends AbstractController
 
             // Assign session carts into customer carts
             $Carts = $this->cartService->getCarts();
-            $qtyInCart = array_reduce($Carts, function($qty, $Cart) {
+            $qtyInCart = array_reduce($Carts, function ($qty, $Cart) {
                 return $qty + $Cart->getTotalQuantity();
             });
 
@@ -286,9 +285,8 @@ class EntryController extends AbstractController
 
             log_info('ログイン済に変更', [$this->getUser()->getId()]);
 
-
             return [
-                'qtyInCart' => $qtyInCart
+                'qtyInCart' => $qtyInCart,
             ];
         } else {
             throw new HttpException\AccessDeniedHttpException(trans('entrycontroller.text.error.authorization'));

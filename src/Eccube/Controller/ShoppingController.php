@@ -14,7 +14,6 @@
 namespace Eccube\Controller;
 
 use Eccube\Annotation\ForwardOnly;
-use Eccube\Entity\BaseInfo;
 use Eccube\Entity\Customer;
 use Eccube\Entity\CustomerAddress;
 use Eccube\Entity\Master\OrderStatus;

@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of EC-CUBE
  *
@@ -9,8 +10,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace Eccube\Service;
 
+namespace Eccube\Service;
 
 use Eccube\Common\EccubeConfig;
 
@@ -30,6 +31,7 @@ class PluginApiService
 
     /**
      * PluginApiService constructor.
+     *
      * @param EccubeConfig $eccubeConfig
      */
     public function __construct(EccubeConfig $eccubeConfig)
@@ -59,14 +61,14 @@ class PluginApiService
 
     public function getCategory()
     {
-        $urlCategory = $this->getApiUrl() . '/category';
+        $urlCategory = $this->getApiUrl().'/category';
 
         return $this->getRequestApi($urlCategory);
     }
 
-    public function getPlugins($data = array())
+    public function getPlugins($data = [])
     {
-        $url = $this->getApiUrl() . '/plugins';
+        $url = $this->getApiUrl().'/plugins';
         $params['category_id'] = $data['category_id'];
         $params['price_type'] = empty($data['price_type']) ? 'all' : $data['price_type'];
         $params['keyword'] = $data['keyword'];
@@ -85,10 +87,10 @@ class PluginApiService
      *
      * @return array
      */
-    public function getRequestApi($url, $data = array())
+    public function getRequestApi($url, $data = [])
     {
         if (count($data) > 0) {
-            $url .=  '?' . http_build_query($data);
+            $url .= '?'.http_build_query($data);
         }
 
         $curl = curl_init($url);

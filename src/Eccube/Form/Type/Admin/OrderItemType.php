@@ -15,7 +15,6 @@ namespace Eccube\Form\Type\Admin;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Eccube\Common\EccubeConfig;
-use Eccube\Entity\BaseInfo;
 use Eccube\Entity\Master\OrderItemType as OrderItemTypeMaster;
 use Eccube\Entity\OrderItem;
 use Eccube\Entity\ProductClass;
