@@ -73,7 +73,7 @@ file that was distributed with this source code.
                 // カートブロックを更新する
                 $.ajax({
                     url: '{{ url('block_cart') }}',
-                    type: 'GET',
+                    type: 'POST',
                     dataType: 'html'
                 }).done(function(html) {
                     $('.ec-headerRole__cart').html(html);
