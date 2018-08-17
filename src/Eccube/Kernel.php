@@ -163,7 +163,9 @@ class Kernel extends BaseKernel
         $container->addCompilerPass(new PluginPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 10);
 
         // DocumentRootをルーティディレクトリに設定する.
-        $container->addCompilerPass(new WebServerDocumentRootPass('%kernel.project_dir%/'));
+        if ($this->environment === 'dev') {
+            $container->addCompilerPass(new WebServerDocumentRootPass('%kernel.project_dir%/'));
+        }
 
         if ($this->environment !== 'install') {
             // テンプレートフックポイントを動作させるように.
