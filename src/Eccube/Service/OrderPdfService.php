@@ -69,7 +69,7 @@ class OrderPdfService extends TcpdfFpdi
     // 変数宣言
     // ====================================
 
-    /** @var BaseInfo */
+    /** @var BaseInfoRepository */
     public $baseInfoRepository;
 
     /** 購入詳細情報 ラベル配列
@@ -117,7 +117,7 @@ class OrderPdfService extends TcpdfFpdi
     public function __construct(EccubeConfig $eccubeConfig, OrderRepository $orderRepository, ShippingRepository $shippingRepository, TaxRuleService $taxRuleService, BaseInfoRepository $baseInfoRepository, EccubeExtension $eccubeExtension)
     {
         $this->eccubeConfig = $eccubeConfig;
-        $this->baseInfoRepository = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
         $this->orderRepository = $orderRepository;
         $this->shippingRepository = $shippingRepository;
         $this->taxRuleService = $taxRuleService;
@@ -284,20 +284,20 @@ class OrderPdfService extends TcpdfFpdi
         $this->setBasePosition();
 
         // ショップ名
-        $this->lfText(125, 60, $this->baseInfoRepository->getShopName(), 8, 'B');
+        $this->lfText(125, 60, $this->baseInfoRepository->get()->getShopName(), 8, 'B');
 
         // 都道府県+所在地
-        $text = $this->baseInfoRepository->getAddr01();
+        $text = $this->baseInfoRepository->get()->getAddr01();
         $this->lfText(125, 65, $text, 8);
-        $this->lfText(125, 69, $this->baseInfoRepository->getAddr02(), 8);
+        $this->lfText(125, 69, $this->baseInfoRepository->get()->getAddr02(), 8);
 
         // 電話番号
-        $text = 'TEL: '.$this->baseInfoRepository->getPhoneNumber();
+        $text = 'TEL: '.$this->baseInfoRepository->get()->getPhoneNumber();
         $this->lfText(125, 72, $text, 8); //TEL・FAX
 
         // メールアドレス
-        if (strlen($this->baseInfoRepository->getEmail01()) > 0) {
-            $text = 'Email: '.$this->baseInfoRepository->getEmail01();
+        if (strlen($this->baseInfoRepository->get()->getEmail01()) > 0) {
+            $text = 'Email: '.$this->baseInfoRepository->get()->getEmail01();
             $this->lfText(125, 75, $text, 8); // Email
         }
 

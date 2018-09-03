@@ -52,9 +52,9 @@ class MailService
     protected $eventDispatcher;
 
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * @var EccubeConfig
@@ -89,7 +89,7 @@ class MailService
         $this->mailer = $mailer;
         $this->mailTemplateRepository = $mailTemplateRepository;
         $this->mailHistoryRepository = $mailHistoryRepository;
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
         $this->eventDispatcher = $eventDispatcher;
         $this->eccubeConfig = $eccubeConfig;
         $this->twig = $twig;
@@ -109,24 +109,24 @@ class MailService
 
         $body = $this->twig->render($MailTemplate->getFileName(), [
             'Customer' => $Customer,
-            'BaseInfo' => $this->BaseInfo,
+            'BaseInfo' => $this->baseInfoRepository->get(),
             'activateUrl' => $activateUrl,
         ]);
 
         $message = (new \Swift_Message())
-            ->setSubject('['.$this->BaseInfo->getShopName().'] '.$MailTemplate->getMailSubject())
-            ->setFrom([$this->BaseInfo->getEmail01() => $this->BaseInfo->getShopName()])
+            ->setSubject('['.$this->baseInfoRepository->get()->getShopName().'] '.$MailTemplate->getMailSubject())
+            ->setFrom([$this->baseInfoRepository->get()->getEmail01() => $this->baseInfoRepository->get()->getShopName()])
             ->setTo([$Customer->getEmail()])
-            ->setBcc($this->BaseInfo->getEmail01())
-            ->setReplyTo($this->BaseInfo->getEmail03())
-            ->setReturnPath($this->BaseInfo->getEmail04());
+            ->setBcc($this->baseInfoRepository->get()->getEmail01())
+            ->setReplyTo($this->baseInfoRepository->get()->getEmail03())
+            ->setReturnPath($this->baseInfoRepository->get()->getEmail04());
 
         // HTMLテンプレートが存在する場合
         $htmlFileName = $this->getHtmlTemplate($MailTemplate->getFileName());
         if (!is_null($htmlFileName)) {
             $htmlBody = $this->twig->render($htmlFileName, [
                 'Customer' => $Customer,
-                'BaseInfo' => $this->BaseInfo,
+                'BaseInfo' => $this->baseInfoRepository->get(),
                 'activateUrl' => $activateUrl,
             ]);
 
@@ -142,7 +142,7 @@ class MailService
             [
                 'message' => $message,
                 'Customer' => $Customer,
-                'BaseInfo' => $this->BaseInfo,
+                'BaseInfo' => $this->baseInfoRepository->get(),
                 'activateUrl' => $activateUrl,
             ],
             null
@@ -169,23 +169,23 @@ class MailService
 
         $body = $this->twig->render($MailTemplate->getFileName(), [
             'Customer' => $Customer,
-            'BaseInfo' => $this->BaseInfo,
+            'BaseInfo' => $this->baseInfoRepository->get(),
         ]);
 
         $message = (new \Swift_Message())
-            ->setSubject('['.$this->BaseInfo->getShopName().'] '.$MailTemplate->getMailSubject())
-            ->setFrom([$this->BaseInfo->getEmail01() => $this->BaseInfo->getShopName()])
+            ->setSubject('['.$this->baseInfoRepository->get()->getShopName().'] '.$MailTemplate->getMailSubject())
+            ->setFrom([$this->baseInfoRepository->get()->getEmail01() => $this->baseInfoRepository->get()->getShopName()])
             ->setTo([$Customer->getEmail()])
-            ->setBcc($this->BaseInfo->getEmail01())
-            ->setReplyTo($this->BaseInfo->getEmail03())
-            ->setReturnPath($this->BaseInfo->getEmail04());
+            ->setBcc($this->baseInfoRepository->get()->getEmail01())
+            ->setReplyTo($this->baseInfoRepository->get()->getEmail03())
+            ->setReturnPath($this->baseInfoRepository->get()->getEmail04());
 
         // HTMLテンプレートが存在する場合
         $htmlFileName = $this->getHtmlTemplate($MailTemplate->getFileName());
         if (!is_null($htmlFileName)) {
             $htmlBody = $this->twig->render($htmlFileName, [
                 'Customer' => $Customer,
-                'BaseInfo' => $this->BaseInfo,
+                'BaseInfo' => $this->baseInfoRepository->get(),
             ]);
 
             $message
@@ -200,7 +200,7 @@ class MailService
             [
                 'message' => $message,
                 'Customer' => $Customer,
-                'BaseInfo' => $this->BaseInfo,
+                'BaseInfo' => $this->baseInfoRepository->get(),
             ],
             null
         );
@@ -227,23 +227,23 @@ class MailService
 
         $body = $this->twig->render($MailTemplate->getFileName(), [
             'Customer' => $Customer,
-            'BaseInfo' => $this->BaseInfo,
+            'BaseInfo' => $this->baseInfoRepository->get(),
         ]);
 
         $message = (new \Swift_Message())
-            ->setSubject('['.$this->BaseInfo->getShopName().'] '.$MailTemplate->getMailSubject())
-            ->setFrom([$this->BaseInfo->getEmail01() => $this->BaseInfo->getShopName()])
+            ->setSubject('['.$this->baseInfoRepository->get()->getShopName().'] '.$MailTemplate->getMailSubject())
+            ->setFrom([$this->baseInfoRepository->get()->getEmail01() => $this->baseInfoRepository->get()->getShopName()])
             ->setTo([$email])
-            ->setBcc($this->BaseInfo->getEmail01())
-            ->setReplyTo($this->BaseInfo->getEmail03())
-            ->setReturnPath($this->BaseInfo->getEmail04());
+            ->setBcc($this->baseInfoRepository->get()->getEmail01())
+            ->setReplyTo($this->baseInfoRepository->get()->getEmail03())
+            ->setReturnPath($this->baseInfoRepository->get()->getEmail04());
 
         // HTMLテンプレートが存在する場合
         $htmlFileName = $this->getHtmlTemplate($MailTemplate->getFileName());
         if (!is_null($htmlFileName)) {
             $htmlBody = $this->twig->render($htmlFileName, [
                 'Customer' => $Customer,
-                'BaseInfo' => $this->BaseInfo,
+                'BaseInfo' => $this->baseInfoRepository->get(),
             ]);
 
             $message
@@ -258,7 +258,7 @@ class MailService
             [
                 'message' => $message,
                 'Customer' => $Customer,
-                'BaseInfo' => $this->BaseInfo,
+                'BaseInfo' => $this->baseInfoRepository->get(),
                 'email' => $email,
             ],
             null
@@ -285,24 +285,24 @@ class MailService
 
         $body = $this->twig->render($MailTemplate->getFileName(), [
             'data' => $formData,
-            'BaseInfo' => $this->BaseInfo,
+            'BaseInfo' => $this->baseInfoRepository->get(),
         ]);
 
         // 問い合わせ者にメール送信
         $message = (new \Swift_Message())
-            ->setSubject('['.$this->BaseInfo->getShopName().'] '.$MailTemplate->getMailSubject())
-            ->setFrom([$this->BaseInfo->getEmail02() => $this->BaseInfo->getShopName()])
+            ->setSubject('['.$this->baseInfoRepository->get()->getShopName().'] '.$MailTemplate->getMailSubject())
+            ->setFrom([$this->baseInfoRepository->get()->getEmail02() => $this->baseInfoRepository->get()->getShopName()])
             ->setTo([$formData['email']])
-            ->setBcc($this->BaseInfo->getEmail02())
-            ->setReplyTo($this->BaseInfo->getEmail02())
-            ->setReturnPath($this->BaseInfo->getEmail04());
+            ->setBcc($this->baseInfoRepository->get()->getEmail02())
+            ->setReplyTo($this->baseInfoRepository->get()->getEmail02())
+            ->setReturnPath($this->baseInfoRepository->get()->getEmail04());
 
         // HTMLテンプレートが存在する場合
         $htmlFileName = $this->getHtmlTemplate($MailTemplate->getFileName());
         if (!is_null($htmlFileName)) {
             $htmlBody = $this->twig->render($htmlFileName, [
                 'data' => $formData,
-                'BaseInfo' => $this->BaseInfo,
+                'BaseInfo' => $this->baseInfoRepository->get(),
             ]);
 
             $message
@@ -317,7 +317,7 @@ class MailService
             [
                 'message' => $message,
                 'formData' => $formData,
-                'BaseInfo' => $this->BaseInfo,
+                'BaseInfo' => $this->baseInfoRepository->get(),
             ],
             null
         );
@@ -362,12 +362,12 @@ class MailService
         ]);
 
         $message = (new \Swift_Message())
-            ->setSubject('['.$this->BaseInfo->getShopName().'] '.$MailTemplate->getMailSubject())
-            ->setFrom([$this->BaseInfo->getEmail01() => $this->BaseInfo->getShopName()])
+            ->setSubject('['.$this->baseInfoRepository->get()->getShopName().'] '.$MailTemplate->getMailSubject())
+            ->setFrom([$this->baseInfoRepository->get()->getEmail01() => $this->baseInfoRepository->get()->getShopName()])
             ->setTo([$Order->getEmail()])
-            ->setBcc($this->BaseInfo->getEmail01())
-            ->setReplyTo($this->BaseInfo->getEmail03())
-            ->setReturnPath($this->BaseInfo->getEmail04());
+            ->setBcc($this->baseInfoRepository->get()->getEmail01())
+            ->setReplyTo($this->baseInfoRepository->get()->getEmail03())
+            ->setReturnPath($this->baseInfoRepository->get()->getEmail04());
 
         // HTMLテンプレートが存在する場合
         $htmlFileName = $this->getHtmlTemplate($MailTemplate->getFileName());
@@ -389,7 +389,7 @@ class MailService
                 'message' => $message,
                 'Order' => $Order,
                 'MailTemplate' => $MailTemplate,
-                'BaseInfo' => $this->BaseInfo,
+                'BaseInfo' => $this->baseInfoRepository->get(),
             ],
             null
         );
@@ -430,24 +430,24 @@ class MailService
         $MailTemplate = $this->mailTemplateRepository->find($this->eccubeConfig['eccube_entry_confirm_mail_template_id']);
 
         $body = $this->twig->render($MailTemplate->getFileName(), [
-            'BaseInfo' => $this->BaseInfo,
+            'BaseInfo' => $this->baseInfoRepository->get(),
             'Customer' => $Customer,
             'activateUrl' => $activateUrl,
         ]);
 
         $message = (new \Swift_Message())
-            ->setSubject('['.$this->BaseInfo->getShopName().'] '.$MailTemplate->getMailSubject())
-            ->setFrom([$this->BaseInfo->getEmail03() => $this->BaseInfo->getShopName()])
+            ->setSubject('['.$this->baseInfoRepository->get()->getShopName().'] '.$MailTemplate->getMailSubject())
+            ->setFrom([$this->baseInfoRepository->get()->getEmail03() => $this->baseInfoRepository->get()->getShopName()])
             ->setTo([$Customer->getEmail()])
-            ->setBcc($this->BaseInfo->getEmail01())
-            ->setReplyTo($this->BaseInfo->getEmail03())
-            ->setReturnPath($this->BaseInfo->getEmail04());
+            ->setBcc($this->baseInfoRepository->get()->getEmail01())
+            ->setReplyTo($this->baseInfoRepository->get()->getEmail03())
+            ->setReturnPath($this->baseInfoRepository->get()->getEmail04());
 
         // HTMLテンプレートが存在する場合
         $htmlFileName = $this->getHtmlTemplate($MailTemplate->getFileName());
         if (!is_null($htmlFileName)) {
             $htmlBody = $this->twig->render($htmlFileName, [
-                'BaseInfo' => $this->BaseInfo,
+                'BaseInfo' => $this->baseInfoRepository->get(),
                 'Customer' => $Customer,
                 'activateUrl' => $activateUrl,
             ]);
@@ -464,7 +464,7 @@ class MailService
             [
                 'message' => $message,
                 'Customer' => $Customer,
-                'BaseInfo' => $this->BaseInfo,
+                'BaseInfo' => $this->baseInfoRepository->get(),
                 'activateUrl' => $activateUrl,
             ],
             null
@@ -495,12 +495,12 @@ class MailService
         log_info('受注管理通知メール送信開始');
 
         $message = (new \Swift_Message())
-            ->setSubject('['.$this->BaseInfo->getShopName().'] '.$formData['mail_subject'])
-            ->setFrom([$this->BaseInfo->getEmail01() => $this->BaseInfo->getShopName()])
+            ->setSubject('['.$this->baseInfoRepository->get()->getShopName().'] '.$formData['mail_subject'])
+            ->setFrom([$this->baseInfoRepository->get()->getEmail01() => $this->baseInfoRepository->get()->getShopName()])
             ->setTo([$Order->getEmail()])
-            ->setBcc($this->BaseInfo->getEmail01())
-            ->setReplyTo($this->BaseInfo->getEmail03())
-            ->setReturnPath($this->BaseInfo->getEmail04())
+            ->setBcc($this->baseInfoRepository->get()->getEmail01())
+            ->setReplyTo($this->baseInfoRepository->get()->getEmail03())
+            ->setReturnPath($this->baseInfoRepository->get()->getEmail04())
             ->setBody($formData['tpl_data']);
 
         $event = new EventArgs(
@@ -508,7 +508,7 @@ class MailService
                 'message' => $message,
                 'Order' => $Order,
                 'formData' => $formData,
-                'BaseInfo' => $this->BaseInfo,
+                'BaseInfo' => $this->baseInfoRepository->get(),
             ],
             null
         );
@@ -533,24 +533,24 @@ class MailService
 
         $MailTemplate = $this->mailTemplateRepository->find($this->eccubeConfig['eccube_forgot_mail_template_id']);
         $body = $this->twig->render($MailTemplate->getFileName(), [
-            'BaseInfo' => $this->BaseInfo,
+            'BaseInfo' => $this->baseInfoRepository->get(),
             'Customer' => $Customer,
             'expire' => $this->eccubeConfig['eccube_customer_reset_expire'],
             'reset_url' => $reset_url,
         ]);
 
         $message = (new \Swift_Message())
-            ->setSubject('['.$this->BaseInfo->getShopName().'] '.$MailTemplate->getMailSubject())
-            ->setFrom([$this->BaseInfo->getEmail01() => $this->BaseInfo->getShopName()])
+            ->setSubject('['.$this->baseInfoRepository->get()->getShopName().'] '.$MailTemplate->getMailSubject())
+            ->setFrom([$this->baseInfoRepository->get()->getEmail01() => $this->baseInfoRepository->get()->getShopName()])
             ->setTo([$Customer->getEmail()])
-            ->setReplyTo($this->BaseInfo->getEmail03())
-            ->setReturnPath($this->BaseInfo->getEmail04());
+            ->setReplyTo($this->baseInfoRepository->get()->getEmail03())
+            ->setReturnPath($this->baseInfoRepository->get()->getEmail04());
 
         // HTMLテンプレートが存在する場合
         $htmlFileName = $this->getHtmlTemplate($MailTemplate->getFileName());
         if (!is_null($htmlFileName)) {
             $htmlBody = $this->twig->render($htmlFileName, [
-                'BaseInfo' => $this->BaseInfo,
+                'BaseInfo' => $this->baseInfoRepository->get(),
                 'Customer' => $Customer,
                 'expire' => $this->eccubeConfig['eccube_customer_reset_expire'],
                 'reset_url' => $reset_url,
@@ -568,7 +568,7 @@ class MailService
             [
                 'message' => $message,
                 'Customer' => $Customer,
-                'BaseInfo' => $this->BaseInfo,
+                'BaseInfo' => $this->baseInfoRepository->get(),
                 'resetUrl' => $reset_url,
             ],
             null
@@ -595,24 +595,24 @@ class MailService
         $MailTemplate = $this->mailTemplateRepository->find($this->eccubeConfig['eccube_reset_complete_mail_template_id']);
 
         $body = $this->twig->render($MailTemplate->getFileName(), [
-            'BaseInfo' => $this->BaseInfo,
+            'BaseInfo' => $this->baseInfoRepository->get(),
             'Customer' => $Customer,
             'password' => $password,
         ]);
 
         $message = (new \Swift_Message())
-            ->setSubject('['.$this->BaseInfo->getShopName().'] '.$MailTemplate->getMailSubject())
-            ->setFrom([$this->BaseInfo->getEmail01() => $this->BaseInfo->getShopName()])
+            ->setSubject('['.$this->baseInfoRepository->get()->getShopName().'] '.$MailTemplate->getMailSubject())
+            ->setFrom([$this->baseInfoRepository->get()->getEmail01() => $this->baseInfoRepository->get()->getShopName()])
             ->setTo([$Customer->getEmail()])
-            ->setBcc($this->BaseInfo->getEmail01())
-            ->setReplyTo($this->BaseInfo->getEmail03())
-            ->setReturnPath($this->BaseInfo->getEmail04());
+            ->setBcc($this->baseInfoRepository->get()->getEmail01())
+            ->setReplyTo($this->baseInfoRepository->get()->getEmail03())
+            ->setReturnPath($this->baseInfoRepository->get()->getEmail04());
 
         // HTMLテンプレートが存在する場合
         $htmlFileName = $this->getHtmlTemplate($MailTemplate->getFileName());
         if (!is_null($htmlFileName)) {
             $htmlBody = $this->twig->render($htmlFileName, [
-                'BaseInfo' => $this->BaseInfo,
+                'BaseInfo' => $this->baseInfoRepository->get(),
                 'Customer' => $Customer,
                 'password' => $password,
             ]);
@@ -629,7 +629,7 @@ class MailService
             [
                 'message' => $message,
                 'Customer' => $Customer,
-                'BaseInfo' => $this->BaseInfo,
+                'BaseInfo' => $this->baseInfoRepository->get(),
                 'password' => $password,
             ],
             null
@@ -659,12 +659,12 @@ class MailService
         ]);
 
         $message = (new \Swift_Message())
-            ->setSubject('['.$this->BaseInfo->getShopName().'] ポイント通知')
-            ->setFrom([$this->BaseInfo->getEmail01() => $this->BaseInfo->getShopName()])
-            ->setTo([$this->BaseInfo->getEmail01()])
-            ->setBcc($this->BaseInfo->getEmail01())
-            ->setReplyTo($this->BaseInfo->getEmail03())
-            ->setReturnPath($this->BaseInfo->getEmail04());
+            ->setSubject('['.$this->baseInfoRepository->get()->getShopName().'] ポイント通知')
+            ->setFrom([$this->baseInfoRepository->get()->getEmail01() => $this->baseInfoRepository->get()->getShopName()])
+            ->setTo([$this->baseInfoRepository->get()->getEmail01()])
+            ->setBcc($this->baseInfoRepository->get()->getEmail01())
+            ->setReplyTo($this->baseInfoRepository->get()->getEmail03())
+            ->setReturnPath($this->baseInfoRepository->get()->getEmail04());
 
         // HTMLテンプレートが存在する場合
         $htmlFileName = $this->getHtmlTemplate('Mail/point_notify.twig');
@@ -705,12 +705,12 @@ class MailService
         $body = $this->getShippingNotifyMailBody($Shipping, $Order, $MailTemplate->getFileName());
 
         $message = (new \Swift_Message())
-            ->setSubject('['.$this->BaseInfo->getShopName().'] '.$MailTemplate->getMailSubject())
-            ->setFrom([$this->BaseInfo->getEmail01() => $this->BaseInfo->getShopName()])
+            ->setSubject('['.$this->baseInfoRepository->get()->getShopName().'] '.$MailTemplate->getMailSubject())
+            ->setFrom([$this->baseInfoRepository->get()->getEmail01() => $this->baseInfoRepository->get()->getShopName()])
             ->setTo($Order->getEmail())
-            ->setBcc($this->BaseInfo->getEmail01())
-            ->setReplyTo($this->BaseInfo->getEmail03())
-            ->setReturnPath($this->BaseInfo->getEmail04());
+            ->setBcc($this->baseInfoRepository->get()->getEmail01())
+            ->setReplyTo($this->baseInfoRepository->get()->getEmail03())
+            ->setReturnPath($this->baseInfoRepository->get()->getEmail04());
 
         // HTMLテンプレートが存在する場合
         $htmlFileName = $this->getHtmlTemplate($MailTemplate->getFileName());

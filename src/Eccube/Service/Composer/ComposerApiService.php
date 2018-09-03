@@ -38,12 +38,15 @@ class ComposerApiService implements ComposerServiceInterface
 
     private $workingDir;
 
-    private $baseInfo;
+    /**
+     * @var BaseInfoRepository
+     */
+    protected $baseInfoRepository;
 
     public function __construct(EccubeConfig $eccubeConfig, BaseInfoRepository $baseInfoRepository)
     {
         $this->eccubeConfig = $eccubeConfig;
-        $this->baseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
     }
 
     /**
@@ -305,7 +308,7 @@ class ComposerApiService implements ComposerServiceInterface
                 'url' => $url,
                 'options' => [
                     'http' => [
-                        'header' => ['X-ECCUBE-KEY: '.$this->baseInfo->getAuthenticationKey()]
+                        'header' => ['X-ECCUBE-KEY: '.$this->baseInfoRepository->get()->getAuthenticationKey()]
                     ]
                 ]
             ]);

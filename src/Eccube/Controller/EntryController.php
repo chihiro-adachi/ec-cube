@@ -52,9 +52,9 @@ class EntryController extends AbstractController
     protected $mailService;
 
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * @var CustomerRepository
@@ -100,7 +100,7 @@ class EntryController extends AbstractController
     ) {
         $this->customerStatusRepository = $customerStatusRepository;
         $this->mailService = $mailService;
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
         $this->customerRepository = $customerRepository;
         $this->encoderFactory = $encoderFactory;
         $this->recursiveValidator = $validatorInterface;
@@ -185,7 +185,7 @@ class EntryController extends AbstractController
 
                     $activateUrl = $this->generateUrl('entry_activate', ['secret_key' => $Customer->getSecretKey()], UrlGeneratorInterface::ABSOLUTE_URL);
 
-                    $activateFlg = $this->BaseInfo->isOptionCustomerActivate();
+                    $activateFlg = $this->baseInfoRepository->get()->isOptionCustomerActivate();
 
                     // 仮会員設定が有効な場合は、確認メールを送信し完了画面表示.
                     if ($activateFlg) {

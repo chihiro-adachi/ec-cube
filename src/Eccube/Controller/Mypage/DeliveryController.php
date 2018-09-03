@@ -30,9 +30,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class DeliveryController extends AbstractController
 {
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * @var CustomerAddressRepository
@@ -41,7 +41,7 @@ class DeliveryController extends AbstractController
 
     public function __construct(BaseInfoRepository $baseInfoRepository, CustomerAddressRepository $customerAddressRepository)
     {
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
         $this->customerAddressRepository = $customerAddressRepository;
     }
 
@@ -149,7 +149,7 @@ class DeliveryController extends AbstractController
         return [
             'form' => $form->createView(),
             'parentPage' => $parentPage,
-            'BaseInfo' => $this->BaseInfo,
+            'BaseInfo' => $this->baseInfoRepository->get(),
         ];
     }
 

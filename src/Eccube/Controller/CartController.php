@@ -13,7 +13,6 @@
 
 namespace Eccube\Controller;
 
-use Eccube\Entity\BaseInfo;
 use Eccube\Entity\ProductClass;
 use Eccube\Event\EccubeEvents;
 use Eccube\Event\EventArgs;
@@ -46,9 +45,9 @@ class CartController extends AbstractController
     protected $purchaseFlow;
 
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $baseInfo;
+    protected $baseInfoRepository;
 
     /**
      * CartController constructor.
@@ -67,7 +66,7 @@ class CartController extends AbstractController
         $this->productClassRepository = $productClassRepository;
         $this->cartService = $cartService;
         $this->purchaseFlow = $cartPurchaseFlow;
-        $this->baseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
     }
 
     /**
@@ -93,19 +92,19 @@ class CartController extends AbstractController
             $quantity[$Cart->getCartKey()] = 0;
             $isDeliveryFree[$Cart->getCartKey()] = false;
 
-            if ($this->baseInfo->getDeliveryFreeQuantity()) {
-                if ($this->baseInfo->getDeliveryFreeQuantity() > $Cart->getQuantity()) {
-                    $quantity[$Cart->getCartKey()] = $this->baseInfo->getDeliveryFreeQuantity() - $Cart->getQuantity();
+            if ($this->baseInfoRepository->get()->getDeliveryFreeQuantity()) {
+                if ($this->baseInfoRepository->get()->getDeliveryFreeQuantity() > $Cart->getQuantity()) {
+                    $quantity[$Cart->getCartKey()] = $this->baseInfoRepository->get()->getDeliveryFreeQuantity() - $Cart->getQuantity();
                 } else {
                     $isDeliveryFree[$Cart->getCartKey()] = true;
                 }
             }
 
-            if ($this->baseInfo->getDeliveryFreeAmount()) {
-                if (!$isDeliveryFree[$Cart->getCartKey()] && $this->baseInfo->getDeliveryFreeAmount() <= $Cart->getTotalPrice()) {
+            if ($this->baseInfoRepository->get()->getDeliveryFreeAmount()) {
+                if (!$isDeliveryFree[$Cart->getCartKey()] && $this->baseInfoRepository->get()->getDeliveryFreeAmount() <= $Cart->getTotalPrice()) {
                     $isDeliveryFree[$Cart->getCartKey()] = true;
                 } else {
-                    $least[$Cart->getCartKey()] = $this->baseInfo->getDeliveryFreeAmount() - $Cart->getTotalPrice();
+                    $least[$Cart->getCartKey()] = $this->baseInfoRepository->get()->getDeliveryFreeAmount() - $Cart->getTotalPrice();
                 }
             }
 

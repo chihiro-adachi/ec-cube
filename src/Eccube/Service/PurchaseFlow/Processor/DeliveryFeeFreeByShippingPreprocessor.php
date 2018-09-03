@@ -27,9 +27,9 @@ use Eccube\Service\PurchaseFlow\PurchaseContext;
 class DeliveryFeeFreeByShippingPreprocessor implements ItemHolderPreprocessor
 {
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * DeliveryFeeProcessor constructor.
@@ -38,7 +38,7 @@ class DeliveryFeeFreeByShippingPreprocessor implements ItemHolderPreprocessor
      */
     public function __construct(BaseInfoRepository $baseInfoRepository)
     {
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
     }
 
     /**
@@ -47,7 +47,7 @@ class DeliveryFeeFreeByShippingPreprocessor implements ItemHolderPreprocessor
      */
     public function process(ItemHolderInterface $itemHolder, PurchaseContext $context)
     {
-        if (!($this->BaseInfo->getDeliveryFreeAmount() || $this->BaseInfo->getDeliveryFreeQuantity())) {
+        if (!($this->baseInfoRepository->get()->getDeliveryFreeAmount() || $this->baseInfoRepository->get()->getDeliveryFreeQuantity())) {
             return;
         }
 
@@ -64,14 +64,14 @@ class DeliveryFeeFreeByShippingPreprocessor implements ItemHolderPreprocessor
                     $quantity += $Item->getQuantity();
                 }
                 // 送料無料（金額）を超えている
-                if ($this->BaseInfo->getDeliveryFreeAmount()) {
-                    if ($total >= $this->BaseInfo->getDeliveryFreeAmount()) {
+                if ($this->baseInfoRepository->get()->getDeliveryFreeAmount()) {
+                    if ($total >= $this->baseInfoRepository->get()->getDeliveryFreeAmount()) {
                         $isFree = true;
                     }
                 }
                 // 送料無料（個数）を超えている
-                if ($this->BaseInfo->getDeliveryFreeQuantity()) {
-                    if ($quantity >= $this->BaseInfo->getDeliveryFreeQuantity()) {
+                if ($this->baseInfoRepository->get()->getDeliveryFreeQuantity()) {
+                    if ($quantity >= $this->baseInfoRepository->get()->getDeliveryFreeQuantity()) {
                         $isFree = true;
                     }
                 }

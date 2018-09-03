@@ -59,9 +59,9 @@ class ProductController extends AbstractController
     protected $productRepository;
 
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * @var AuthenticationUtils
@@ -92,7 +92,7 @@ class ProductController extends AbstractController
         $this->customerFavoriteProductRepository = $customerFavoriteProductRepository;
         $this->cartService = $cartService;
         $this->productRepository = $productRepository;
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
         $this->helper = $helper;
     }
 
@@ -105,7 +105,7 @@ class ProductController extends AbstractController
     public function index(Request $request, Paginator $paginator)
     {
         // Doctrine SQLFilter
-        if ($this->BaseInfo->isOptionNostockHidden()) {
+        if ($this->baseInfoRepository->get()->isOptionNostockHidden()) {
             $this->entityManager->getFilters()->enable('option_nostock_hidden');
         }
 
@@ -493,7 +493,7 @@ class ProductController extends AbstractController
         // 管理ユーザの場合はステータスやオプションにかかわらず閲覧可能.
         if (!$is_admin) {
             // 在庫なし商品の非表示オプションが有効な場合.
-            // if ($this->BaseInfo->isOptionNostockHidden()) {
+            // if ($this->baseInfoRepository->get()->isOptionNostockHidden()) {
             //     if (!$Product->getStockFind()) {
             //         return false;
             //     }

@@ -39,9 +39,9 @@ class PluginApiService
     private $requestStack;
 
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    private $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * PluginApiService constructor.
@@ -57,7 +57,7 @@ class PluginApiService
     {
         $this->eccubeConfig = $eccubeConfig;
         $this->requestStack = $requestStack;
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
     }
 
     /**
@@ -236,7 +236,7 @@ class PluginApiService
 
         $curl = curl_init($url);
 
-        $key = $this->BaseInfo->getAuthenticationKey();
+        $key = $this->baseInfoRepository->get()->getAuthenticationKey();
         $baseUrl = $this->requestStack->getCurrentRequest()->getSchemeAndHttpHost().$this->requestStack->getCurrentRequest()->getBasePath();
 
         // Option array

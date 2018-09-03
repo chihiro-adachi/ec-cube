@@ -47,9 +47,9 @@ class PluginController extends AbstractController
     protected $pluginService;
 
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * @var PluginRepository
@@ -76,7 +76,7 @@ class PluginController extends AbstractController
     {
         $this->pluginRepository = $pluginRepository;
         $this->pluginService = $pluginService;
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
         $this->pluginApiService = $pluginApiService;
     }
 

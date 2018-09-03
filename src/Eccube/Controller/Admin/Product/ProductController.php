@@ -88,9 +88,9 @@ class ProductController extends AbstractController
     protected $productRepository;
 
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * @var PageMaxRepository
@@ -139,7 +139,7 @@ class ProductController extends AbstractController
         $this->taxRuleRepository = $taxRuleRepository;
         $this->categoryRepository = $categoryRepository;
         $this->productRepository = $productRepository;
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
         $this->pageMaxRepository = $pageMaxRepository;
         $this->productStatusRepository = $productStatusRepository;
         $this->tagRepository = $tagRepository;
@@ -383,7 +383,7 @@ class ProductController extends AbstractController
                         break;
                     }
                 }
-                if ($this->BaseInfo->isOptionProductTaxRule() && $ProductClass->getTaxRule()) {
+                if ($this->baseInfoRepository->get()->isOptionProductTaxRule() && $ProductClass->getTaxRule()) {
                     $ProductClass->setTaxRate($ProductClass->getTaxRule()->getTaxRate());
                 }
                 $ProductStock = $ProductClasses[0]->getProductStock();
@@ -443,7 +443,7 @@ class ProductController extends AbstractController
                     $ProductClass = $form['class']->getData();
 
                     // 個別消費税
-                    if ($this->BaseInfo->isOptionProductTaxRule()) {
+                    if ($this->baseInfoRepository->get()->isOptionProductTaxRule()) {
                         if ($ProductClass->getTaxRate() !== null) {
                             if ($ProductClass->getTaxRule()) {
                                 $ProductClass->getTaxRule()->setTaxRate($ProductClass->getTaxRate());

@@ -27,9 +27,9 @@ use Eccube\Service\PurchaseFlow\PurchaseContext;
 class AddPointProcessor extends ItemHolderPostValidator
 {
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * AddPointProcessor constructor.
@@ -38,7 +38,7 @@ class AddPointProcessor extends ItemHolderPostValidator
      */
     public function __construct(BaseInfoRepository $baseInfoRepository)
     {
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
     }
 
     /**
@@ -65,7 +65,7 @@ class AddPointProcessor extends ItemHolderPostValidator
      */
     private function calculateAddPoint(ItemHolderInterface $itemHolder)
     {
-        $basicPointRate = $this->BaseInfo->getBasicPointRate();
+        $basicPointRate = $this->baseInfoRepository->get()->getBasicPointRate();
 
         // 明細ごとのポイントを集計
         $totalPoint = array_reduce($itemHolder->getItems()->toArray(),
@@ -106,7 +106,7 @@ class AddPointProcessor extends ItemHolderPostValidator
      */
     private function supports(ItemHolderInterface $itemHolder)
     {
-        if (!$this->BaseInfo->isOptionPoint()) {
+        if (!$this->baseInfoRepository->get()->isOptionPoint()) {
             return false;
         }
 

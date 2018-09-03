@@ -79,9 +79,9 @@ class CsvImportController extends AbstractCsvImportController
     protected $productRepository;
 
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     private $errors = [];
 
@@ -106,7 +106,7 @@ class CsvImportController extends AbstractCsvImportController
         $this->classCategoryRepository = $classCategoryRepository;
         $this->productStatusRepository = $productStatusRepository;
         $this->productRepository = $productRepository;
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
     }
 
     /**
@@ -263,7 +263,7 @@ class CsvImportController extends AbstractCsvImportController
                         if ($ProductClasses->count() < 1) {
                             // 規格分類1(ID)がセットされていると規格なし商品、規格あり商品を作成
                             $ProductClassOrg = $this->createProductClass($row, $Product, $data, $headerByKey);
-                            if ($this->BaseInfo->isOptionProductDeliveryFee()) {
+                            if ($this->baseInfoRepository->get()->isOptionProductDeliveryFee()) {
                                 if (isset($row[$headerByKey['delivery_fee']]) && StringUtil::isBlank($row[$headerByKey['delivery_fee']])) {
                                     $deliveryFee = str_replace(',', '', $row[$headerByKey['delivery_fee']]);
                                     if (preg_match('/^\d+$/', $deliveryFee) && $deliveryFee >= 0) {
@@ -356,7 +356,7 @@ class CsvImportController extends AbstractCsvImportController
                                 ) {
                                     $this->updateProductClass($row, $Product, $pc, $data, $headerByKey);
 
-                                    if ($this->BaseInfo->isOptionProductDeliveryFee()) {
+                                    if ($this->baseInfoRepository->get()->isOptionProductDeliveryFee()) {
                                         $headerByKey['delivery_fee'] = trans('csvimport.label.delivery_fee');
                                         if (isset($row[$headerByKey['delivery_fee']]) && StringUtil::isNotBlank($row[$headerByKey['delivery_fee']])) {
                                             $deliveryFee = str_replace(',', '', $row[$headerByKey['delivery_fee']]);
@@ -442,7 +442,7 @@ class CsvImportController extends AbstractCsvImportController
                                     }
                                     $ProductClass = $this->createProductClass($row, $Product, $data, $headerByKey, $ClassCategory1, $ClassCategory2);
 
-                                    if ($this->BaseInfo->isOptionProductDeliveryFee()) {
+                                    if ($this->baseInfoRepository->get()->isOptionProductDeliveryFee()) {
                                         if (isset($row[$headerByKey['delivery_fee']]) && StringUtil::isNotBlank($row[$headerByKey['delivery_fee']])) {
                                             $deliveryFee = str_replace(',', '', $row[$headerByKey['delivery_fee']]);
                                             if (preg_match('/^\d+$/', $deliveryFee) && $deliveryFee >= 0) {

@@ -53,9 +53,9 @@ class OrderItemType extends AbstractType
     protected $eccubeConfig;
 
     /**
-     * @var BaseInfo
+     * @var BaseInfoRepository
      */
-    protected $BaseInfo;
+    protected $baseInfoRepository;
 
     /**
      * @var ProductClassRepository
@@ -102,7 +102,7 @@ class OrderItemType extends AbstractType
     ) {
         $this->entityManager = $entityManager;
         $this->eccubeConfig = $eccubeConfig;
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
         $this->productClassRepository = $productClassRepository;
         $this->orderItemRepository = $orderItemRepository;
         $this->orderItemTypeRepository = $orderItemTypeRepository;

@@ -66,8 +66,10 @@ class OwnerStoreController extends AbstractController
 
     private static $vendorName = 'ec-cube';
 
-    /** @var BaseInfo */
-    private $BaseInfo;
+    /**
+     * @var BaseInfoRepository
+     */
+    protected $baseInfoRepository;
 
     /**
      * OwnerStoreController constructor.
@@ -96,7 +98,7 @@ class OwnerStoreController extends AbstractController
         $this->pluginService = $pluginService;
         $this->systemService = $systemService;
         $this->pluginApiService = $pluginApiService;
-        $this->BaseInfo = $baseInfoRepository->get();
+        $this->baseInfoRepository = $baseInfoRepository;
 
         // TODO: Check the flow of the composer service below
         $memoryLimit = $this->systemService->getMemoryLimit();
@@ -122,7 +124,7 @@ class OwnerStoreController extends AbstractController
      */
     public function search(Request $request, $page_no = null, Paginator $paginator)
     {
-        if (empty($this->BaseInfo->getAuthenticationKey())) {
+        if (empty($this->baseInfoRepository->get()->getAuthenticationKey())) {
             $this->addWarning('認証キーを設定してください。', 'admin');
 
             return $this->redirectToRoute('admin_store_authentication_setting');
