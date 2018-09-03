@@ -15,56 +15,56 @@ file that was distributed with this source code.
             <div class="ec-headerLink__icon">
                 <i class="fas fa-shopping-cart"></i>
             </div>
-            <span>{{ 'front.block.login.to_cart'|trans }}</span>
+            <span>{{ 'カートを見る'|trans }}</span>
         </a>
         {% if is_granted('ROLE_USER') %}
             <a class="ec-headerLink__item" href="{{ url('mypage') }}">
                 <div class="ec-headerLink__icon">
                     <i class="fas fa-lock"></i>
                 </div>
-                <span>{{ 'front.block.login.mypage'|trans }}</span>
+                <span>{{ 'マイページ'|trans }}</span>
             </a>
             {% if BaseInfo.option_favorite_product %}
                 <a class="ec-headerLink__item" href="{{ url('mypage_favorite') }}">
                     <div class="ec-headerLink__icon">
                         <i class="fas fa-heart"></i>
                     </div>
-                    <span>{{ 'front.block.login.favorite'|trans }}</span>
+                    <span>{{ 'お気に入り'|trans }}</span>
                 </a>
             {% endif %}
             <a class="ec-headerLink__item" href="{{ url('logout') }}">
                 <div class="ec-headerLink__icon">
                     <i class="fas fa-user"></i>
                 </div>
-                <span>{{ 'front.block.login.logout'|trans }}</span>
+                <span>{{ 'ログアウト'|trans }}</span>
             </a>
         {% else %}
             <a class="ec-headerLink__item" href="{{ url('entry') }}">
                 <div class="ec-headerLink__icon">
                     <i class="fas fa-lock"></i>
                 </div>
-                <span>{{ 'front.block.login.customer_registration'|trans }}</span>
+                <span>{{ '新規会員登録'|trans }}</span>
             </a>
             {% if BaseInfo.option_favorite_product %}
                 <a class="ec-headerLink__item" href="{{ url('mypage_favorite') }}">
                     <div class="ec-headerLink__icon">
                         <i class="fas fa-heart"></i>
                     </div>
-                    <span>{{ 'front.block.login.favorite'|trans }}</span>
+                    <span>{{ 'お気に入り'|trans }}</span>
                 </a>
             {% endif %}
             <a class="ec-headerLink__item" href="{{ url('mypage_login') }}">
                 <div class="ec-headerLink__icon">
                     <i class="fas fa-user"></i>
                 </div>
-                <span>{{ 'front.block.login.login'|trans }}</span>
+                <span>{{ 'ログイン'|trans }}</span>
             </a>
         {% endif %}
         <a class="ec-headerLink__item" href="{{ url('homepage') }}">
             <div class="ec-headerLink__icon">
                 <i class="fas fa-home"></i>
             </div>
-            <span>{{ 'front.block.login.to_home'|trans }}</span>
+            <span>{{ 'ホームに戻る'|trans }}</span>
         </a>
     </div>
 </div>

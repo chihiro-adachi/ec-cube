@@ -35,7 +35,7 @@ file that was distributed with this source code.
         <div class="main_inner">
             <div class="main_content">
                 <div class="page-header">
-                    <h1>{{ 'install.database_configration'|trans }}</h1>
+                    <h1>{{ 'データベースの設定'|trans }}</h1>
                 </div>
                 <div class="container-fluid">
                     <div class="row">
@@ -49,8 +49,8 @@ file that was distributed with this source code.
                                 {{ form_row(form.database_user) }}
                                 {{ form_row(form.database_password) }}
                                 <ul class="btn_area">
-                                    <li><button type="submit" class="btn btn-primary btn-block btn-lg">{{ 'install.next'|trans }}</button></li>
-                                    <li><a href="{{ path('install_step3') }}" class="btn btn-link btn-block btn-lg">{{ 'install.back'|trans }}</a></li>
+                                    <li><button type="submit" class="btn btn-primary btn-block btn-lg">{{ '次へ進む'|trans }}</button></li>
+                                    <li><a href="{{ path('install_step3') }}" class="btn btn-link btn-block btn-lg">{{ '前へ戻る'|trans }}</a></li>
                                 </ul>
                             </form>
                         </div>

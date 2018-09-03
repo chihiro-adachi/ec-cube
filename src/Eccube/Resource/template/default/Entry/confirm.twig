@@ -17,17 +17,19 @@ file that was distributed with this source code.
 {% block main %}
     <div class="ec-registerRole">
         <div class="ec-pageHeader">
-            <h1>{{ 'front.entry.confirm_title'|trans }}</h1>
+            <h1>{{ '新規会員登録(確認)'|trans }}</h1>
         </div>
         <div class="ec-off1Grid">
             <div class="ec-off1Grid__cell">
                 <form method="post" action="{{ url('entry') }}">
                     {{ form_widget(form._token) }}
-                    <p>{{ 'front.entry.confirm_message'|trans|nl2br }}</p>
+                    <p>{{ '下記の内容で登録してもよろしいでしょうか？
+よろしければ、一番下の「会員登録をする」ボタンをクリックしてください。
+'|trans|nl2br }}</p>
                     <div class="ec-borderedDefs">
                         <dl>
                             <dt>
-                                {{ form_label(form.name, 'common.name', { 'label_attr': { 'class': 'ec-label '}}) }}
+                                {{ form_label(form.name, 'お名前', { 'label_attr': { 'class': 'ec-label '}}) }}
                             </dt>
                             <dd>
                                 {{ form.name.name01.vars.data }} {# form.vars.value = form.vars.data = Customer #}
@@ -38,7 +40,7 @@ file that was distributed with this source code.
                         </dl>
                         <dl>
                             <dt>
-                                {{ form_label(form.kana, 'common.kana', { 'label_attr': { 'class': 'ec-label' }}) }}
+                                {{ form_label(form.kana, 'お名前(カナ)', { 'label_attr': { 'class': 'ec-label' }}) }}
                             </dt>
                             <dd>
                                 {{ form.kana.kana01.vars.data }}
@@ -49,7 +51,7 @@ file that was distributed with this source code.
                         </dl>
                         <dl>
                             <dt>
-                                {{ form_label(form.company_name, 'common.company_name', { 'label_attr': { 'class': 'ec-label'}}) }}
+                                {{ form_label(form.company_name, '会社名', { 'label_attr': { 'class': 'ec-label'}}) }}
                             </dt>
                             <dd>
                                 {{ form.company_name.vars.data }}
@@ -58,11 +60,11 @@ file that was distributed with this source code.
                         </dl>
                         <dl>
                             <dt>
-                                {{ form_label(form.address, 'common.address', { 'label_attr': { 'class': 'ec-label' }}) }}
+                                {{ form_label(form.address, '住所', { 'label_attr': { 'class': 'ec-label' }}) }}
                             </dt>
                             <dd>
                                 {# 郵便番号 #}
-                                <span>{{ 'common.postal_symbol'|trans }}</span>{{ form.postal_code.vars.data }}
+                                <span>{{ '〒'|trans }}</span>{{ form.postal_code.vars.data }}
                                 {{ form_widget(form.postal_code, { type : 'hidden' }) }}
                                 {# 都道府県・住所 #}
                                 {{ form.address.pref.vars.data }} {{ form.address.addr01.vars.data }} {{ form.address.addr02.vars.data }}
@@ -73,7 +75,7 @@ file that was distributed with this source code.
                         </dl>
                         <dl>
                             <dt>
-                                {{ form_label(form.phone_number, 'common.phone_number', { 'label_attr': { 'class': 'ec-label' }}) }}
+                                {{ form_label(form.phone_number, '電話番号', { 'label_attr': { 'class': 'ec-label' }}) }}
                             </dt>
                             <dd>{{ form.phone_number.vars.data }}
                                 {{ form_widget(form.phone_number, { type : 'hidden' }) }}
@@ -81,7 +83,7 @@ file that was distributed with this source code.
                         </dl>
                         <dl>
                             <dt>
-                                {{ form_label(form.email, 'common.mail_address', {'label_attr': {'class': 'ec-label'}}) }}
+                                {{ form_label(form.email, 'メールアドレス', {'label_attr': {'class': 'ec-label'}}) }}
                             </dt>
                             <dd>
                                 {{ form.email.vars.data }}
@@ -91,7 +93,7 @@ file that was distributed with this source code.
                         </dl>
                         <dl>
                             <dt>
-                                {{ form_label(form.password, 'common.password', { 'label_attr': { 'class': 'ec-label' }}) }}
+                                {{ form_label(form.password, 'パスワード', { 'label_attr': { 'class': 'ec-label' }}) }}
                             </dt>
                             <dd>
                                 ********
@@ -101,7 +103,7 @@ file that was distributed with this source code.
                         </dl>
                         <dl>
                             <dt>
-                                {{ form_label(form.birth, 'common.birth_day', { 'label_attr': { 'class': 'ec-label' }}) }}
+                                {{ form_label(form.birth, '生年月日', { 'label_attr': { 'class': 'ec-label' }}) }}
                             </dt>
                             <dd>
                                 {{ form.birth.vars.data ? form.birth.vars.data|date_day() }}
@@ -112,7 +114,7 @@ file that was distributed with this source code.
                         </dl>
                         <dl>
                             <dt>
-                                {{ form_label(form.sex, 'common.gender', {'label_attr': {'class': 'ec-label'}}) }}
+                                {{ form_label(form.sex, '性別', {'label_attr': {'class': 'ec-label'}}) }}
                             </dt>
                             <dd>
                                 {{ form.sex.vars.data }}
@@ -121,7 +123,7 @@ file that was distributed with this source code.
                         </dl>
                         <dl>
                             <dt>
-                                {{ form_label(form.job, 'common.job', {'label_attr': {'class': 'ec-label'}}) }}
+                                {{ form_label(form.job, '職業', {'label_attr': {'class': 'ec-label'}}) }}
                             </dt>
                             <dd>{{ form.job.vars.data }}
                                 {{ form_widget(form.job, { type: 'hidden'}) }}
@@ -153,8 +155,8 @@ file that was distributed with this source code.
                     <div class="ec-registerRole__actions">
                         <div class="ec-off4Grid">
                             <div class="ec-off4Grid__cell">
-                                <button class="ec-blockBtn--action" type="submit" name="mode" value="complete">{{ 'front.entry.do_register'|trans }}</button>
-                                <button class="ec-blockBtn--cancel" type="submit" name="mode" value="back">{{ 'common.back'|trans }}</button>
+                                <button class="ec-blockBtn--action" type="submit" name="mode" value="complete">{{ '会員登録をする'|trans }}</button>
+                                <button class="ec-blockBtn--cancel" type="submit" name="mode" value="back">{{ '戻る'|trans }}</button>
                             </div>
                         </div>
                     </div>

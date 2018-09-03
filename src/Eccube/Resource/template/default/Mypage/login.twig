@@ -15,7 +15,7 @@ file that was distributed with this source code.
 {% block main %}
     <div class="ec-role">
         <div class="ec-pageHeader">
-            <h1>{{ 'common.login'|trans }}</h1>
+            <h1>{{ 'ログイン'|trans }}</h1>
         </div>
         <div class="ec-off2Grid">
             <div class="ec-off2Grid__cell">
@@ -29,8 +29,8 @@ file that was distributed with this source code.
                         </div>
                         <div class="ec-login__input">
                             <div class="ec-input">
-                                {{ form_widget(form.login_email, {'attr': {'style' : 'ime-mode: disabled;', 'placeholder' : 'common.mail_address', 'autofocus': true}}) }}
-                                {{ form_widget(form.login_pass,  {'attr': {'placeholder' : 'common.password' }}) }}
+                                {{ form_widget(form.login_email, {'attr': {'style' : 'ime-mode: disabled;', 'placeholder' : 'メールアドレス', 'autofocus': true}}) }}
+                                {{ form_widget(form.login_pass,  {'attr': {'placeholder' : 'パスワード' }}) }}
                             </div>
                             {% if BaseInfo.option_remember_me %}
                             <div class="ec-checkbox">
@@ -38,7 +38,7 @@ file that was distributed with this source code.
                                     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
                                         <input type="hidden" name="login_memory" value="1">
                                     {% else %}
-                                        {{ form_widget(form.login_memory, { 'label': 'common.remember_me'|trans }) }}
+                                        {{ form_widget(form.login_memory, { 'label': '次回から自動的にログインする'|trans }) }}
                                     {% endif %}
                                 </label>
                             </div>
@@ -54,15 +54,15 @@ file that was distributed with this source code.
                             <div class="ec-grid2__cell">
                                 <div class="ec-login__actions">
                                     <button type="submit"
-                                            class="ec-blockBtn--cancel">{{ 'common.login'|trans }}</button>
+                                            class="ec-blockBtn--cancel">{{ 'ログイン'|trans }}</button>
                                 </div>
                             </div>
                             <div class="ec-grid2__cell">
                                 <div class="ec-login__link"><a class="ec-link"
-                                                               href="{{ url('forgot') }}">{{ 'common.forgot_login'|trans }}</a>
+                                                               href="{{ url('forgot') }}">{{ 'ログイン情報をお忘れですか？'|trans }}</a>
                                 </div>
                                 <div class="ec-login__link"><a class="ec-link"
-                                                               href="{{ url('entry') }}">{{ 'common.signup'|trans }}</a>
+                                                               href="{{ url('entry') }}">{{ '新規会員登録'|trans }}</a>
                                 </div>
                             </div>
                         </div>

@@ -24,7 +24,7 @@ file that was distributed with this source code.
                     <div class="ec-borderedDefs">
                         <dl>
                             <dt>
-                                {{ form_label(form.login_email, 'common.mail_address', { 'label_attr': { 'class': 'ec-label' }}) }}
+                                {{ form_label(form.login_email, 'メールアドレス', { 'label_attr': { 'class': 'ec-label' }}) }}
                             </dt>
                             <dd>
                                 <div class="ec-input{{ has_errors(form.login_email) ? ' error' }}">
@@ -38,19 +38,19 @@ file that was distributed with this source code.
                         </dl>
                         <dl>
                             <dt>
-                                {{ form_label(form.password, 'common.password', { 'label_attr': {'class': 'ec-label' }}) }}
+                                {{ form_label(form.password, 'パスワード', { 'label_attr': {'class': 'ec-label' }}) }}
                             </dt>
                             <dd>
                                 <div class="ec-input{{ has_errors(form.password.first) ? ' error' }}">
                                     {{ form_widget(form.password.first, {
-                                        'attr': { 'placeholder': 'common.password_sample'|trans({ '%min%': eccube_config.eccube_password_min_len, '%max%': eccube_config.eccube_password_max_len }) },
+                                        'attr': { 'placeholder': '半角英数記号%min%〜%max%文字'|trans({ '%min%': eccube_config.eccube_password_min_len, '%max%': eccube_config.eccube_password_max_len }) },
                                         'type': 'password'
                                     }) }}
                                     {{ form_errors(form.password.first) }}
                                 </div>
                                 <div class="ec-input{{ has_errors(form.password.second) ? ' error' }}">
                                     {{ form_widget(form.password.second, {
-                                        'attr': { 'placeholder': 'common.repeated_confirm'|trans },
+                                        'attr': { 'placeholder': '確認のためもう一度入力してください'|trans },
                                         'type': 'password'
                                     }) }}
                                     {{ form_errors(form.password.second) }}
@@ -62,7 +62,7 @@ file that was distributed with this source code.
                     <div class="ec-registerRole__actions">
                         <div class="ec-off4Grid">
                             <div class="ec-off4Grid__cell">
-                                <button class="ec-blockBtn--action" type="submit">{{ 'common.registration'|trans }}</button>
+                                <button class="ec-blockBtn--action" type="submit">{{ '登録する'|trans }}</button>
                             </div>
                         </div>
                     </div>

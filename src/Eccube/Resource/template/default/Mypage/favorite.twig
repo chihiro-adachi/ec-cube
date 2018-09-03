@@ -18,7 +18,7 @@ file that was distributed with this source code.
     <div class="ec-layoutRole__main">
         <div class="ec-mypageRole">
             <div class="ec-pageHeader">
-                <h1>{{ 'front.mypage.title'|trans }}/{{ 'front.mypage.nav__favorite'|trans }}</h1>
+                <h1>{{ 'マイページ'|trans }}/{{ 'お気に入り一覧'|trans }}</h1>
             </div>
             {% include 'Mypage/navi.twig' %}
         </div>
@@ -27,7 +27,7 @@ file that was distributed with this source code.
             <div class="ec-favoriteRole">
                 {% if pagination.totalItemCount > 0 %}
                     <div class="ec-favoriteRole__header">
-                        <p>{{ 'front.mypage.favorite_count'|trans({'%count%':pagination.totalItemCount}) }}</p>
+                        <p>{{ '%count%件のお気に入りがあります'|trans({'%count%':pagination.totalItemCount}) }}</p>
                     </div>
                     <div class="ec-favoriteRole__detail">
                         <ul class="ec-favoriteRole__itemList">
@@ -62,7 +62,7 @@ file that was distributed with this source code.
                         {% include "pager.twig" with {'pages': pagination.paginationData} %}
                     </div>
                 {% else %}
-                    <div class="ec-favoriteRole__header">{{ 'front.mypage.favorite_not_found'|trans }}</div>
+                    <div class="ec-favoriteRole__header">{{ 'お気に入りは登録されていません。'|trans }}</div>
                 {% endif %}
             </div>
         </div>

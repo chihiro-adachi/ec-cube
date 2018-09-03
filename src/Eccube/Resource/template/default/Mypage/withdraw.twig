@@ -18,7 +18,7 @@ file that was distributed with this source code.
     <div class="ec-layoutRole__main">
         <div class="ec-mypageRole">
             <div class="ec-pageHeader">
-                <h1>{{ 'front.mypage.title'|trans }}/{{ 'front.mypage.nav__withdrow'|trans }}</h1>
+                <h1>{{ 'マイページ'|trans }}/{{ '退会手続き'|trans }}</h1>
             </div>
             {{ include('Mypage/navi.twig') }}
         </div>
@@ -30,16 +30,16 @@ file that was distributed with this source code.
                         <div style="font-size:100px;text-align:center;">
                             <div class="ec-icon"><img src="{{ asset('assets/icon/exclamation.svg') }}" alt=""></div>
                         </div>
-                        <p class="ec-withdrawRole__title">{{ 'front.mypage.withdraw_message__title'|trans }}
+                        <p class="ec-withdrawRole__title">{{ '退会手続きの前にご確認ください'|trans }}
                         </p>
-                        <p class="ec-withdrawRole__description">{{ 'front.mypage.withdraw_message__body'|trans }}
+                        <p class="ec-withdrawRole__description">{{ '退会手続きが完了した時点で、現在保存されている購入履歴やお届け先等の情報は、すべて削除されますのでご注意ください。'|trans }}
                         </p>
                     </div>
                 </div>
                 <div class="ec-off4Grid">
                     <div class="ec-off4Grid__cell">
                         <button type="submit" class="ec-blockBtn--cancel" name="mode"
-                                value="confirm">{{ 'front.mypage.withdraw_confirm'|trans }}</button>
+                                value="confirm">{{ '退会手続きへ'|trans }}</button>
                     </div>
                 </div>
             </form>

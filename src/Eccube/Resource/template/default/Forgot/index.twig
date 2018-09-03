@@ -15,7 +15,7 @@ file that was distributed with this source code.
 {% block main %}
     <div class="ec-role">
         <div class="ec-pageHeader">
-            <h1>{{ 'front.forgot.title'|trans }}</h1>
+            <h1>{{ 'パスワードの再発行'|trans }}</h1>
         </div>
     </div>
     <div class="ec-forgotRole">
@@ -25,13 +25,13 @@ file that was distributed with this source code.
                 <div class="ec-off1Grid__cell">
                     <div class="ec-forgotRole__form">
                         <div class="ec-forgotRole__intro">
-                            <p class="ec-para-nomal">{{ 'front.forgot.message1'|trans }}</p>
-                            <p class="ec-para-nomal">{{ 'front.forgot.message2'|trans }}</p>
+                            <p class="ec-para-nomal">{{ 'ご登録時のメールアドレスを入力して「次へ」ボタンをクリックしてください。'|trans }}</p>
+                            <p class="ec-para-nomal">{{ '※パスワード再発行メールを送信します。メールの内容をご確認の上、新しいパスワードを登録してください。'|trans }}</p>
                         </div>
                         <div class="ec-borderedDefs">
                             <dl>
                                 <dt>
-                                    {{ form_label(form.login_email, 'common.mail_address', { 'label_attr': { 'class': 'ec-label' }}) }}
+                                    {{ form_label(form.login_email, 'メールアドレス', { 'label_attr': { 'class': 'ec-label' }}) }}
                                 </dt>
                                 <dd>
                                     <div class="ec-input{{ has_errors(form.login_email) ? ' error' }}">
@@ -46,7 +46,7 @@ file that was distributed with this source code.
             </div>
             <div class="ec-off4Grid">
                 <div class="ec-off4Grid__cell">
-                    <button type="submit" class="ec-blockBtn--action">{{ 'common.next'|trans }}</button>
+                    <button type="submit" class="ec-blockBtn--action">{{ '次へ'|trans }}</button>
                 </div>
             </div>
         </form>

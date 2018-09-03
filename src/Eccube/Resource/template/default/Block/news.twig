@@ -19,7 +19,7 @@ file that was distributed with this source code.
                 $(this).find('.ec-newsRole__newsItem:gt(4)').each(function() {
                     $(this).hide();
                 });
-                $(this).append('<a id="news_readmore" class="ec-inlineBtn--top">{{ 'front.block.news.read_more'|trans }}</a>');
+                $(this).append('<a id="news_readmore" class="ec-inlineBtn--top">{{ 'more'|trans }}</a>');
                 var dispNum = 5;
                 $(this).find('#news_readmore').click(function() {
                     dispNum += 5;
@@ -36,9 +36,9 @@ file that was distributed with this source code.
 <div class="ec-role">
     <div class="ec-newsRole">
         <div class="ec-secHeading">
-            <span class="ec-secHeading__en">{{'front.block.news.title__en'|trans}}</span>
+            <span class="ec-secHeading__en">{{'NEWS'|trans}}</span>
             <span class="ec-secHeading__line"></span>
-            <span class="ec-secHeading__ja">{{'front.block.news.title__ja'|trans}}</span>
+            <span class="ec-secHeading__ja">{{'新着情報'|trans}}</span>
         </div>
         <div class="ec-newsRole__news">
             {% for News in NewsList %}
@@ -65,7 +65,7 @@ file that was distributed with this source code.
                         {% if News.url %}
                             <br>
                             <a href="{{ News.url }}" {% if News.link_method == '1' %}target="_blank"{% endif %}>
-                                {{ 'front.block.news.see_details'|trans }}
+                                {{ '詳しくはこちら'|trans }}
                             </a>
                         {% endif %}
                     </div>

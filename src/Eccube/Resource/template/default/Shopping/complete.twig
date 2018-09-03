@@ -15,7 +15,7 @@ file that was distributed with this source code.
 {% block main %}
 <div class="ec-role">
     <div class="ec-pageHeader">
-        <h1>{{ 'front.shopping.complete_title'|trans }}</h1>
+        <h1>{{ 'ご注文完了'|trans }}</h1>
     </div>
 </div>
 
@@ -26,33 +26,33 @@ file that was distributed with this source code.
             <li class="ec-progress__item">
                 <div class="ec-progress__number">{{ step }}{% set step = step + 1 %}
                 </div>
-                <div class="ec-progress__label">{{ 'front.cart.nav__cart_items'|trans }}
+                <div class="ec-progress__label">{{ 'カートの商品'|trans }}
                 </div>
             </li>
             {% if is_granted('ROLE_USER') == false %}
                 <li class="ec-progress__item">
                     <div class="ec-progress__number">{{ step }}{% set step = step + 1 %}
                     </div>
-                    <div class="ec-progress__label">{{ 'front.cart.nav__customer_info'|trans }}
+                    <div class="ec-progress__label">{{ 'お客様情報'|trans }}
                     </div>
                 </li>
             {% endif %}
             <li class="ec-progress__item">
                 <div class="ec-progress__number">{{ step }}{% set step = step + 1 %}
                 </div>
-                <div class="ec-progress__label">{{ 'front.cart.nav__order'|trans }}
+                <div class="ec-progress__label">{{ 'ご注文手続き'|trans }}
                 </div>
             </li>
             <li class="ec-progress__item">
                 <div class="ec-progress__number">{{ step }}{% set step = step + 1 %}
                 </div>
-                <div class="ec-progress__label">{{ 'front.cart.nav__confirm'|trans }}
+                <div class="ec-progress__label">{{ 'ご注文内容確認'|trans }}
                 </div>
             </li>
             <li class="ec-progress__item  is-complete">
                 <div class="ec-progress__number">{{ step }}{% set step = step + 1 %}
                 </div>
-                <div class="ec-progress__label">{{ 'front.cart.nav__complete'|trans }}
+                <div class="ec-progress__label">{{ '完了'|trans }}
                 </div>
             </li>
         </ul>
@@ -63,10 +63,13 @@ file that was distributed with this source code.
     <div class="ec-off3Grid ec-text-ac">
         <div class="ec-off3Grid__cell">
             <div class="ec-reportHeading">
-                <h2>{{ 'front.shopping.complete_message__title'|trans }}</h2>
+                <h2>{{ 'ご注文ありがとうございました'|trans }}</h2>
             </div>
             <p class="ec-reportDescription">
-                {{ 'front.shopping.complete_message__body'|trans }}
+                {{ 'ただいま、ご注文の確認メールをお送りさせていただきました。
+万一、ご確認メールが届かない場合は、トラブルの可能性もありますので大変お手数ではございますがもう一度お問い合わせいただくか、お電話にてお問い合わせくださいませ。
+今後ともご愛顧賜りますようよろしくお願い申し上げます。
+'|trans }}
                 {% if Order.id %}
                     <br /><br /><strong>ご注文番号：{{ Order.orderNo }}</strong>
                 {% endif %}
@@ -78,9 +81,9 @@ file that was distributed with this source code.
 
             <div class="ec-off4Grid">
                 {% if hasNextCart %}
-                    <div class="ec-off4Grid__cell"><a class="ec-blockBtn--primary" href="{{ url('cart') }}">{{ 'front.shopping.continue'|trans }}</a></div>
+                    <div class="ec-off4Grid__cell"><a class="ec-blockBtn--primary" href="{{ url('cart') }}">{{ '購入を続ける'|trans }}</a></div>
                 {% else %}
-                    <div class="ec-off4Grid__cell"><a class="ec-blockBtn--cancel" href="{{ url('homepage') }}">{{ 'common.go_to_top'|trans }}</a></div>
+                    <div class="ec-off4Grid__cell"><a class="ec-blockBtn--cancel" href="{{ url('homepage') }}">{{ 'トップページへ'|trans }}</a></div>
                 {% endif %}
             </div>
         </div>

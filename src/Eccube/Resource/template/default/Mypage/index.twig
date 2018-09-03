@@ -18,13 +18,13 @@ file that was distributed with this source code.
     <div class="ec-layoutRole__main">
         <div class="ec-mypageRole">
             <div class="ec-pageHeader">
-                <h1>{{ 'front.mypage.title'|trans }}/{{ 'front.mypage.nav__history'|trans }}</h1>
+                <h1>{{ 'マイページ'|trans }}/{{ 'ご注文履歴'|trans }}</h1>
             </div>
             {% include 'Mypage/navi.twig' %}
         </div>
         <div class="ec-mypageRole">
             {% if pagination.totalItemCount > 0 %}
-                <p class="ec-para-nomal">{{ 'front.mypage.history_count'|trans({'%count%':pagination.totalItemCount}) }}</p>
+                <p class="ec-para-nomal">{{ '%count%件の履歴があります'|trans({'%count%':pagination.totalItemCount}) }}</p>
                 {% for Order in pagination %}
                     <div class="ec-historyRole">
                         <div class="ec-historyRole__contents">
@@ -33,17 +33,17 @@ file that was distributed with this source code.
                                 <div class="ec-historyListHeader">
                                     <p class="ec-historyListHeader__date">{{ Order.order_date|date_sec }}</p>
                                     <dl class="ec-definitions">
-                                        <dt>{{ 'front.mypage.order_no'|trans }}</dt>
+                                        <dt>{{ 'ご注文番号'|trans }}</dt>
                                         <dd>{{ Order.order_no }}</dd>
                                     </dl>
                                     {% if (BaseInfo.option_mypage_order_status_display) %}
                                         <dl class="ec-definitions">
-                                            <dt>{{ 'front.mypage.order_status'|trans }}</dt>
+                                            <dt>{{ 'ご注文状況'|trans }}</dt>
                                             <dd>{{ Order.CustomerOrderStatus }}</dd>
                                         </dl>
                                     {% endif %}
                                     <p class="ec-historyListHeader__action"><a class="ec-inlineBtn"
-                                                                               href="{{ url('mypage_history', {'order_no': Order.order_no}) }}">{{ 'front.mypage.view_detail'|trans }}</a>
+                                                                               href="{{ url('mypage_history', {'order_no': Order.order_no}) }}">{{ '詳細を見る'|trans }}</a>
                                     </p>
                                 </div>
                             </div>
@@ -78,7 +78,7 @@ file that was distributed with this source code.
                     {% include "pager.twig" with {'pages': pagination.paginationData} %}
                 </div>
             {% else %}
-                <p class="ec-para-nomal">{{ 'front.mypage.history_not_found'|trans }}</p>
+                <p class="ec-para-nomal">{{ 'ご注文履歴はありません。'|trans }}</p>
             {% endif %}
         </div>
     </div>

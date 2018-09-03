@@ -136,7 +136,7 @@ $(function() {
 
                                 <button id="button__delete--{{ idx }}_{{ loop.index0 }}" type="button" class="btn ec-inlineBtn delete"
                                         {% if loop.index0 == 0 %}style="display:none;"{% endif %}
-                                        data-itemidx="{{ idx }}-{{ loop.index0 }}">{{'common.delete'|trans}}</button>
+                                        data-itemidx="{{ idx }}-{{ loop.index0 }}">{{'削除'|trans}}</button>
                             </div>
                         {% endfor %}
                     </div>
