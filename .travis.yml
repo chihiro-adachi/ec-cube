@@ -38,6 +38,7 @@ eccube_setup: &eccube_setup |
   bin/console doctrine:database:create
   bin/console doctrine:schema:create
   bin/console eccube:fixtures:load
+  bin/template_jp.php
 
 jobs:
   fast_finish: true
