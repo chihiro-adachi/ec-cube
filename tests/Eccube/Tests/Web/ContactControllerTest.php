@@ -187,6 +187,8 @@ class ContactControllerTest extends AbstractWebTestCase
             ['contact' => $formData,
                 'mode' => 'complete', ]
         );
+
+        dump($this->client->getResponse()->isRedirect());
         $this->assertTrue($this->client->getResponse()->isRedirect($this->generateUrl('contact_complete')));
     }
 }
