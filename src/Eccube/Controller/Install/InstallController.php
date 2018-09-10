@@ -23,6 +23,7 @@ use Doctrine\DBAL\Migrations\Migration;
 use Doctrine\DBAL\Migrations\MigrationException;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Doctrine\ORM\Tools\Setup;
 use Eccube\Common\Constant;
@@ -746,7 +747,7 @@ class InstallController extends AbstractController
         return $migration;
     }
 
-    protected function dropTables(EntityManager $em)
+    protected function dropTables(EntityManagerInterface $em)
     {
         $metadatas = $em->getMetadataFactory()->getAllMetadata();
         $schemaTool = new SchemaTool($em);
@@ -754,14 +755,14 @@ class InstallController extends AbstractController
         $em->getConnection()->executeQuery('DROP TABLE IF EXISTS doctrine_migration_versions');
     }
 
-    protected function createTables(EntityManager $em)
+    protected function createTables(EntityManagerInterface $em)
     {
         $metadatas = $em->getMetadataFactory()->getAllMetadata();
         $schemaTool = new SchemaTool($em);
         $schemaTool->createSchema($metadatas);
     }
 
-    protected function importCsv(EntityManager $em)
+    protected function importCsv(EntityManagerInterface $em)
     {
         $loader = new \Eccube\Doctrine\Common\CsvDataFixtures\Loader();
         $loader->loadFromDirectory($this->getParameter('kernel.project_dir').'/src/Eccube/Resource/doctrine/import_csv');
@@ -885,7 +886,7 @@ class InstallController extends AbstractController
      *
      * @return array
      */
-    public function createAppData($params, EntityManager $em)
+    public function createAppData($params, EntityManagerInterface $em)
     {
         $platform = $em->getConnection()->getDatabasePlatform()->getName();
         $version = $this->getDatabaseVersion($em);
@@ -905,7 +906,7 @@ class InstallController extends AbstractController
      * @param array $params
      * @param EntityManager $em
      */
-    protected function sendAppData($params, EntityManager $em)
+    protected function sendAppData($params, EntityManagerInterface $em)
     {
         $query = http_build_query($this->createAppData($params, $em));
         $header = [
@@ -931,7 +932,7 @@ class InstallController extends AbstractController
      *
      * @return string
      */
-    public function getDatabaseVersion(EntityManager $em)
+    public function getDatabaseVersion(EntityManagerInterface $em)
     {
         $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
         $rsm->addScalarResult('server_version', 'server_version');

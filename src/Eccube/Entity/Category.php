@@ -51,12 +51,12 @@ if (!class_exists('\Eccube\Entity\Category')) {
         }
 
         /**
-         * @param  \Doctrine\ORM\EntityManager $em
+         * @param  \Doctrine\ORM\EntityManagerInterface $em
          * @param  integer                     $sortNo
          *
          * @return \Eccube\Entity\Category
          */
-        public function calcChildrenSortNo(\Doctrine\ORM\EntityManager $em, $sortNo)
+        public function calcChildrenSortNo(\Doctrine\ORM\EntityManagerInterface $em, $sortNo)
         {
             $this->setSortNo($this->getSortNo() + $sortNo);
             $em->persist($this);
