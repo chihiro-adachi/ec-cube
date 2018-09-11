@@ -20,10 +20,12 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+            logout_on_user_change: true
         admin:
             pattern: '^/%eccube_admin_route%/'
             anonymous: true
             provider: member_provider
+            logout_on_user_change: true
             form_login:
                 check_path: admin_login
                 login_path: admin_login
@@ -39,6 +41,7 @@ security:
             pattern: ^/
             anonymous: true
             provider: customer_provider
+            logout_on_user_change: true
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 3600
