@@ -18,6 +18,13 @@ services:
             - '%session.save_path%'
             - 'MOCKSESSID'
             - '@session.storage.metadata_bag'
+
+    Eccube\Repository\:
+        resource: '../../../src/Eccube/Repository'
+        autowire: true
+        autoconfigure: true
+        public: true
+
     Eccube\Service\PurchaseFlow\Processor\DeliveryFeePreprocessor:
         autowire: true
         public: true
