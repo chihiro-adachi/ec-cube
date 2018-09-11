@@ -42,7 +42,7 @@ use Eccube\Repository\TaxRuleRepository;
 use Eccube\Service\CsvExportService;
 use Eccube\Util\FormUtil;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
@@ -273,7 +273,7 @@ class ProductController extends AbstractController
     /**
      * @Route("/%eccube_admin_route%/product/classes/{id}/load", name="admin_product_classes_load", methods={"GET"}, requirements={"id" = "\d+"})
      * @Template("@admin/Product/product_class_popup.twig")
-     * @ParamConverter("Product")
+     * @Entity("Product")
      */
     public function loadProductClasses(Request $request, Product $Product)
     {

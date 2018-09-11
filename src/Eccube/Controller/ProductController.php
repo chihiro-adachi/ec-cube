@@ -29,7 +29,7 @@ use Eccube\Service\CartService;
 use Eccube\Service\PurchaseFlow\PurchaseContext;
 use Eccube\Service\PurchaseFlow\PurchaseFlow;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -243,7 +243,7 @@ class ProductController extends AbstractController
      *
      * @Route("/products/detail/{id}", name="product_detail", methods={"GET"}, requirements={"id" = "\d+"})
      * @Template("Product/detail.twig")
-     * @ParamConverter("Product", options={"repository_method" = "findWithSortedClassCategories"})
+     * @Entity("Product", expr="repository.findWithSortedClassCategories(id)")
      *
      * @param Request $request
      * @param Product $Product
