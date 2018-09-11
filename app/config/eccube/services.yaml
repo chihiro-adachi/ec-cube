@@ -148,9 +148,9 @@ services:
             - { name: monolog.processor }
             - { name: kernel.event_listener, event: kernel.request, priority: 1024 }
 
-    Symfony\Component\HttpFoundation\ParameterBag:
-
     Eccube\Twig\Extension\IgnoreRoutingNotFoundExtension:
         # Symfony\Bridge\Twig\Extension\RoutingExtensionの後に登録するため,
         # autoconfigureはfalseにし, CompilerPassで追加する.
         autoconfigure: false
+
+    SunCat\MobileDetectBundle\DeviceDetector\MobileDetector: ~
