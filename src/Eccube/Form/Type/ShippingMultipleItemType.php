@@ -126,8 +126,8 @@ class ShippingMultipleItemType extends AbstractType
                         $CustomerAddress->setFromCustomer($NonMember);
                         $CustomerAddresses[] = $CustomerAddress;
 
-                        if ($Address = $this->orderHelper->getNonMemberAddresses()) {
-                            $CustomerAddresses[] = $Address;
+                        if ($NonMemberAddresses = $this->orderHelper->getNonMemberAddresses()) {
+                            $CustomerAddresses = array_merge($CustomerAddresses, $NonMemberAddresses);
                         }
                     }
                 }
