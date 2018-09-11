@@ -28,6 +28,7 @@ services:
           $shoppingPurchaseFlow: '@eccube.purchase.flow.shopping'
           $orderPurchaseFlow: '@eccube.purchase.flow.order'
           $_orderStateMachine: '@state_machine.order'
+          Psr\Log\LoggerInterface: '@eccube.logger'
 
 
     # makes classes in src/ available to be used as services
