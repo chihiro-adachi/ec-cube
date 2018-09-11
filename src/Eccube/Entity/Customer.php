@@ -28,7 +28,7 @@ if (!class_exists('\Eccube\Entity\Customer')) {
      * @ORM\HasLifecycleCallbacks()
      * @ORM\Entity(repositoryClass="Eccube\Repository\CustomerRepository")
      */
-    class Customer extends \Eccube\Entity\AbstractEntity implements UserInterface
+    class Customer extends \Eccube\Entity\AbstractEntity implements UserInterface, \Serializable
     {
         /**
          * @var int
@@ -1147,6 +1147,32 @@ if (!class_exists('\Eccube\Entity\Customer')) {
         public function getPoint()
         {
             return $this->point;
+        }
+
+        /**
+         * @see \Serializable::serialize()
+         */
+        public function serialize()
+        {
+            return \serialize([
+                $this->id,
+                $this->email,
+                $this->password,
+                $this->salt,
+            ]);
+        }
+
+        /**
+         * @see \Serializable::unserialize()
+         */
+        public function unserialize($serialized)
+        {
+            list (
+                $this->id,
+                $this->email,
+                $this->password,
+                $this->salt,
+                ) = \unserialize($serialized, ['allowed_classes' => false]);
         }
     }
 }

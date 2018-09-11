@@ -28,7 +28,7 @@ if (!class_exists('\Eccube\Entity\Member')) {
      * @ORM\HasLifecycleCallbacks()
      * @ORM\Entity(repositoryClass="Eccube\Repository\MemberRepository")
      */
-    class Member extends \Eccube\Entity\AbstractEntity implements UserInterface
+    class Member extends \Eccube\Entity\AbstractEntity implements UserInterface, \Serializable
     {
         public static function loadValidatorMetadata(ClassMetadata $metadata)
         {
@@ -467,6 +467,32 @@ if (!class_exists('\Eccube\Entity\Member')) {
         public function getCreator()
         {
             return $this->Creator;
+        }
+
+        /**
+         * @see \Serializable::serialize()
+         */
+        public function serialize()
+        {
+            return \serialize([
+                $this->id,
+                $this->login_id,
+                $this->password,
+                $this->salt,
+            ]);
+        }
+
+        /**
+         * @see \Serializable::unserialize()
+         */
+        public function unserialize($serialized)
+        {
+            list (
+                $this->id,
+                $this->login_id,
+                $this->password,
+                $this->salt,
+                ) = \unserialize($serialized, ['allowed_classes' => false]);
         }
     }
 }
