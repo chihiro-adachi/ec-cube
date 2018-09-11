@@ -21,6 +21,7 @@ use Eccube\Form\Validator\Email;
 use Eccube\Repository\Master\PrefRepository;
 use Eccube\Service\CartService;
 use Eccube\Service\OrderHelper;
+use Eccube\Util\FormUtil;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -105,24 +106,9 @@ class NonMemberShoppingController extends AbstractShoppingController
         if ($form->isSubmitted() && $form->isValid()) {
             log_info('非会員お客様情報登録開始');
 
-            $data = $form->getData();
-            $Customer = new Customer();
-            $Customer
-                ->setName01($data['name01'])
-                ->setName02($data['name02'])
-                ->setKana01($data['kana01'])
-                ->setKana02($data['kana02'])
-                ->setCompanyName($data['company_name'])
-                ->setEmail($data['email'])
-                ->setPhonenumber($data['phone_number'])
-                ->setPostalcode($data['postal_code'])
-                ->setPref($data['pref'])
-                ->setAddr01($data['addr01'])
-                ->setAddr02($data['addr02']);
-
             // 非会員用セッションを作成
-            $this->session->set(OrderHelper::SESSION_NON_MEMBER, $Customer);
-            $this->session->set(OrderHelper::SESSION_NON_MEMBER_ADDRESSES, serialize([]));
+            $this->session->set(OrderHelper::SESSION_NON_MEMBER, FormUtil::getViewData($form));
+            $this->session->set(OrderHelper::SESSION_NON_MEMBER_ADDRESSES, []);
 
             $event = new EventArgs(
                 [
@@ -198,21 +184,31 @@ class NonMemberShoppingController extends AbstractShoppingController
 
             $this->entityManager->flush();
 
-            $Customer = new Customer();
-            $Customer
-                ->setName01($data['customer_name01'])
-                ->setName02($data['customer_name02'])
-                ->setKana01($data['customer_kana01'])
-                ->setKana02($data['customer_kana02'])
-                ->setCompanyName($data['customer_company_name'])
-                ->setPhoneNumber($data['customer_phone_number'])
-                ->setPostalCode($data['customer_postal_code'])
-                ->setPref($pref)
-                ->setAddr01($data['customer_addr01'])
-                ->setAddr02($data['customer_addr02'])
-                ->setEmail($data['customer_email']);
+            // NonMemberTypeの形式に合わせる
+            $NonMember = [
+                'name' => [
+                    'name01' => $data['customer_name01'],
+                    'name02' => $data['customer_name02']
+                ],
+                'kana' => [
+                    'kana01' => $data['customer_kana01'],
+                    'kana02' => $data['customer_kana02'],
+                ],
+                'company_name' => $data['customer_company_name'],
+                'email' => [
+                    'first' => $data['customer_email'],
+                    'second' => $data['customer_email'],
+                ],
+                'phone_number' => $data['customer_phone_number'],
+                'postal_code' => $data['customer_postal_code'],
+                'address' => [
+                    'pref' => $pref->getId(),
+                    'addr01' => $data['customer_addr01'],
+                    'addr02' => $data['customer_addr01']
+                ],
+            ];
 
-            $this->session->set(OrderHelper::SESSION_NON_MEMBER, $Customer);
+            $this->session->set(OrderHelper::SESSION_NON_MEMBER, $NonMember);
 
             $event = new EventArgs(
                 [

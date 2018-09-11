@@ -29,6 +29,7 @@ use Eccube\Service\CartService;
 use Eccube\Service\PurchaseFlow\PurchaseContext;
 use Eccube\Service\PurchaseFlow\PurchaseFlow;
 use Eccube\Service\OrderHelper;
+use Eccube\Util\FormUtil;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\HttpFoundation\Request;
@@ -420,10 +421,9 @@ class ShippingMultipleController extends AbstractShoppingController
                 $this->entityManager->flush($CustomerAddress);
             } else {
                 // 非会員用のセッションに追加
-                $CustomerAddresses = $this->session->get(OrderHelper::SESSION_NON_MEMBER_ADDRESSES);
-                $CustomerAddresses = unserialize($CustomerAddresses);
-                $CustomerAddresses[] = $CustomerAddress;
-                $this->session->set(OrderHelper::SESSION_NON_MEMBER_ADDRESSES, serialize($CustomerAddresses));
+                $CustomerAddresses = $this->session->get(OrderHelper::SESSION_NON_MEMBER_ADDRESSES, []);
+                $CustomerAddresses[] = FormUtil::getViewData($form);
+                $this->session->set(OrderHelper::SESSION_NON_MEMBER_ADDRESSES, $CustomerAddresses);
             }
 
             $event = new EventArgs(

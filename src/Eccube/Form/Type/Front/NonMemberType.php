@@ -14,6 +14,7 @@
 namespace Eccube\Form\Type\Front;
 
 use Eccube\Common\EccubeConfig;
+use Eccube\Entity\Customer;
 use Eccube\Form\Type\AddressType;
 use Eccube\Form\Type\KanaType;
 use Eccube\Form\Type\NameType;
@@ -23,6 +24,9 @@ use Eccube\Form\Type\PostalType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class NonMemberType extends AbstractType
@@ -71,7 +75,30 @@ class NonMemberType extends AbstractType
             ->add('phone_number', PhoneNumberType::class, [
                 'required' => true,
             ])
-            ->add('email', RepeatedEmailType::class);
+            ->add('email', RepeatedEmailType::class, [
+                // Customer::loadValidateMetadataを実行させないため, mappedをfalseにする.
+                'mapped' => false,
+            ]);
+
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function(FormEvent $event) {
+            /** @var Customer $Customer */
+            $Customer = $event->getData();
+            if ($Customer) {
+                $form = $event->getForm();
+                $email = $form['email']->getData();
+                $Customer->setEmail($email);
+            }
+        });
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => Customer::class,
+        ]);
     }
 
     /**

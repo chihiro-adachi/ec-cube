@@ -26,6 +26,8 @@ use Eccube\Entity\Order;
 use Eccube\Entity\OrderItem;
 use Eccube\Entity\Shipping;
 use Eccube\EventListener\SecurityListener;
+use Eccube\Form\Type\Front\NonMemberType;
+use Eccube\Form\Type\Front\ShoppingShippingType;
 use Eccube\Repository\DeliveryRepository;
 use Eccube\Repository\Master\DeviceTypeRepository;
 use Eccube\Repository\Master\OrderItemTypeRepository;
@@ -33,6 +35,7 @@ use Eccube\Repository\Master\OrderStatusRepository;
 use Eccube\Repository\Master\PrefRepository;
 use Eccube\Repository\OrderRepository;
 use Eccube\Repository\PaymentRepository;
+use Eccube\Util\FormUtil;
 use Eccube\Util\StringUtil;
 use SunCat\MobileDetectBundle\DeviceDetector\MobileDetector;
 use Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait;
@@ -240,13 +243,43 @@ class OrderHelper
      */
     public function getNonMember()
     {
-        $NonMember = $this->session->get(self::SESSION_NON_MEMBER);
-        if ($NonMember && $NonMember->getPref()) {
-            $Pref = $this->prefRepository->find($NonMember->getPref()->getId());
-            $NonMember->setPref($Pref);
+        $data = $this->session->get(self::SESSION_NON_MEMBER);
+        if (empty($data)) {
+            return $data;
         }
 
+        $form = $this->createForm(NonMemberType::class, null, [
+            'csrf_protection' => false,
+        ]);
+
+        $NonMember = FormUtil::submitAndGetData($form, $data);
+
         return $NonMember;
+    }
+
+    /**
+     * セッションに保持されている非会員のお届け先を取得する.
+     * 非会員購入時に入力されたお客様情報を返す.
+     *
+     * @return Customer
+     */
+    public function getNonMemberAddresses()
+    {
+        $addresses = $this->session->get(self::SESSION_NON_MEMBER_ADDRESSES);
+        if (empty($addresses)) {
+            return $addresses;
+        }
+
+        $NonMemberAddresses = [];
+        foreach ($addresses as $address) {
+            $form = $this->createForm(ShoppingShippingType::class, null, [
+                'csrf_protection' => false,
+            ]);
+
+            $NonMemberAddresses[] = FormUtil::submitAndGetData($form, $address);
+        }
+
+        return $NonMemberAddresses;
     }
 
     /**
