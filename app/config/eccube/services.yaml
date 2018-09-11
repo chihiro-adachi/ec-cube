@@ -3,6 +3,7 @@
 parameters:
     # container parameters
     container.dumper.inline_class_loader: true
+    container.autowiring.strict_mode: true
 
     # ec-cube parameters
     env(ECCUBE_LOCALE): 'ja'
