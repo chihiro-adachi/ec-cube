@@ -50,7 +50,7 @@ services:
             - method: initialize
             - method: boot
 
-    app: '@Eccube\Application';
+    app: '@Eccube\Application'
 
     Eccube\Common\EccubeConfig:
         public: true
