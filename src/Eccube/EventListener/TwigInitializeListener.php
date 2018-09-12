@@ -23,6 +23,8 @@ use Eccube\Entity\Page;
 use Eccube\Entity\PageLayout;
 use Eccube\Repository\AuthorityRoleRepository;
 use Eccube\Repository\BaseInfoRepository;
+use Eccube\Repository\BlockPositionRepository;
+use Eccube\Repository\BlockRepository;
 use Eccube\Repository\LayoutRepository;
 use Eccube\Repository\Master\DeviceTypeRepository;
 use Eccube\Repository\PageRepository;
@@ -115,7 +117,10 @@ class TwigInitializeListener implements EventSubscriberInterface
         Context $context,
         MobileDetector $mobileDetector,
         UrlGeneratorInterface $router,
-        LayoutRepository $layoutRepository
+        LayoutRepository $layoutRepository,
+        BlockPositionRepository $blockPositionRepository,
+        BlockRepository $blockRepository
+
     ) {
         $this->twig = $twig;
         $this->baseInfoRepository = $baseInfoRepository;
@@ -127,6 +132,8 @@ class TwigInitializeListener implements EventSubscriberInterface
         $this->mobileDetector = $mobileDetector;
         $this->router = $router;
         $this->layoutRepository = $layoutRepository;
+        $this->blockPositionRepository = $blockRepository;
+        $this->blockRepository = $baseInfoRepository;
     }
 
     /**
@@ -174,7 +181,7 @@ class TwigInitializeListener implements EventSubscriberInterface
 
         // URLからPageを取得
         /** @var Page $Page */
-        $Page = $this->pageRepository->findOneBy(['url' => $route]);
+        $Page = $this->pageRepository->getPageByRoute($route);
 
         // 該当するPageがない場合は空のページをセット
         if (!$Page) {
@@ -205,7 +212,9 @@ class TwigInitializeListener implements EventSubscriberInterface
         }
 
         // Layoutのデータがない場合は空のLayoutをセット
-        if (!$Layout) {
+        if ($Layout) {
+            $Layout = $this->layoutRepository->get($Layout->getId(), $type);
+        } else {
             $Layout = new Layout();
         }
 

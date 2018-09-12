@@ -13,9 +13,11 @@
 
 namespace Eccube\Repository;
 
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Eccube\Common\EccubeConfig;
 use Eccube\Entity\Page;
+use PHPUnit\Runner\Exception;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -64,6 +66,30 @@ class PageRepository extends AbstractRepository
         $this->userDataRealDir = $container->getParameter('eccube_theme_user_data_dir');
         $this->templateRealDir = $container->getParameter('eccube_theme_app_dir');
         $this->templateDefaultRealDir = $container->getParameter('eccube_theme_src_dir');
+    }
+
+    /**
+     * @param $route
+     * @return Page
+     */
+    public function getPageByRoute($route)
+    {
+        $qb = $this->createQueryBuilder('p');
+
+        try {
+            $Page = $qb
+                ->select(['p', 'pl', 'l'])
+                ->leftJoin('p.PageLayouts', 'pl')
+                ->leftJoin('pl.Layout', 'l')
+                ->where('p.url = :url')
+                ->setParameter('url', $route)
+                ->getQuery()
+                ->getSingleResult();
+        } catch (\Exception $e) {
+            return $this->newPage();
+        }
+
+        return $Page;
     }
 
     /**

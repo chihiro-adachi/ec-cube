@@ -42,9 +42,11 @@ services:
 
     Eccube\Common\EccubeConfig:
         public: true
-        lazy: true
 
     Eccube\Service\TaxRuleService:
+        lazy: true
+
+    Ecccube\Service\CartService:
         lazy: true
 
     # controllers are imported separately to make sure they're public

@@ -14,6 +14,7 @@
 namespace Eccube\Repository;
 
 use Eccube\Entity\Layout;
+use Eccube\Entity\Master\DeviceType;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -27,5 +28,30 @@ class LayoutRepository extends AbstractRepository
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Layout::class);
+    }
+
+    /**
+     * @param $id
+     * @param int $deviceTypeId
+     */
+    public function get($id, $deviceTypeId = DeviceType::DEVICE_TYPE_PC)
+    {
+        $qb = $this->createQueryBuilder('l');
+        try {
+            $Layout = $qb
+                ->select(['l', 'bp', 'b'])
+                ->leftJoin('l.BlockPositions', 'bp')
+                ->leftJoin('bp.Block', 'b')
+                ->where('l.id = :id')
+                ->andWhere('l.DeviceType = :deviceTypeId')
+                ->setParameter('id', $id)
+                ->setParameter('deviceTypeId', $deviceTypeId)
+                ->getQuery()
+                ->getSingleResult();
+        } catch (\Exception $e) {
+            return new Layout();
+        }
+
+        return $Layout;
     }
 }
