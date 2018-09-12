@@ -55,7 +55,7 @@ class InstallControllerTest extends AbstractWebTestCase
 
         $formFactory = $this->container->get('form.factory');
         $encoder = $this->container->get(PasswordEncoder::class);
-        $cacheUtil = $this->container->get(CacheUtil::class);
+        $cacheUtil = $this->container->get('eccube.util.cache_util');
 
         $this->session = new Session(new MockArraySessionStorage());
         $this->controller = new InstallController($encoder, $cacheUtil);

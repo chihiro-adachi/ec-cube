@@ -89,9 +89,9 @@ class PurchaseFlowPassTest extends EccubeTestCase
     {
         $container = new ContainerBuilder();
 
-        $container->register('eccube.purchase.flow.cart', PurchaseFlow::class);
-        $container->register('eccube.purchase.flow.shopping', PurchaseFlow::class);
-        $container->register('eccube.purchase.flow.order', PurchaseFlow::class);
+        $container->register('eccube.purchase.flow.cart', PurchaseFlow::class)->setPublic(true);
+        $container->register('eccube.purchase.flow.shopping', PurchaseFlow::class)->setPublic(true);
+        $container->register('eccube.purchase.flow.order', PurchaseFlow::class)->setPublic(true);
 
         $container->addCompilerPass(new PurchaseFlowPass());
 

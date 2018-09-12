@@ -84,7 +84,7 @@ class CartServiceTest extends AbstractServiceTestCase
         $this->saleTypeRepository = $this->container->get(SaleTypeRepository::class);
         $this->orderRepository = $this->container->get(OrderRepository::class);
         $this->productClassRepository = $this->container->get(ProductClassRepository::class);
-        $this->purchaseFlow = $this->container->get('eccube.purchase.flow.cart');
+        $this->purchaseFlow = $this->container->get('test.eccube.purchase.flow.cart');
 
         $this->SaleType1 = $this->saleTypeRepository->find(1);
         $this->SaleType2 = $this->saleTypeRepository->find(2);

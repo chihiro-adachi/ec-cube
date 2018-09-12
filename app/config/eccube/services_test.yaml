@@ -25,27 +25,49 @@ services:
         autoconfigure: true
         public: true
 
-    Eccube\Service\PurchaseFlow\Processor\DeliveryFeePreprocessor:
+    Eccube\Service\PurchaseFlow\Processor\:
+        resource: '../../../src/Eccube/Service/PurchaseFlow/Processor'
+        autowire: true
+        autoconfigure: true
+        public: true
+
+    Eccube\Service\OrderHelper:
         autowire: true
         public: true
-    Eccube\Service\PurchaseFlow\Processor\PaymentChargePreprocessor:
+    Eccube\Service\MailService:
         autowire: true
         public: true
-    Eccube\Service\PurchaseFlow\Processor\StockMultipleValidator:
+    Eccube\Service\PluginService:
         autowire: true
         public: true
-    Eccube\Service\PurchaseFlow\Processor\SaleLimitMultipleValidator:
+    Eccube\Service\EntityProxyService:
         autowire: true
         public: true
-    Eccube\Service\PurchaseFlow\Processor\StockReduceProcessor:
+    Eccube\Service\CsvExportService:
         autowire: true
         public: true
-    Eccube\Service\PurchaseFlow\Processor\StockValidator:
+    Eccube\Service\CartService:
         autowire: true
         public: true
-    Eccube\Service\PurchaseFlow\Processor\TaxProcessor:
+    Eccube\Service\TaxRuleService:
         autowire: true
         public: true
-    Eccube\Service\PurchaseFlow\Processor\AddPointProcessor:
+    Eccube\Service\SystemService:
         autowire: true
         public: true
+    Eccube\Command\DeleteCartsCommand:
+        autowire: true
+        public: true
+    Eccube\Security\Core\Encoder\PasswordEncoder:
+        autowire: true
+        public: true
+    Eccube\Security\Core\Encoder:
+        autowire: true
+        public: true
+
+    eccube.util.cache_util: '@Eccube\Util\CacheUtil'
+    eccube.service.order_state_machine: '@Eccube\Service\OrderStateMachine'
+    test.eccube.purchase.flow.cart: '@eccube.purchase.flow.cart'
+    test.eccube.purchase.flow.order: '@eccube.purchase.flow.order'
+    test.eccube.purchase.flow.shopping: '@eccube.purchase.flow.shopping'
+

@@ -136,7 +136,7 @@ class ShippingRepositoryTest extends EccubeTestCase
             $this->Shippings[$i] = $Shipping;
         }
 
-        $purchaseFlow = $this->container->get('eccube.purchase.flow.order');
+        $purchaseFlow = $this->container->get('test.eccube.purchase.flow.order');
         $purchaseFlow->validate($this->Order, new PurchaseContext($this->Order));
         $this->entityManager->flush();
     }

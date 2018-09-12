@@ -42,14 +42,10 @@ services:
 
     Eccube\Common\EccubeConfig:
         public: true
+        lazy: true
 
     Eccube\Service\TaxRuleService:
         lazy: true
-        public: true
-
-    Eccube\Service\SystemService:
-        lazy: true
-        public: true
 
     # controllers are imported separately to make sure they're public
     # and have a tag that allows actions to type-hint services

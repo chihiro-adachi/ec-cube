@@ -17,6 +17,7 @@ use Eccube\Entity\Master\OrderStatus;
 use Eccube\Entity\Member;
 use Eccube\Repository\Master\OrderStatusRepository;
 use Eccube\Repository\OrderRepository;
+use Eccube\Security\Core\Encoder\PasswordEncoder;
 
 class IndexControllerTest extends AbstractAdminWebTestCase
 {
@@ -175,7 +176,7 @@ class IndexControllerTest extends AbstractAdminWebTestCase
         $this->assertTrue($client->getResponse()->isRedirect($this->generateUrl('admin_change_password')));
 
         $Member = clone $this->Member;
-        $encoder = $this->container->get('security.encoder_factory')->getEncoder($this->Member);
+        $encoder = $this->container->get(PasswordEncoder::class);
         $this->expected = $encoder->encodePassword($form['change_password']['first'], $this->Member->getSalt());
         $this->actual = $this->Member->getPassword();
 

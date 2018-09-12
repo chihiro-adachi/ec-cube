@@ -15,8 +15,9 @@ namespace Eccube\Tests\Repository;
 
 use Eccube\Entity\Member;
 use Eccube\Repository\MemberRepository;
+use Eccube\Security\Core\Encoder\PasswordEncoder;
 use Eccube\Tests\EccubeTestCase;
-use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
+use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 
 /**
  * MemberRepository test cases.
@@ -30,13 +31,13 @@ class MemberRepositoryTest extends EccubeTestCase
     /** @var MemberRepository */
     protected $memberRepo;
 
-    /** @var EncoderFactoryInterface */
-    protected $encoderFactory;
+    /** @var PasswordEncoderInterface */
+    protected $encoder;
 
     public function setUp()
     {
         parent::setUp();
-        $this->encoderFactory = $this->container->get('security.encoder_factory');
+        $this->encoder = $this->container->get(PasswordEncoder::class);
         $this->memberRepo = $this->container->get(MemberRepository::class);
         $this->Member = $this->memberRepo->find(1);
         $Work = $this->entityManager->getRepository('Eccube\Entity\Master\Work')
@@ -46,10 +47,9 @@ class MemberRepositoryTest extends EccubeTestCase
             $Member = new Member();
             $salt = bin2hex(openssl_random_pseudo_bytes(5));
             $password = 'password';
-            $encoder = $this->encoderFactory->getEncoder($Member);
             $Member
                 ->setLoginId('member-1')
-                ->setPassword($encoder->encodePassword($password, $salt))
+                ->setPassword($this->encoder->encodePassword($password, $salt))
                 ->setSalt($salt)
                 ->setSortNo($i)
                 ->setWork($Work);
