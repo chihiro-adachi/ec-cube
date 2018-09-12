@@ -101,7 +101,7 @@ class MailController extends AbstractController
             // テンプレート変更の場合は. バリデーション前に内容差し替え.
             switch ($mode) {
                 case 'change':
-                    if ($form->get('template')->isValid()) {
+                    if ($form->isSubmitted() && $form->get('template')->isValid()) {
                         /** @var $data \Eccube\Entity\MailTemplate */
                         $MailTemplate = $form->get('template')->getData();
                         $data = $form->getData();
@@ -134,7 +134,7 @@ class MailController extends AbstractController
                     }
                     break;
                 case 'confirm':
-                    if ($form->isValid()) {
+                    if ($form->isSubmitted() && $form->isValid()) {
                         $builder->setAttribute('freeze', true);
                         $builder->setAttribute('freeze_display_text', false);
                         $form = $builder->getForm();
@@ -148,7 +148,7 @@ class MailController extends AbstractController
                     }
                     break;
                 case 'complete':
-                    if ($form->isValid()) {
+                    if ($form->isSubmitted() && $form->isValid()) {
                         $data = $form->getData();
                         $data['tpl_data'] = $form->get('tpl_data')->getData();
 
