@@ -25,19 +25,19 @@ class TaxRuleEventSubscriber implements EventSubscriber
     /**
      * @var TaxRuleService
      */
-    protected $container;
+    protected $taxRuleService;
 
     /**
      * TaxRuleEventSubscriber constructor.
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(TaxRuleService $taxRuleService)
     {
-        $this->container = $container;
+        $this->taxRuleService = $taxRuleService;
     }
 
     public function getTaxRuleService()
     {
-        return $this->container->get(TaxRuleService::class);
+        return $this->taxRuleService;
     }
 
     public function getSubscribedEvents()
