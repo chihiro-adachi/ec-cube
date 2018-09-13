@@ -308,9 +308,6 @@
             "ref": "aaddfdf43cdecd4cf91f992052d76c2cadc04543"
         }
     },
-    "sensio/generator-bundle": {
-        "version": "v3.1.7"
-    },
     "sensiolabs/security-checker": {
         "version": "4.0",
         "recipe": {
@@ -345,9 +342,6 @@
         "version": "v3.4.4"
     },
     "symfony/cache": {
-        "version": "v3.4.1"
-    },
-    "symfony/class-loader": {
         "version": "v3.4.1"
     },
     "symfony/config": {
@@ -431,9 +425,6 @@
     "symfony/intl": {
         "version": "v3.4.1"
     },
-    "symfony/lts": {
-        "version": "v3"
-    },
     "symfony/maker-bundle": {
         "version": "1.0",
         "recipe": {
@@ -470,9 +461,6 @@
             "ref": "179470cb6492db92dffee208cfdb436f175c93b4"
         }
     },
-    "symfony/polyfill-apcu": {
-        "version": "v1.6.0"
-    },
     "symfony/polyfill-ctype": {
         "version": "v1.8.0"
     },
@@ -482,16 +470,10 @@
     "symfony/polyfill-mbstring": {
         "version": "v1.6.0"
     },
-    "symfony/polyfill-php56": {
-        "version": "v1.6.0"
-    },
     "symfony/polyfill-php70": {
         "version": "v1.6.0"
     },
     "symfony/polyfill-php72": {
-        "version": "v1.6.0"
-    },
-    "symfony/polyfill-util": {
         "version": "v1.6.0"
     },
     "symfony/process": {
