@@ -47,6 +47,7 @@ class LayoutRepository extends AbstractRepository
                 ->setParameter('id', $id)
                 ->setParameter('deviceTypeId', $deviceTypeId)
                 ->getQuery()
+                ->useResultCache(true, 1200)
                 ->getSingleResult();
         } catch (\Exception $e) {
             return new Layout();

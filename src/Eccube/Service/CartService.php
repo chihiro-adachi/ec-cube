@@ -127,7 +127,7 @@ class CartService
      */
     public function getCarts()
     {
-        if (!empty($this->carts)) {
+        if (null !== $this->carts) {
             return $this->carts;
         }
 
@@ -158,6 +158,10 @@ class CartService
     public function getSessionCarts()
     {
         $cartKeys = $this->session->get('cart_keys', []);
+
+        if (empty($cartKeys)) {
+            return [];
+        }
 
         return $this->cartRepository->findBy(['cart_key' => $cartKeys], ['id' => 'DESC']);
     }

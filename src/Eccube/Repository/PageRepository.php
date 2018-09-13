@@ -84,6 +84,7 @@ class PageRepository extends AbstractRepository
                 ->where('p.url = :url')
                 ->setParameter('url', $route)
                 ->getQuery()
+                ->useResultCache(true, 1200)
                 ->getSingleResult();
         } catch (\Exception $e) {
             return $this->newPage();
