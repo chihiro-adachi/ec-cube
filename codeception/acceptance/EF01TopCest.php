@@ -79,6 +79,11 @@ class EF01TopCest
         $createNews = Fixtures::get('createNews');
         $News = $createNews(new \DateTime(), 'タイトル1', 'コメント1', 'https://www.ec-cube.net');
 
+        $fs = new Symfony\Component\Filesystem\Filesystem();
+        $cacheDir = __DIR__.'/../../var/cache/prod/pools';
+        if ($fs->exists($cacheDir)) {
+            $fs->remove($cacheDir);
+        }
         $topPage = TopPage::go($I);
 
         // 各新着情報の箇所を押下する
