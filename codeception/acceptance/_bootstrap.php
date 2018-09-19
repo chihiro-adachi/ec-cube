@@ -20,6 +20,7 @@ use Eccube\Kernel;
 use Faker\Factory as Faker;
 
 $config = parse_ini_file(__DIR__.'/config.ini', true);
+date_default_timezone_set('Asia/Tokyo');
 
 /*
  * create fixture
