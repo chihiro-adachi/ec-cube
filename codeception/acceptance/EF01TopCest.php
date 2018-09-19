@@ -53,6 +53,12 @@ class EF01TopCest
         $News1 = $createNews($minus1, 'タイトル1', 'コメント1');
         $News2 = $createNews($minus2, 'タイトル2', 'コメント2');
 
+        $fs = new Symfony\Component\Filesystem\Filesystem();
+        $cacheDir = __DIR__.'/../../var/cache/prod/pools';
+        if ($fs->exists($cacheDir)) {
+            $fs->remove($cacheDir);
+        }
+
         $I->reloadPage();
 
         $findNews = Fixtures::get('findNews');
