@@ -1,6 +1,6 @@
 <?php
 
-namespace Eccube\Service\PurchaseFlow\Processor;
+namespace Customize\Service\PurchaseFlow\Processor;
 
 
 use Doctrine\ORM\EntityManagerInterface;
