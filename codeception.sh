@@ -16,7 +16,7 @@ if [[ $1 == '--reset' ]]; then
     exit
 fi
 
-chromedriver --url-base=/wd/hub &
+chromedriver --url-base=/wd/hub --whitelisted-ips= &
 CDPID="$!"
 trap "kill ${CDPID}" exit
 
