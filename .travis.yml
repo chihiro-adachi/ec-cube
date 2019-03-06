@@ -17,7 +17,6 @@ addons:
 cache:
   directories:
     - $HOME/.composer/cache
-    - bin/.phpunit
 
 php:
   - 7.1
