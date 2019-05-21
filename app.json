@@ -35,6 +35,10 @@
         },
         "ECCUBE_ADMIN_PASS": {
             "description": "The password of admin user."
+        },
+        "ECCUBE_LOCALE": {
+            "description": "ja|en",
+            "value": "ja"
         }
     },
     "buildpacks": [
