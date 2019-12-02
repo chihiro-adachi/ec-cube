@@ -170,6 +170,12 @@ file that was distributed with this source code.
                     $('#quantity')[0].setCustomValidity('');
                 }
 
+                if ($('#name_printed').val() == '') {
+                    $('#name_printed')[0].setCustomValidity('{{ '入力されていません'|trans }}');
+                    return true;
+                } else {
+                    $('#name_printed')[0].setCustomValidity('');
+                }
                 event.preventDefault();
                 $form = $('#form1');
                 $.ajax({
@@ -318,6 +324,10 @@ file that was distributed with this source code.
                                 <div class="ec-numberInput"><span>{{ 'common.quantity'|trans }}</span>
                                     {{ form_widget(form.quantity) }}
                                     {{ form_errors(form.quantity) }}
+                                </div>
+                                <div class="ec-halfInput"><span>なまえ</span>
+                                    {{ form_widget(form.name_printed) }}
+                                    {{ form_errors(form.name_printed) }}
                                 </div>
                             </div>
                             <div class="ec-productRole__btn">

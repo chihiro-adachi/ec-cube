@@ -1,0 +1,3 @@
+services:
+  Eccube\Service\Cart\CartItemComparator:
+    class: Customize\Service\Cart\NaireComparetor

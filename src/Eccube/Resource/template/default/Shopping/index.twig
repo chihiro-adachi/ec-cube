@@ -311,6 +311,23 @@ file that was distributed with this source code.
                                         </div>
                                     </li>
                                 {% endfor %}
+                                {% for orderItem in shipping.order_items if orderItem.orderItemType.id == 99 %}
+                                    <li>
+                                        <div class="ec-imageGrid">
+                                            <div class="ec-imageGrid__img"><img src="{{ asset((orderItem.product is null ? null : orderItem.product.MainListImage)|no_image_product, 'save_image') }}" alt="{{ orderItem.productName }}"></div>
+                                            <div class="ec-imageGrid__content">
+                                                <p>{{ orderItem.productName }}{{ is_reduced_tax_rate(orderItem) ? 'common.reduced_tax_rate_symbol'|trans }}</p>
+                                                {% if orderItem.productClass is not null and orderItem.productClass.classCategory1 %}
+                                                    <p>{{ orderItem.productClass.classCategory1.className.name }}：{{ orderItem.productClass.classCategory1 }}</p>
+                                                {% endif %}
+                                                {% if orderItem.productClass is not null and orderItem.productClass.classCategory2 %}
+                                                    <p>{{ orderItem.productClass.classCategory2.className.name }}：{{ orderItem.productClass.classCategory2 }}</p>
+                                                {% endif %}
+                                                <p>{{ orderItem.priceIncTax|price }} × {{ orderItem.quantity|number_format }}<span>{{ 'common.subtotal__with_separator'|trans }}{{ orderItem.totalPrice|price }}</span></p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
                             </ul>
                             <p>{{ 'common.reduced_tax_rate_messeage'|trans }}</p>
                         </div>
@@ -395,6 +412,10 @@ file that was distributed with this source code.
                     <dl class="ec-totalBox__spec">
                         <dt>{{ 'common.delivery_fee'|trans }}</dt>
                         <dd>{{ Order.deliveryFeeTotal|price }}</dd>
+                    </dl>
+                    <dl class="ec-totalBox__spec">
+                        <dt>{{ '名入れ料'|trans }}</dt>
+                        <dd>{{ Order.naireFeeTotal|price }}</dd>
                     </dl>
                     {% if Order.taxable_discount < 0 %}
                     <dl class="ec-totalBox__spec">
