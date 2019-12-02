@@ -321,6 +321,48 @@ class CartService
         $this->carts = array_values($Carts);
     }
 
+    public function handleCartItemQuantity($cartItemId, $quantity = 1)
+    {
+        foreach ($this->getCart()->getItems() as $Item) {
+            if ($Item->getId() == $cartItemId) {
+                $Item->setQuantity($Item->getQuantity() + $quantity);
+                break;
+            }
+        }
+    }
+
+    public function removeCartItem($cartItemId)
+    {
+        foreach ($this->getCart()->getItems() as $Item) {
+            if ($Item->getId() == $cartItemId) {
+                $Item->setQuantity(0);
+                break;
+            }
+        }
+    }
+
+    public function addCartItem(CartItem $CartItem)
+    {
+        $ProductClass = $CartItem->getProductClass();
+        if (null === $ProductClass) {
+            return false;
+        }
+
+        $ClassCategory1 = $ProductClass->getClassCategory1();
+        if ($ClassCategory1 && !$ClassCategory1->isVisible()) {
+            return false;
+        }
+        $ClassCategory2 = $ProductClass->getClassCategory2();
+        if ($ClassCategory2 && !$ClassCategory2->isVisible()) {
+            return false;
+        }
+
+        $CartItem->setPrice($ProductClass->getPrice02IncTax());
+
+        $allCartItems = $this->mergeAllCartItems([$CartItem]);
+        $this->restoreCarts($allCartItems);
+    }
+
     /**
      * カートに商品を追加します.
      *

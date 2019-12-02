@@ -184,7 +184,7 @@ class CartController extends AbstractController
      *      - 明細を削除する
      *
      * @Route(
-     *     path="/cart/{operation}/{productClassId}",
+     *     path="/cart/{operation}/{cartItemId}",
      *     name="cart_handle_item",
      *     methods={"PUT"},
      *     requirements={
@@ -193,31 +193,22 @@ class CartController extends AbstractController
      *     }
      * )
      */
-    public function handleCartItem($operation, $productClassId)
+    public function handleCartItem($operation, $cartItemId)
     {
-        log_info('カート明細操作開始', ['operation' => $operation, 'product_class_id' => $productClassId]);
+        log_info('カート明細操作開始', ['operation' => $operation, 'cart_item_id' => $cartItemId]);
 
         $this->isTokenValid();
-
-        /** @var ProductClass $ProductClass */
-        $ProductClass = $this->productClassRepository->find($productClassId);
-
-        if (is_null($ProductClass)) {
-            log_info('商品が存在しないため、カート画面へredirect', ['operation' => $operation, 'product_class_id' => $productClassId]);
-
-            return $this->redirectToRoute('cart');
-        }
 
         // 明細の増減・削除
         switch ($operation) {
             case 'up':
-                $this->cartService->addProduct($ProductClass, 1);
+                $this->cartService->handleCartItemQuantity($cartItemId, 1);
                 break;
             case 'down':
-                $this->cartService->addProduct($ProductClass, -1);
+                $this->cartService->handleCartItemQuantity($cartItemId, -1);
                 break;
             case 'remove':
-                $this->cartService->removeProduct($ProductClass);
+                $this->cartService->removeCartItem($cartItemId);
                 break;
         }
 
@@ -225,7 +216,7 @@ class CartController extends AbstractController
         $Carts = $this->cartService->getCarts();
         $this->execPurchaseFlow($Carts);
 
-        log_info('カート演算処理終了', ['operation' => $operation, 'product_class_id' => $productClassId]);
+        log_info('カート演算処理終了', ['operation' => $operation, 'cart_item_id' => $cartItemId]);
 
         return $this->redirectToRoute('cart');
     }

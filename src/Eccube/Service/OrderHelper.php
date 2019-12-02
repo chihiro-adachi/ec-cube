@@ -340,6 +340,7 @@ class OrderHelper
             $Product = $ProductClass->getProduct();
 
             $OrderItem = new OrderItem();
+            $OrderItem->copyProperties($item);
             $OrderItem
                 ->setProduct($Product)
                 ->setProductClass($ProductClass)
