@@ -309,6 +309,9 @@ file that was distributed with this source code.
                                                 <p>{{ orderItem.priceIncTax|price }} × {{ orderItem.quantity|number_format }}<span>{{ 'common.subtotal__with_separator'|trans }}{{ orderItem.totalPrice|price }}</span></p>
                                             </div>
                                         </div>
+                                        <div class="ec-input">
+                                            {{ form_row(form.Shippings[idx].OrderItems[0].name_printed, { 'attr': { 'class': 'form-control', 'data-trigger': 'change' }}) }}
+                                        </div>
                                     </li>
                                 {% endfor %}
                             </ul>

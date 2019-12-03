@@ -101,6 +101,11 @@ file that was distributed with this source code.
                                         <p>{{ orderItem.priceIncTax|price }} × {{ orderItem.quantity|number_format }}<span>{{ 'common.subtotal__with_separator'|trans }}{{ orderItem.totalPrice|price }}</span></p>
                                     </div>
                                 </div>
+                                {% if orderItem.name_printed %}
+                                    <div class="ec-input" style="padding-bottom: 10px">
+                                        <strong>名入れ</strong>：{{ orderItem.name_printed }}
+                                    </div>
+                                {% endif %}
                             </li>
                             {% endfor %}
                         </ul>
