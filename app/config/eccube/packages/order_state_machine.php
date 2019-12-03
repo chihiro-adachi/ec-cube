@@ -35,8 +35,13 @@ $container->loadFromExtension('framework', [
                 (string) Status::PENDING,
                 (string) Status::PROCESSING,
                 (string) Status::RETURNED,
+                // mtb_order_status, mtb_customer_order_status, mtb_order_status_colorに以下を追加しておく.
+                '100',  // 名入れ中
+                '101',  // 名入れ完了
             ],
             'transitions' => [
+                // ステータス遷移の定義を追加.
+                // 新規受付→名入れ中→名入れ完了→発送済への一方通行の遷移を作成する.
                 'pay' => [
                     'from' => (string) Status::NEW,
                     'to' => (string) Status::PAID,
@@ -53,8 +58,9 @@ $container->loadFromExtension('framework', [
                     'from' => (string) Status::CANCEL,
                     'to' => (string) Status::IN_PROGRESS,
                 ],
+                // 名入れ完了→発送済への遷移.
                 'ship' => [
-                    'from' => [(string) Status::NEW, (string) Status::PAID, (string) Status::IN_PROGRESS],
+                    'from' => [(string) Status::NEW, (string) Status::PAID, (string) Status::IN_PROGRESS, '101'],
                     'to' => [(string) Status::DELIVERED],
                 ],
                 'return' => [
@@ -64,6 +70,16 @@ $container->loadFromExtension('framework', [
                 'cancel_return' => [
                     'from' => (string) Status::RETURNED,
                     'to' => (string) Status::DELIVERED,
+                ],
+                // 新規→名入れ中への遷移.
+                'to_naire' => [
+                    'from' => (string) Status::NEW,
+                    'to' => '100',
+                ],
+                // 名入れ中→名入れ完了への遷移.
+                'to_naire_complete' => [
+                    'from' => '100',
+                    'to' => '101',
                 ],
             ],
         ],
