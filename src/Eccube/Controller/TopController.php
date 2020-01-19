@@ -14,6 +14,7 @@
 namespace Eccube\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class TopController extends AbstractController
@@ -25,5 +26,13 @@ class TopController extends AbstractController
     public function index()
     {
         return [];
+    }
+
+    /**
+     * @Route("/iframe", name="iframe")
+     */
+    public function iframe()
+    {
+        return new Response('test');
     }
 }
