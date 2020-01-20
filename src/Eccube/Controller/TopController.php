@@ -30,9 +30,10 @@ class TopController extends AbstractController
 
     /**
      * @Route("/iframe", name="iframe")
+     * @Template("iframe.twig")
      */
     public function iframe()
     {
-        return new Response('test');
+        return [];
     }
 }
