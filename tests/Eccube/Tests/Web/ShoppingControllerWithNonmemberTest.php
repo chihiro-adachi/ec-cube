@@ -16,6 +16,7 @@ namespace Eccube\Tests\Web;
 use Eccube\Entity\BaseInfo;
 use Eccube\Entity\Customer;
 use Eccube\Service\OrderHelper;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Class ShoppingControllerWithNonmemberTest
@@ -83,17 +84,16 @@ class ShoppingControllerWithNonmemberTest extends AbstractShoppingControllerTest
         $this->client->followRedirect();
 
         $crawler = $this->scenarioConfirm();
-        $this->expected = 'ご注文手続き';
-        $this->actual = $crawler->filter('.ec-pageHeader h1')->text();
-        $this->verify();
+        $this->assertContains('ご注文手続き', $crawler->text(), $this->client->getResponse()->getContent());
 
         $crawler = $this->scenarioComplete(null, $this->generateUrl('shopping_confirm'));
-        $this->expected = 'ご注文内容のご確認';
-        $this->actual = $crawler->filter('.ec-pageHeader h1')->text();
-        $this->verify();
+        $this->assertContains('ご注文内容のご確認', $crawler->text(), $this->client->getResponse()->getContent());
 
         $this->scenarioCheckout();
-        $this->assertTrue($this->client->getResponse()->isRedirect($this->generateUrl('shopping_complete')));
+        $this->assertTrue(
+            $this->client->getResponse()->isRedirect($this->generateUrl('shopping_complete')),
+            $this->client->getResponse()->getContent()
+        );
 
         $mailCollector = $this->getMailCollector(false);
         $Messages = $mailCollector->getMessages();
