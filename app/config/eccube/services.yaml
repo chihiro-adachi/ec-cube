@@ -58,6 +58,10 @@ services:
     Eccube\Service\Composer\ComposerProcessService:
         lazy: true
 
+    Eccube\Service\Composer\ComposerApiService:
+        lazy: true
+        public: true
+
     Eccube\Service\Composer\ComposerServiceInterface:
         factory: ['Eccube\Service\Composer\ComposerServiceFactory', createService]
 
