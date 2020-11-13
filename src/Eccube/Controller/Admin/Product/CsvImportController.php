@@ -40,10 +40,12 @@ use Eccube\Util\StringUtil;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -649,6 +651,72 @@ class CsvImportController extends AbstractCsvImportController
         }
 
         return $this->renderWithError($form, $headers);
+    }
+
+    /**
+     * カテゴリ登録CSVの分割
+     *
+     * @Route("/%eccube_admin_route%/product/category_csv_upload2", name="admin_product_category_csv_import2")
+     * @Template("@admin/Product/csv_category.twig")
+     */
+    public function splitCsv(Request $request)
+    {
+        /** @var UploadedFile $uploadFile */
+        $uploadFile = $request->files->get('admin_csv_import')['import_file'];
+
+        $fp = fopen($uploadFile->getRealPath(), 'r');
+        $header = fgets($fp);
+        $lineNo = 1;
+        $fileNo = 0;
+        $csvText = '';
+        $fileName = StringUtil::random(6);
+
+        while (($row = fgets($fp)) !== false) {
+            $csvText .= $row;
+            if ($lineNo % 1000 === 0) {
+                $fileNo++;
+                file_put_contents(
+                    $this->eccubeConfig['eccube_csv_temp_realdir'].'/'.$fileName.$fileNo.'.csv',
+                $header.$csvText);
+                $csvText = '';
+            }
+            $lineNo++;
+        }
+
+        fclose($fp);
+
+        if ($fileNo === 0) {
+            $fileNo++;
+            file_put_contents($this->eccubeConfig['eccube_csv_temp_realdir'].'/'.$fileName.$fileNo.'.csv',
+                $header.$csvText);
+        }
+
+        return $this->json(['file_name' => $fileName, 'pages_count' => $fileNo]);
+    }
+
+    /**
+     * 分割後のカテゴリ登録CSV登録
+     *
+     * @Route("/%eccube_admin_route%/product/category_csv_upload3", name="admin_product_category_csv_import3")
+     * @Template("@admin/Product/csv_category.twig")
+     */
+    public function splitCsvUpload(Request $request, CsrfTokenManagerInterface $tokenManager)
+    {
+        $path = $this->eccubeConfig['eccube_csv_temp_realdir'].'/'.$request->get('file_name');
+        $request->files->set('admin_csv_import', ['import_file' => new UploadedFile(
+            $path,
+            'category.csv',
+            'text/csv',
+            filesize($path),
+            null,
+            true
+        )]);
+
+        $request->request->set('admin_csv_import', [
+            Constant::TOKEN_NAME => $tokenManager->getToken('admin_csv_import')->getValue()
+        ]);
+
+        return $this->forwardToRoute('admin_product_category_csv_import');
     }
 
     /**

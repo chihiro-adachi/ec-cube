@@ -43,10 +43,46 @@ file that was distributed with this source code.
             ImageSpinner = new Spinner(opts).spin(document.getElementById('spinner'));
             ImageSpinner.stop();
 
-            $('#upload-form').submit(function() {
+            // $('#upload-form').submit(function() {
+            //     $('#upload-button').attr('disabled', 'disabled');
+            //     $('#download-button').attr('disabled', 'disabled');
+            //     ImageSpinner.spin(document.getElementById('spinner'));
+            // });
+            $('#upload-button').on('click', function() {
                 $('#upload-button').attr('disabled', 'disabled');
                 $('#download-button').attr('disabled', 'disabled');
                 ImageSpinner.spin(document.getElementById('spinner'));
+
+                var formData = new FormData($('#upload-form').get(0));
+
+                $.ajax({
+                    url: '{{ url('admin_product_category_csv_import2') }}',
+                    type: 'POST',
+                    data: formData,
+                    processData : false,
+                    contentType:false,
+                    cache       : false,
+                }).done(function (data) {
+                    console.log(data);
+                    for(var i = 1; i <= data.pages_count; i++) {
+                        var file_name = data.file_name + i;
+                        $.ajax({
+                            url: '{{ url('admin_product_category_csv_import3') }}',
+                            type: 'POST',
+                            data: {
+                                file_name: file_name+'.csv'
+                            },
+                            async: false
+                        }).done(function (data) {
+                            console.log(data);
+                        }).fail(function(e) {
+                            console.log(e);
+                        })
+                    }
+                }).fail(function(e) {
+                    console.log(e);
+                   // 失敗時の処理
+                });
             });
 
             $('#file-select').click(function() {
@@ -73,7 +109,7 @@ file that was distributed with this source code.
                         <div class="row">
                             <div class="col-2"><span>{{ 'admin.common.csv_select'|trans }}</span></div>
                             <div class="col">
-                                <form id="upload-form" method="post" action="{{ url('admin_product_category_csv_import') }}" enctype="multipart/form-data">
+                                <form id="upload-form" method="post" action="{{ url('admin_product_category_csv_import2') }}" enctype="multipart/form-data">
                                     {{ form_widget(form._token) }}
                                     <div class="mb-2">
                                         <span id="file-select" class="btn btn-ec-regular mr-2">{{ 'admin.common.file_select'|trans }}</span>
@@ -81,7 +117,7 @@ file that was distributed with this source code.
                                         {{ form_widget(form.import_file, {'attr': {'accept': 'text/csv,text/tsv', 'class': 'd-none'}}) }}
                                         {{ form_errors(form.import_file) }}
                                     </div>
-                                    <button class="btn btn-ec-conversion" id="upload-button" type="submit">{{ 'admin.common.bulk_registration'|trans }}</button>
+                                    <button class="btn btn-ec-conversion" id="upload-button" type="button">{{ 'admin.common.bulk_registration'|trans }}</button>
                                     {% for error in errors %}
                                         <div class="text-danger">{{ error }}</div>
                                     {% endfor %}
