@@ -18,6 +18,43 @@ file that was distributed with this source code.
 {% form_theme form '@admin/Form/bootstrap_4_horizontal_layout.html.twig' %}
 
 {% block javascript %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/encoding-japanese/1.0.30/encoding.min.js"></script>
+    <script>
+        $(function () {
+            $('#admin_csv_import_import_file').on('change', function(e) {
+                var reader = new FileReader()
+                reader.readAsBinaryString(e.target.files[0])
+                reader.onload = function() {
+                    var arr = Encoding.convert(reader.result, {
+                        to: 'UNICODE',
+                        from:'SJIS',
+                    }).split("\n")
+
+                    var header = arr.shift();
+                    arr.forEach(function (e) {
+                        if (e.trim() == '') {
+                            return;
+                        }
+                        var row = new Blob([header+"\n"+e], {type: 'text/csv'});
+                        var fd = new FormData($('#upload-form').get(0));
+                        fd.append('admin_csv_import[import_file]', row, 'import.csv');
+                        $.ajax({
+                            url: '{{ url('admin_product_category_csv_import') }}',
+                                type: 'POST',
+                                data: fd,
+                                processData : false,
+                                contentType:false,
+                                cache       : false,
+                            }).done(function (data) {
+                                console.log(header+"\n"+e);
+                            }).fail(function(e) {
+                                console.log(e)
+                            });
+                    })
+                }
+            })
+        });
+    </script>
     <script src="{{ asset('assets/js/vendor/spin.min.js', 'admin') }}"></script>
     <script>
         $(function() {
