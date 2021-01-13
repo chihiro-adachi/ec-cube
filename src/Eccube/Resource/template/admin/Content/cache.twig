@@ -17,6 +17,30 @@ file that was distributed with this source code.
 
 {% form_theme form '@admin/Form/bootstrap_4_horizontal_layout.html.twig' %}
 
+{% block javascript %}
+
+<script>
+    $(function () {
+        $('#clear-cache-button').on('click', function () {
+            $.post('{{ url('admin_content_cache_enable_maintenance') }}')
+            .then(function () {
+                return $.post('{{ url('admin_content_cache_clear_cache') }}')
+            })
+            .then(function () {
+                return $.post('{{ url('admin_content_cache_create_cache') }}')
+            })
+            .then(function () {
+                return $.post('{{ url('admin_content_cache_disable_maintenance') }}')
+            })
+            .always(function() {
+                location.reload();
+            })
+        })
+    })
+</script>
+
+{% endblock %}
+
 {% block main %}
     <form method="post" action="{{ url('admin_content_cache') }}">
         {{ form_widget(form._token) }}
@@ -37,7 +61,7 @@ file that was distributed with this source code.
                             </div>
                             <div class="row mb-2">
                                 <div class="col-auto">
-                                    <button type="submit" class="btn btn-ec-conversion">{{ 'admin.content.cache_delete'|trans }}</button>
+                                    <button id="clear-cache-button" type="button" class="btn btn-ec-conversion">{{ 'admin.content.cache_delete'|trans }}</button>
                                 </div>
                             </div>
                         </div>

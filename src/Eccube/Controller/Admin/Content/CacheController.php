@@ -18,6 +18,7 @@ use Eccube\Util\CacheUtil;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class CacheController extends AbstractController
@@ -41,5 +42,52 @@ class CacheController extends AbstractController
         return [
             'form' => $form->createView(),
         ];
+    }
+
+    /**
+     * @Route("/%eccube_admin_route%/content/cache/clear_cache", name="admin_content_cache_clear_cache")
+     * @return Response
+     */
+    public function clearCache(CacheUtil $cacheUtil)
+    {
+        $cacheUtil->clearCache();
+        $this->addSuccess('admin.common.delete_complete', 'admin');
+        return new Response();
+    }
+
+    /**
+     * @Route("/%eccube_admin_route%/content/cache/create_cache", name="admin_content_cache_create_cache")
+     * @return Response
+     */
+    public function createCache(CacheUtil $cacheUtil)
+    {
+        return new Response();
+    }
+
+    /**
+     * @Route("/%eccube_admin_route%/content/cache/enable_maintenance", name="admin_content_cache_enable_maintenance")
+     * @return Response
+     */
+    public function enableMaintenance()
+    {
+        $projectDir = $this->container->getParameter('kernel.project_dir');
+        if (!file_exists($projectDir . '/.maintenance')) {
+            touch($projectDir . '/.maintenance');
+        }
+
+        return new Response();
+    }
+
+    /**
+     * @Route("/%eccube_admin_route%/content/cache/disable_maintenance", name="admin_content_cache_disable_maintenance")
+     * @return Response
+     */
+    public function disableMaintenance()
+    {
+        $projectDir = $this->container->getParameter('kernel.project_dir');
+        if (file_exists($projectDir . '/.maintenance')) {
+            unlink($projectDir . '/.maintenance');
+        }
+        return new Response();
     }
 }
