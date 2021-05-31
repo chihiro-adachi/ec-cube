@@ -113,6 +113,7 @@ class ComposerApiService implements ComposerServiceInterface
             '--prefer-dist' => true,
             '--update-with-dependencies' => true,
             '--no-scripts' => true,
+            '--update-no-dev' => true,
         ], $output);
     }
 
@@ -141,6 +142,7 @@ class ComposerApiService implements ComposerServiceInterface
             '--no-interaction' => true,
             '--profile' => true,
             '--no-scripts' => true,
+            '--update-no-dev' => true,
         ], $output);
     }
 
