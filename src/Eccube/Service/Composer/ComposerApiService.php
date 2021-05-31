@@ -164,6 +164,7 @@ class ComposerApiService implements ComposerServiceInterface
             '--profile' => true,
             '--no-scripts' => true,
             '--dry-run' => (bool) $dryRun,
+            '--no-dev' => true,
         ], $output);
     }
 
@@ -185,6 +186,7 @@ class ComposerApiService implements ComposerServiceInterface
             '--profile' => true,
             '--no-scripts' => true,
             '--dry-run' => (bool) $dryRun,
+            '--no-dev' => true,
         ], $output);
     }
 
